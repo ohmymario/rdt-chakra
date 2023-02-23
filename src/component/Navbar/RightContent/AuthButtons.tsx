@@ -1,11 +1,15 @@
+import { authModalState } from "@/atoms/authModalAtom";
 import { Button, HStack } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
+import { useSetRecoilState } from "recoil";
 
 interface AuthButtonsProps {}
 
 const AuthButtons: FunctionComponent<AuthButtonsProps> = (
   props: AuthButtonsProps
 ) => {
+  const setAuthModalState = useSetRecoilState(authModalState);
+
   return (
     <HStack spacing={2} align="center">
       {/* // give me styles that look like reddit buttons */}
@@ -21,8 +25,10 @@ const AuthButtons: FunctionComponent<AuthButtonsProps> = (
           sm: "110px",
         }}
         onClick={(e) => {
-          console.log(`🚀 ~ e:`, e);
-          console.log("clicked login");
+          setAuthModalState({
+            isOpen: true,
+            view: "login",
+          });
         }}
       >
         Log In
@@ -39,8 +45,10 @@ const AuthButtons: FunctionComponent<AuthButtonsProps> = (
           sm: "110px",
         }}
         onClick={(e) => {
-          console.log(`🚀 ~ e:`, e);
-          console.log("clicked sign up");
+          setAuthModalState({
+            isOpen: true,
+            view: "signup",
+          });
         }}
       >
         Sign Up
