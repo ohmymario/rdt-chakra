@@ -1,11 +1,13 @@
 import { Flex, Image } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
+import RightContent from "./RightContent/RightContent";
+import SearchInput from "./SearchInput";
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
   return (
-    <Flex bg="white" height="44px" padding="6px 12px" border="1px solid red">
+    <Flex as="header" bg="white" height="44px" padding="6px 12px">
       <Flex align="center">
         <Image src="/images/redditFace.svg" alt="logo" height="30px" />
         <Image
@@ -24,10 +26,10 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
       {/* <Directory /> */}
 
       {/* Always Shown */}
-      {/* <SearchInput /> */}
+      <SearchInput />
 
       {/* Show RightContent if Logged In */}
-      {/* <RightContent /> */}
+      <RightContent />
     </Flex>
   );
 };
