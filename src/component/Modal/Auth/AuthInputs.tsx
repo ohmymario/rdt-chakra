@@ -16,7 +16,7 @@ const AuthInputs: FunctionComponent<AuthInputsProps> = (
   const modalState = useRecoilValue(authModalState);
 
   return (
-    <Flex direction="column" align="center" width="100%" mt={4}>
+    <Flex direction="column" width="100%">
       {modalState.view === "login" && <Login />}
       {modalState.view === "signup" && <SignUp />}
     </Flex>
