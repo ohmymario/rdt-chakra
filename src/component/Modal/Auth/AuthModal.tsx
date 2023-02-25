@@ -7,11 +7,14 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Text,
+  VStack,
 } from "@chakra-ui/react";
 import { FunctionComponent } from "react";
 
 import { useRecoilState } from "recoil";
 import AuthInputs from "./AuthInputs";
+import OAuthButtons from "./OAuthButtons";
 
 interface AuthModalProps {}
 
@@ -41,14 +44,22 @@ const AuthModal: FunctionComponent<AuthModalProps> = (
             alignItems="center"
             justifyContent="center"
           >
-            <Flex
+            <VStack
+              display="flex"
               direction="column"
               alignItems="center"
               justifyContent="center"
               width="70%"
+              spacing={4}
             >
+              <OAuthButtons />
+
+              <Text color="gray.500" fontWeight="700" textTransform="uppercase">
+                Or
+              </Text>
+
               <AuthInputs />
-            </Flex>
+            </VStack>
           </ModalBody>
         </ModalContent>
       </Modal>
