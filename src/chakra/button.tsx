@@ -1,13 +1,13 @@
-import type { ComponentStyleConfig } from "@chakra-ui/react";
+import type { ComponentStyleConfig } from '@chakra-ui/react';
 
 export const Button: ComponentStyleConfig = {
   // default style of the button
   baseStyle: {
-    borderRadius: "60px",
-    fontSize: "10pt",
-    fontWeight: "700",
+    borderRadius: '60px',
+    fontSize: '10pt',
+    fontWeight: '700',
     _focus: {
-      boxShadow: "none",
+      boxShadow: 'none',
     },
   },
 
@@ -15,33 +15,43 @@ export const Button: ComponentStyleConfig = {
   // the font size will change
   sizes: {
     sm: {
-      fontSize: "8pt",
+      fontSize: '8pt',
     },
     md: {
-      fontSize: "10pt",
+      fontSize: '10pt',
     },
   },
 
   // variants alter the base style of the button
   variants: {
     solid: {
-      color: "white",
-      bg: "blue.500",
+      color: 'white',
+      bg: 'blue.500',
       _hover: {
-        bg: "blue.400",
+        bg: 'blue.400',
       },
     },
     outline: {
-      color: "blue.500",
-      border: "1px solid",
-      borderColor: "blue.500",
+      color: 'blue.500',
+      border: '1px solid',
+      borderColor: 'blue.500',
     },
     oauth: {
-      height: "34px",
-      border: "1px solid",
-      borderColor: "gray.300",
+      height: '34px',
+      border: '1px solid',
+      borderColor: 'gray.300',
       _hover: {
-        bg: "gray.50",
+        bg: 'gray.50',
+      },
+    },
+    auth: {
+      color: 'white',
+      bg: '#D93A00',
+      _hover: {
+        bg: '#DC4A14',
+      },
+      _active: {
+        bg: '#D93A00',
       },
     },
   },
