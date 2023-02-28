@@ -3,6 +3,8 @@ import { Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
+import { FIREBASE_ERRORS } from '@/firebase/errors';
+
 // firebase hooks email & password
 import { auth } from '@/firebase/clientApp';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
@@ -37,21 +39,6 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
     setError(null);
     if (password !== confirmPassword) {
       setError('Passwords do not match');
-      return;
-    }
-
-    if (authError && authError.code === 'auth/email-already-in-use') {
-      setError('Email already in use');
-      return;
-    }
-
-    if (authError && authError.code === 'auth/invalid-email') {
-      setError('Invalid email');
-      return;
-    }
-
-    if (authError && authError.code === 'auth/weak-password') {
-      setError('Password must be at least 6 characters');
       return;
     }
 
@@ -106,10 +93,12 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
             {...inputStyles}
           />
 
-          {/* change this to a formerror */}
-          {error && (
+          {(error || authError) && (
             <Text textAlign='center' color='red.500' fontSize='10pt'>
-              {error}
+              {error ||
+                FIREBASE_ERRORS[
+                  authError?.message as keyof typeof FIREBASE_ERRORS
+                ]}
             </Text>
           )}
 
