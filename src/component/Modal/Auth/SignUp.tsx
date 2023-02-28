@@ -3,6 +3,10 @@ import { Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
+// firebase hooks email & password
+import { auth } from '@/firebase/clientApp';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
 interface SignUpProps {}
 
 const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
@@ -14,6 +18,11 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
     confirmPassword: '',
   });
 
+  const [error, setError] = useState<string | null>(null);
+
+  const [createUserWithEmailAndPassword, authUser, authLoading, authError] =
+    useCreateUserWithEmailAndPassword(auth);
+
   const handleSignupForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupForm({
       ...SignupForm,
@@ -23,6 +32,30 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const { email, password, confirmPassword } = SignupForm;
+
+    setError(null);
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (authError && authError.code === 'auth/email-already-in-use') {
+      setError('Email already in use');
+      return;
+    }
+
+    if (authError && authError.code === 'auth/invalid-email') {
+      setError('Invalid email');
+      return;
+    }
+
+    if (authError && authError.code === 'auth/weak-password') {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    createUserWithEmailAndPassword(email, password);
   };
 
   const inputStyles = {
@@ -51,6 +84,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
           <Input
             name='email'
             type='email'
+            required
             placeholder='Email'
             onChange={(e) => handleSignupForm(e)}
             {...inputStyles}
@@ -58,6 +92,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
           <Input
             name='password'
             type='password'
+            required
             placeholder='Password'
             onChange={(e) => handleSignupForm(e)}
             {...inputStyles}
@@ -65,12 +100,25 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
           <Input
             name='confirmPassword'
             type='password'
+            required
             placeholder='Confirm Password'
             onChange={(e) => handleSignupForm(e)}
             {...inputStyles}
           />
 
-          <Button height='36px' variant='auth' type='submit'>
+          {/* change this to a formerror */}
+          {error && (
+            <Text textAlign='center' color='red.500' fontSize='10pt'>
+              {error}
+            </Text>
+          )}
+
+          <Button
+            height='36px'
+            variant='auth'
+            type='submit'
+            isLoading={authLoading}
+          >
             Sign Up
           </Button>
 
