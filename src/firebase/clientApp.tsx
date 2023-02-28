@@ -30,4 +30,4 @@ const firstore = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-export { firstore, auth, storage };
+export { app, firstore, auth, storage };
