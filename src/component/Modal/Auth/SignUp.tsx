@@ -1,5 +1,14 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Flex,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
@@ -94,12 +103,13 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
           />
 
           {(error || authError) && (
-            <Text textAlign='center' color='red.500' fontSize='10pt'>
+            <Alert status='error' borderRadius='xl'>
+              <AlertIcon />
               {error ||
                 FIREBASE_ERRORS[
                   authError?.message as keyof typeof FIREBASE_ERRORS
                 ]}
-            </Text>
+            </Alert>
           )}
 
           <Button
