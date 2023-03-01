@@ -1,11 +1,21 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Flex,
+  Input,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 // Firebase sign in with email and password
 import { auth } from '@/firebase/clientApp';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { FIREBASE_ERRORS } from '@/firebase/errors';
 
 interface LoginProps {}
 
@@ -72,7 +82,21 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             {...inputStyles}
           />
 
-          <Button height='36px' variant={'auth'} type='submit'>
+          {error && (
+            <Alert
+              status='error'
+              borderRadius='xl'
+              flexDirection='column'
+              alignItems='center'
+              justifyContent='center'
+              textAlign='center'
+            >
+              <AlertIcon mb={1} />
+              {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
+            </Alert>
+          )}
+
+          <Button height='36px' variant='auth' type='submit'>
             Log In
           </Button>
 
