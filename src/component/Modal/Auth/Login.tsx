@@ -3,25 +3,35 @@ import { Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
+// Firebase sign in with email and password
+import { auth } from '@/firebase/clientApp';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
   const setAuthModalState = useSetRecoilState(authModalState);
+  const [signInWithEmailAndPassword, user, loading, error] =
+    useSignInWithEmailAndPassword(auth);
 
-  const [LoginForm, setLoginForm] = useState({
+  const [loginForm, setLoginForm] = useState({
     email: '',
     password: '',
   });
 
+  // update login form state
   const handleLoginForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginForm({
-      ...LoginForm,
+      ...loginForm,
       [e.target.name]: e.target.value,
     });
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const { email, password } = loginForm;
+    signInWithEmailAndPassword(email, password);
   };
 
   const inputStyles = {
