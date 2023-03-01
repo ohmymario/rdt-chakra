@@ -1,7 +1,7 @@
-import { authModalState } from "@/atoms/authModalAtom";
-import { Button, HStack } from "@chakra-ui/react";
-import { FunctionComponent } from "react";
-import { useSetRecoilState } from "recoil";
+import { authModalState } from '@/atoms/authModalAtom';
+import { Button, HStack } from '@chakra-ui/react';
+import { FunctionComponent } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 interface AuthButtonsProps {}
 
@@ -11,43 +11,42 @@ const AuthButtons: FunctionComponent<AuthButtonsProps> = (
   const setAuthModalState = useSetRecoilState(authModalState);
 
   return (
-    <HStack spacing={2} align="center">
-      {/* // give me styles that look like reddit buttons */}
+    <HStack spacing={2} align='center'>
       <Button
-        variant="outline"
-        height="28px"
+        variant='outline'
+        height='28px'
         display={{
-          base: "none",
-          sm: "flex",
+          base: 'none',
+          sm: 'flex',
         }}
         width={{
-          base: "70px",
-          sm: "110px",
+          base: '70px',
+          sm: '110px',
         }}
         onClick={(e) => {
           setAuthModalState({
             isOpen: true,
-            view: "login",
+            view: 'login',
           });
         }}
       >
         Log In
       </Button>
       <Button
-        variant="solid"
-        height="28px"
+        variant='solid'
+        height='28px'
         display={{
-          base: "none",
-          sm: "flex",
+          base: 'none',
+          sm: 'flex',
         }}
         width={{
-          base: "70px",
-          sm: "110px",
+          base: '70px',
+          sm: '110px',
         }}
         onClick={(e) => {
           setAuthModalState({
             isOpen: true,
-            view: "signup",
+            view: 'signup',
           });
         }}
       >
