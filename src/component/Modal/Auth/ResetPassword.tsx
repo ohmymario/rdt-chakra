@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   Flex,
   Heading,
@@ -10,11 +12,16 @@ import {
 
 import { BsDot, BsReddit } from 'react-icons/bs';
 
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 
 // change modal state
 import { authModalState } from '@/atoms/authModalAtom';
 import { useSetRecoilState } from 'recoil';
+
+// firebase password reset hook
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+import { auth } from '@/firebase/clientApp';
+import { FIREBASE_ERRORS } from '@/firebase/errors';
 
 interface ResetPasswordProps {}
 
@@ -23,6 +30,21 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
 ) => {
   // setting between login and signup and reset password
   const setAuthModalState = useSetRecoilState(authModalState);
+  const [sendPasswordResetEmail, sending, error] =
+    useSendPasswordResetEmail(auth);
+
+  const [email, setEmail] = useState<string | null>(null);
+
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const userEmail = e.target.value;
+    setEmail(userEmail);
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!email) return;
+    await sendPasswordResetEmail(email);
+  };
 
   const inputStyles = {
     fontSize: '10pt',
@@ -54,24 +76,48 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
   return (
     <>
       <VStack spacing={2} align='stretch' mb={2}>
-        <VStack spacing={3} textAlign='center'>
-          <Icon as={BsReddit} color='brand.100' fontSize={40} />
+        <VStack spacing={3} textAlign='center' mb={2}>
+          <Icon
+            alignSelf='center'
+            as={BsReddit}
+            color='brand.100'
+            fontSize={40}
+          />
           <Heading size='md'>Reset your password</Heading>
           <Text fontSize='sm'>
             Enter the email associated with your account and we&apos;ll send you
             a reset link.
           </Text>
-        </VStack>
 
-        <VStack spacing={4} textAlign='center' align='stretch'>
-          <Input type='email' placeholder='Email' {...inputStyles} />
-          <Button height='36px' variant='auth' type='submit'>
-            Log In
-          </Button>
+          <form onSubmit={(e) => handlePasswordReset(e)}>
+            {error && (
+              <Alert status='error' borderRadius='xl' mb={3}>
+                <AlertIcon />
+                {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
+              </Alert>
+            )}
+
+            <Input
+              type='email'
+              placeholder='Email'
+              required
+              onChange={(e) => handleEmail(e)}
+              {...inputStyles}
+            />
+
+            <Button
+              height='36px'
+              variant='auth'
+              type='submit'
+              width={'100%'}
+              isLoading={sending}
+            >
+              Reset Password
+            </Button>
+          </form>
         </VStack>
 
         <Flex
-          fontSize='9pt'
           justify='center'
           alignItems='center'
           color='blue.500'
