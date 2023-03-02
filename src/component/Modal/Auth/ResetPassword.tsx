@@ -26,6 +26,7 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
 
   const inputStyles = {
     fontSize: '10pt',
+    mb: 3,
     _placeholder: {
       color: 'gray.500',
     },
@@ -41,6 +42,13 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
       borderColor: 'blue.500',
     },
     bg: 'gray.50',
+  };
+
+  const authStyles = {
+    color: 'blue.500',
+    fontWeight: '700',
+    cursor: 'pointer',
+    textDecoration: 'underline',
   };
 
   return (
@@ -67,12 +75,10 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
           justify='center'
           alignItems='center'
           color='blue.500'
+          fontSize='9pt'
         >
           <Text
-            color='blue.500'
-            fontWeight={700}
-            cursor='pointer'
-            textDecoration={'underline'}
+            {...authStyles}
             onClick={() =>
               setAuthModalState((prev) => ({
                 ...prev,
@@ -84,10 +90,7 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
           </Text>
           <Icon as={BsDot} />
           <Text
-            color='blue.500'
-            fontWeight={700}
-            cursor='pointer'
-            textDecoration={'underline'}
+            {...authStyles}
             onClick={() =>
               setAuthModalState((prev) => ({
                 ...prev,
