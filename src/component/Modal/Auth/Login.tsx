@@ -96,7 +96,12 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             </Alert>
           )}
 
-          <Button height='36px' variant='auth' type='submit'>
+          <Button
+            height='36px'
+            variant='auth'
+            type='submit'
+            isLoading={loading}
+          >
             Log In
           </Button>
 
