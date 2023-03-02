@@ -37,9 +37,7 @@ const AuthModal: FunctionComponent<AuthModalProps> = (
   };
 
   useEffect(() => {
-    if (user) {
-      console.log(`🚀 ~ useEffect ~ user:`, user);
-    }
+    if (user) handleClose();
   }, [user]);
 
   return (
