@@ -1,6 +1,8 @@
 import {
   Alert,
+  AlertDescription,
   AlertIcon,
+  AlertTitle,
   Button,
   Flex,
   Heading,
@@ -34,6 +36,7 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
     useSendPasswordResetEmail(auth);
 
   const [email, setEmail] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const userEmail = e.target.value;
@@ -43,7 +46,8 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
   const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email) return;
-    await sendPasswordResetEmail(email);
+    let response = await sendPasswordResetEmail(email);
+    if (response) setSuccess(true);
   };
 
   const inputStyles = {
@@ -76,47 +80,71 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
   return (
     <>
       <VStack spacing={2} align='stretch' mb={2}>
-        <VStack spacing={3} textAlign='center' mb={2}>
-          <Icon
-            alignSelf='center'
-            as={BsReddit}
-            color='brand.100'
-            fontSize={40}
-          />
-          <Heading size='md'>Reset your password</Heading>
-          <Text fontSize='sm'>
-            Enter the email associated with your account and we&apos;ll send you
-            a reset link.
-          </Text>
-
-          <form onSubmit={(e) => handlePasswordReset(e)}>
-            {error && (
-              <Alert status='error' borderRadius='xl' mb={3}>
-                <AlertIcon />
-                {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
-              </Alert>
-            )}
-
-            <Input
-              type='email'
-              placeholder='Email'
-              required
-              onChange={(e) => handleEmail(e)}
-              {...inputStyles}
+        {success ? (
+          <Alert
+            status='success'
+            borderRadius='xl'
+            mb={3}
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            textAlign='center'
+          >
+            <AlertIcon boxSize='32px' />
+            <AlertTitle mt={4} mb={3} fontSize='xl'>
+              Email Sent!
+            </AlertTitle>
+            <AlertDescription maxWidth='sm' fontSize='md'>
+              Check your email for a link to reset your password. If it
+              doesn&apos;t appear within a few minutes, check your spam folder.
+            </AlertDescription>
+          </Alert>
+        ) : (
+          <VStack spacing={3} textAlign='center' mb={2}>
+            <Icon
+              alignSelf='center'
+              as={BsReddit}
+              color='brand.100'
+              fontSize={40}
             />
+            <Heading size='md'>Reset your password</Heading>
+            <Text fontSize='sm'>
+              Enter the email associated with your account and we&apos;ll send
+              you a reset link.
+            </Text>
 
-            <Button
-              height='36px'
-              variant='auth'
-              type='submit'
-              width={'100%'}
-              isLoading={sending}
-            >
-              Reset Password
-            </Button>
-          </form>
-        </VStack>
+            <form onSubmit={(e) => handlePasswordReset(e)}>
+              {error && (
+                <Alert status='error' borderRadius='xl' mb={3}>
+                  <AlertIcon />
+                  {
+                    FIREBASE_ERRORS[
+                      error.message as keyof typeof FIREBASE_ERRORS
+                    ]
+                  }
+                </Alert>
+              )}
 
+              <Input
+                type='email'
+                placeholder='Email'
+                required
+                onChange={(e) => handleEmail(e)}
+                {...inputStyles}
+              />
+
+              <Button
+                height='36px'
+                variant='auth'
+                type='submit'
+                width={'100%'}
+                isLoading={sending}
+              >
+                Reset Password
+              </Button>
+            </form>
+          </VStack>
+        )}
         <Flex
           justify='center'
           alignItems='center'
