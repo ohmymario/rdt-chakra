@@ -108,7 +108,12 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
               fontSize='9pt'
               color='blue.500'
               cursor='pointer'
-              // onClick={() => toggleView('resetPassword')}
+              onClick={() =>
+                setAuthModalState({
+                  isOpen: true,
+                  view: 'resetPassword',
+                })
+              }
             >
               Reset
             </Text>
