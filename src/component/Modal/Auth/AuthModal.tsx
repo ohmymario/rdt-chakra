@@ -67,11 +67,19 @@ const AuthModal: FunctionComponent<AuthModalProps> = (
               width='70%'
               spacing={4}
             >
-              <OAuthButtons />
+              {modalState.view != 'resetPassword' && (
+                <>
+                  <OAuthButtons />
 
-              <Text color='gray.500' fontWeight='700' textTransform='uppercase'>
-                Or
-              </Text>
+                  <Text
+                    color='gray.500'
+                    fontWeight='700'
+                    textTransform='uppercase'
+                  >
+                    Or
+                  </Text>
+                </>
+              )}
 
               <AuthInputs />
             </VStack>
