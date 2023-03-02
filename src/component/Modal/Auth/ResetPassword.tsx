@@ -74,10 +74,10 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
             cursor='pointer'
             textDecoration={'underline'}
             onClick={() =>
-              setAuthModalState({
-                isOpen: true,
+              setAuthModalState((prev) => ({
+                ...prev,
                 view: 'login',
-              })
+              }))
             }
           >
             Login
@@ -89,10 +89,10 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
             cursor='pointer'
             textDecoration={'underline'}
             onClick={() =>
-              setAuthModalState({
-                isOpen: true,
+              setAuthModalState((prev) => ({
+                ...prev,
                 view: 'signup',
-              })
+              }))
             }
           >
             Sign Up
