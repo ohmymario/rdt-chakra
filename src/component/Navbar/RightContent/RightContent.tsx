@@ -20,19 +20,12 @@ const RightContent: FunctionComponent<RightContentProps> = (
 
   return (
     <>
+      <AuthModal />
       <Flex as='nav' justifyContent='center' alignItems='center'>
         {user ? (
-          <Button
-            height={8}
-            onClick={async () => {
-              const success = await signOut();
-              if (success) {
-                console.log('Sign out success');
-              }
-            }}
-          >
-            Sign out
-          </Button>
+          <>
+            <Icons />
+          </>
         ) : (
           <AuthButtons />
         )}
@@ -43,3 +36,15 @@ const RightContent: FunctionComponent<RightContentProps> = (
 };
 
 export default RightContent;
+
+// <Button
+// height={8}
+// onClick={async () => {
+//   const success = await signOut();
+//   if (success) {
+//     console.log('Sign out success');
+//   }
+// }}
+// >
+// Sign out
+// </Button>
