@@ -2,11 +2,13 @@ import AuthModal from '@/component/Modal/Auth/AuthModal';
 import { Button, Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import AuthButtons from './AuthButtons';
+import UserMenu from './UserMenu';
 
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 
 import { User as FirebaseUser } from 'firebase/auth';
+import Icons from './Icons';
 
 interface RightContentProps {
   user: FirebaseUser | null | undefined;
@@ -29,8 +31,8 @@ const RightContent: FunctionComponent<RightContentProps> = (
         ) : (
           <AuthButtons />
         )}
+        <UserMenu user={user} />
       </Flex>
-      <AuthModal />
     </>
   );
 };
