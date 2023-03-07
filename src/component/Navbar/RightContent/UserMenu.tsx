@@ -81,48 +81,56 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
         </HStack>
       </MenuButton>
       <MenuList fontSize='10pt'>
-        <Flex align='center' gap={2} pl='3' mb={2} color='gray.500'>
-          <Icon as={CgProfile} fontSize={20} />
-          My Stuff
-        </Flex>
-        <MenuItem>Online Status</MenuItem>
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>Create Avatar</MenuItem>
-        <MenuItem>User Settings</MenuItem>
+        {user ? (
+          <>
+            <Flex align='center' gap={2} pl='3' mb={2} color='gray.500'>
+              <Icon as={CgProfile} fontSize={20} />
+              My Stuff
+            </Flex>
+            <MenuItem>Online Status</MenuItem>
+            <MenuItem>Profile</MenuItem>
+            <MenuItem>Create Avatar</MenuItem>
+            <MenuItem>User Settings</MenuItem>
 
-        <MenuDivider />
+            <MenuDivider />
 
-        <Flex align='center' gap={2} pl='3' mb={2} color='gray.500'>
-          <Icon as={AiOutlineEye} fontSize={20} />
-          View Options
-        </Flex>
-        <MenuItem>Dark Mode</MenuItem>
+            <Flex align='center' gap={2} pl='3' mb={2} color='gray.500'>
+              <Icon as={AiOutlineEye} fontSize={20} />
+              View Options
+            </Flex>
+            <MenuItem>Dark Mode</MenuItem>
 
-        <MenuDivider />
+            <MenuDivider />
 
-        <MenuItem>Create a Community</MenuItem>
-        <MenuItem>Advertise of Reddit</MenuItem>
-        <MenuItem>Coins</MenuItem>
-        <MenuItem>Premium</MenuItem>
-        <MenuItem>Help Center</MenuItem>
+            <MenuItem>Create a Community</MenuItem>
+            <MenuItem>Advertise of Reddit</MenuItem>
+            <MenuItem>Coins</MenuItem>
+            <MenuItem>Premium</MenuItem>
+            <MenuItem>Help Center</MenuItem>
 
-        <MenuDivider />
+            <MenuDivider />
 
-        <MenuItem onClick={() => handleSignOut()}>
-          <Icon as={MdOutlineLogin} fontSize={20} mr={2} />
-          Log Out
-        </MenuItem>
+            <MenuItem onClick={() => handleSignOut()}>
+              <Icon as={MdOutlineLogin} fontSize={20} mr={2} />
+              Log Out
+            </MenuItem>
+          </>
+        ) : (
+          <>
+            <MenuItem>Dark Mode</MenuItem>
+            <MenuItem>Help Center</MenuItem>
+            <MenuItem>More DOWN</MenuItem>
+            <MenuItem>Terms & Policies DOWN</MenuItem>
+            <MenuItem>Advertise on Reddit</MenuItem>
 
-        {/* SIGNEDOUT */}
-        {/* Dark Mode on a Toggle */}
-        {/* Help Center */}
-        {/* More */}
-        {/* Terms & Policies */}
-        {/* Advertise on Reddit */}
+            <MenuDivider />
 
-        {/* Horizontal Line */}
-
-        {/* Log In / Sign Up */}
+            <MenuItem onClick={() => console.log('LOGGING IN/SIGNING IN')}>
+              <Icon as={MdOutlineLogin} fontSize={20} mr={2} />
+              Log In / Sign Up
+            </MenuItem>
+          </>
+        )}
       </MenuList>
     </Menu>
   );
