@@ -1,14 +1,16 @@
 import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
+  Button,
+  Flex,
+  HStack,
+  Icon,
   Menu,
   MenuButton,
-  Button,
-  MenuList,
-  MenuItem,
-  HStack,
-  Flex,
-  Icon,
   MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 
@@ -16,17 +18,21 @@ import { User as FirebaseUser } from 'firebase/auth';
 
 import { FaRedditSquare } from 'react-icons/fa';
 import { VscAccount } from 'react-icons/vsc';
+
+import { AiOutlineEye } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlineLogin } from 'react-icons/md';
-import { AiOutlineEye } from 'react-icons/ai';
+
+import { BiCoinStack } from 'react-icons/bi';
+import { IoSparkles } from 'react-icons/io5';
 
 // Sign out hook
-import { useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
+import { useSignOut } from 'react-firebase-hooks/auth';
 
 // Auth Modal
-import { useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
+import { useSetRecoilState } from 'recoil';
 
 interface UserMenuProps {
   user: FirebaseUser | null | undefined;
@@ -72,9 +78,36 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
   return (
     <Menu>
       <MenuButton as={Button} {...menuButtonStyle}>
+        {/* UPDATE SPACING FOR DESKTOP VIEW */}
         <HStack spacing={0.5}>
           {user ? (
-            <Icon as={FaRedditSquare} fontSize={24} />
+            <>
+              <Icon as={FaRedditSquare} fontSize={24} mr={1} />
+              <VStack
+                spacing={0.5}
+                fontSize='8pt'
+                align='flex-start'
+                display={{
+                  base: 'none',
+                  md: 'none',
+                  xl: 'flex',
+                }}
+              >
+                <Text color='gray.600'>
+                  {user?.displayName || user.email?.split('@')[0]}
+                </Text>
+                <HStack color='gray.400' spacing={2}>
+                  <HStack spacing={0.25}>
+                    <Icon as={IoSparkles} color='brand.100' fontSize={12} />
+                    <Text>1 Karma</Text>
+                  </HStack>
+                  <HStack spacing={0.25}>
+                    <Icon as={BiCoinStack} color='yellow.500' fontSize={12} />
+                    <Text>4.8k</Text>
+                  </HStack>
+                </HStack>
+              </VStack>
+            </>
           ) : (
             <Icon as={VscAccount} fontSize={22} />
           )}
