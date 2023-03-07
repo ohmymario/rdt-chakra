@@ -23,7 +23,7 @@ const RightContent: FunctionComponent<RightContentProps> = (
   return (
     <>
       <AuthModal />
-      <Flex as='nav' justifyContent='center' alignItems='center'>
+      <Flex as='nav' justifyContent='center' alignItems='center' gap={2}>
         {user ? (
           <>
             <Icons />
