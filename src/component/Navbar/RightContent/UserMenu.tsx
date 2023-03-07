@@ -24,6 +24,10 @@ import { AiOutlineEye } from 'react-icons/ai';
 import { useSignOut } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 
+// Auth Modal
+import { useSetRecoilState } from 'recoil';
+import { authModalState } from '@/atoms/authModalAtom';
+
 interface UserMenuProps {
   user: FirebaseUser | null | undefined;
 }
@@ -59,12 +63,10 @@ const menuButtonStyle = {
 const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
   const { user } = props;
   const [signOut, loading, error] = useSignOut(auth);
+  const setAuthModalState = useSetRecoilState(authModalState);
 
   const handleSignOut = async () => {
     const success = await signOut();
-    if (success) {
-      alert('You are signed out');
-    }
   };
 
   return (
@@ -125,7 +127,14 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
 
             <MenuDivider />
 
-            <MenuItem onClick={() => console.log('LOGGING IN/SIGNING IN')}>
+            <MenuItem
+              onClick={(e) => {
+                setAuthModalState({
+                  isOpen: true,
+                  view: 'login',
+                });
+              }}
+            >
               <Icon as={MdOutlineLogin} fontSize={20} mr={2} />
               Log In / Sign Up
             </MenuItem>
