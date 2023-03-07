@@ -74,7 +74,7 @@ const Icons: FunctionComponent<IconsProps> = (props: IconsProps) => {
           base: '0',
           md: '1.5',
         }}
-        mr={1.5}
+        // mr={1.5}
         spacing={1.5}
       >
         <IconButton {...iconStyles} aria-label='Chat' icon={<BsChatDots />} />
