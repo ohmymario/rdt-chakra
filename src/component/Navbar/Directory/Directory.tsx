@@ -26,6 +26,7 @@ import { TiHome } from 'react-icons/ti';
 import { auth } from '@/firebase/clientApp';
 import { authModalState } from '@/atoms/authModalAtom';
 import { useSetRecoilState } from 'recoil';
+import Communities from './Communities';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -99,7 +100,8 @@ const Directory: FunctionComponent<DirectoryProps> = (
         </HStack>
       </MenuButton>
       <MenuList fontSize='10pt'>
-        <MenuItem>Directories</MenuItem>
+        {/* <MenuItem>Directories</MenuItem> */}
+        <Communities />
       </MenuList>
     </Menu>
   );
