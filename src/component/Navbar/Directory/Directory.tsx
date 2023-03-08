@@ -83,6 +83,7 @@ const Directory: FunctionComponent<DirectoryProps> = (
               }}
             />
             <Text
+              pt={1}
               display={{
                 base: 'none',
                 md: 'none',
@@ -98,7 +99,7 @@ const Directory: FunctionComponent<DirectoryProps> = (
         </HStack>
       </MenuButton>
       <MenuList fontSize='10pt'>
-        <MenuItem>Stuff here later</MenuItem>
+        <MenuItem>Directories</MenuItem>
       </MenuList>
     </Menu>
   );
