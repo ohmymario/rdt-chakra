@@ -22,6 +22,7 @@ const SearchInput: FunctionComponent<SearchInputProps> = (
           fontSize='10pt'
           height='34px'
           bg={'gray.50'}
+          borderRadius='3xl'
           _placeholder={{
             color: 'gray.500',
           }}
