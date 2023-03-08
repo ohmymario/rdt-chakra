@@ -2,6 +2,7 @@ import { auth } from '@/firebase/clientApp';
 import { Flex, Image } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Directory from './Directory/Directory';
 import RightContent from './RightContent/RightContent';
 import SearchInput from './SearchInput';
 
@@ -16,6 +17,7 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
 
   return (
     <Flex as='header' bg='white' height='44px' padding='6px 12px' gap={2}>
+      {/* Needs to be a link */}
       <Flex align='center'>
         <Image src='/images/redditFace.svg' alt='logo' height='30px' />
         <Image
@@ -24,12 +26,12 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
           height='40px'
           display={{
             base: 'none',
-            md: 'unset',
+            md: 'none',
+            lg: 'block',
           }}
         />
       </Flex>
-      {/* <Directory /> */}
-
+      <Directory user={user} />
       <SearchInput />
       <RightContent user={user} />
     </Flex>
