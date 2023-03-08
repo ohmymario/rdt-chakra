@@ -16,7 +16,16 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
   }
 
   return (
-    <Flex as='header' bg='white' height='44px' padding='6px 12px' gap={2}>
+    <Flex
+      as='header'
+      bg='white'
+      height='44px'
+      padding='6px 12px'
+      gap={2}
+      justify={{
+        md: 'space-between',
+      }}
+    >
       {/* Needs to be a link */}
       <Flex align='center'>
         <Image src='/images/redditFace.svg' alt='logo' height='30px' />
@@ -32,7 +41,7 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
         />
       </Flex>
       {user && <Directory user={user} />}
-      <SearchInput />
+      <SearchInput user={user} />
       <RightContent user={user} />
     </Flex>
   );
