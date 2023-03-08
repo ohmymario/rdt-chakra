@@ -45,6 +45,10 @@ const menuButtonStyle = {
     md: 0.25,
     lg: 2,
   },
+  minWidth: {
+    base: 'auto',
+    lg: '260px',
+  },
   _hover: {
     bg: 'none',
     borderColor: 'gray.300',
@@ -68,15 +72,7 @@ const Directory: FunctionComponent<DirectoryProps> = (
   return (
     <Menu>
       <MenuButton as={Button} {...menuButtonStyle}>
-        <HStack
-          spacing={0.5}
-          align='center'
-          justify={'space-between'}
-          minWidth={{
-            base: 'auto',
-            lg: '270px',
-          }}
-        >
+        <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
             <Icon
               as={TiHome}
