@@ -18,7 +18,7 @@ import {
   Highlight,
   HStack,
 } from '@chakra-ui/react';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -30,7 +30,21 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
 ) => {
   const { open, handleClose } = props;
 
-  const handleCreateCommunity = () => {
+  type AccessLevel = 'public' | 'restricted' | 'private';
+
+  const [communityName, setCommunityName] = useState<string>('');
+  const [value, setValue] = useState<AccessLevel>('public');
+
+  const handleCommunityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(`🚀 ~ handleCommunityInput ~  e.target.value:`, e.target.value);
+  };
+
+  const handleRadioChange = (e: string) => {
+    setValue(e as AccessLevel);
+  };
+
+  const submitCommunity = () => {
+    console.log(`🚀 ~ handleCreateCommunity ~ e:`, e);
     console.log('Create Community');
   };
 
