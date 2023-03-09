@@ -71,12 +71,26 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                     Name
                   </Heading>
-                  <Text>
+                  <Text {...subTextStyles}>
                     Community names including capitalization cannot be changed.
                   </Text>
                 </Box>
-                <Input placeholder='r/' size='md' />
-                <Text>21 characters remaining</Text>
+                <Text
+                  position='relative'
+                  top='37px'
+                  left='10px'
+                  width='20px'
+                  color='gray.400'
+                >
+                  r/
+                </Text>
+                <Input
+                  position='relative'
+                  pl='20px'
+                  size='sm'
+                  onChange={(e) => handleCommunityInput(e)}
+                />
+                <Text {...subTextStyles}>21 characters remaining</Text>
               </VStack>
 
               <VStack width={'100%'} align='flex-start'>
