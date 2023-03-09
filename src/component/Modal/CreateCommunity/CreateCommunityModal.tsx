@@ -53,21 +53,22 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
     fontSize: '8pt',
     color: 'gray.500',
   };
+
   return (
     <>
       <Modal isOpen={open} onClose={() => handleClose()}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader fontSize='md' fontWeight='500'>
+        <ModalContent maxW={'lg'} p={4}>
+          <ModalHeader fontSize='md' fontWeight='500' p={0}>
             Create a community
           </ModalHeader>
           <ModalCloseButton />
 
-          <Divider />
+          <Divider mt={3} mb={2} />
 
-          <ModalBody>
+          <ModalBody px={0}>
             <VStack spacing={6}>
-              <VStack width={'100%'} align='flex-start'>
+              <VStack width={'100%'} align='flex-start' mb={3}>
                 <Box>
                   <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                     Name
@@ -103,37 +104,37 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   value={value}
                 >
                   <Radio size='md' mb={4} value='public'>
-                  <HStack>
+                    <HStack>
                       <Text fontSize='10pt' fontWeight='600'>
                         Public
                       </Text>
                       <Text {...subTextStyles}>
-                      Anyone can view, post, and comment to this community
-                    </Text>
-                  </HStack>
-                </Radio>
+                        Anyone can view, post, and comment to this community
+                      </Text>
+                    </HStack>
+                  </Radio>
                   <Radio size='md' mb={4} value='restricted'>
-                  <HStack>
+                    <HStack>
                       <Text fontSize='10pt' fontWeight='600'>
                         Restricted
                       </Text>
                       <Text {...subTextStyles}>
-                      Anyone can view this community, but only approved users
-                      can post
-                    </Text>
-                  </HStack>
-                </Radio>
+                        Anyone can view this community, but only approved users
+                        can post
+                      </Text>
+                    </HStack>
+                  </Radio>
                   <Radio size='md' mb={4} value='private'>
                     <HStack>
                       <Text fontSize='10pt' fontWeight='600'>
                         Private
-                  </Text>
+                      </Text>
                       <Text {...subTextStyles}>
                         Only approved users can view and submit to this
                         community{' '}
                       </Text>
                     </HStack>
-                </Radio>
+                  </Radio>
                 </RadioGroup>
               </VStack>
 
@@ -170,7 +171,10 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
             >
               Cancel
             </Button>
-            <Button height='32px' onClick={() => handleCreateCommunity()}>
+            <Button
+              height='32px'
+              // onClick={() => submitCommunity()}
+            >
               Create Community
             </Button>
           </ModalFooter>
