@@ -174,6 +174,8 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                     styles={{
                       px: '1',
                       py: '1',
+                      top: '-2px',
+                      position: 'relative',
                       bg: 'red.400',
                       color: 'white',
                       fontSize: '2xs',
