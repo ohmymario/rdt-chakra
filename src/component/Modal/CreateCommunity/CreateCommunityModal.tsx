@@ -17,6 +17,7 @@ import {
   Checkbox,
   Highlight,
   HStack,
+  RadioGroup,
 } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
@@ -97,28 +98,43 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                   Community Type
                 </Heading>
-                <Radio size='md' name='1'>
+                <RadioGroup
+                  onChange={(e) => handleRadioChange(e)}
+                  value={value}
+                >
+                  <Radio size='md' mb={4} value='public'>
                   <HStack>
+                      <Text fontSize='10pt' fontWeight='600'>
+                        Public
+                      </Text>
                       <Text {...subTextStyles}>
                       Anyone can view, post, and comment to this community
                     </Text>
                   </HStack>
                 </Radio>
-                <Radio size='md' name='1'>
+                  <Radio size='md' mb={4} value='restricted'>
                   <HStack>
+                      <Text fontSize='10pt' fontWeight='600'>
+                        Restricted
+                      </Text>
                       <Text {...subTextStyles}>
                       Anyone can view this community, but only approved users
                       can post
                     </Text>
                   </HStack>
                 </Radio>
-                <Radio size='md' name='1'>
-                  <Text>Private</Text>
-                  <Text fontSize='8pt' color='gray.500'>
-                    Only approved users can view and submit to this community{' '}
+                  <Radio size='md' mb={4} value='private'>
+                    <HStack>
+                      <Text fontSize='10pt' fontWeight='600'>
+                        Private
                   </Text>
                       <Text {...subTextStyles}>
+                        Only approved users can view and submit to this
+                        community{' '}
+                      </Text>
+                    </HStack>
                 </Radio>
+                </RadioGroup>
               </VStack>
 
               <VStack width={'100%'} align='flex-start'>
