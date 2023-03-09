@@ -168,7 +168,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                   Adult Content
                 </Heading>
-                <Checkbox size={'lg'}>
+                <Checkbox>
                   <Highlight
                     query='NSFW'
                     styles={{
