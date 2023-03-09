@@ -45,7 +45,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   const [charsRemain, setCharsRemain] = useState<number>(21);
   const [value, setValue] = useState<AccessLevel>('public');
 
-  const handleCommunityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
     if (name.length > 21) return;
     setCharsRemain(21 - name.length);
@@ -103,8 +103,9 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   position='relative'
                   pl='20px'
                   size='sm'
+                  borderRadius='md'
                   value={communityName}
-                  onChange={(e) => handleCommunityInput(e)}
+                  onChange={(e) => handleCommunityName(e)}
                 />
                 <Text
                   {...subTextStyles}
