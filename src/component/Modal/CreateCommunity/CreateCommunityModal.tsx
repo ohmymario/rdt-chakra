@@ -113,7 +113,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 >
                   <Radio size='md' mb={4} value='public'>
                     <HStack>
-                      <Icon as={FaUserCircle} color='gray.500' />
+                      <Icon
+                        as={FaUserCircle}
+                        color='gray.500'
+                        top='-1px'
+                        position='relative'
+                      />
                       <Text fontSize='10pt' fontWeight='600'>
                         Public
                       </Text>
@@ -124,7 +129,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   </Radio>
                   <Radio size='md' mb={4} value='restricted'>
                     <HStack>
-                      <Icon as={FaEye} color='gray.500' />
+                      <Icon
+                        as={FaEye}
+                        color='gray.500'
+                        top='-1px'
+                        position='relative'
+                      />
                       <Text fontSize='10pt' fontWeight='600'>
                         Restricted
                       </Text>
@@ -136,7 +146,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   </Radio>
                   <Radio size='md' mb={4} value='private'>
                     <HStack>
-                      <Icon as={FaLock} color='gray.500' />
+                      <Icon
+                        as={FaLock}
+                        color='gray.500'
+                        top='-1px'
+                        position='relative'
+                      />
                       <Text fontSize='10pt' fontWeight='600'>
                         Private
                       </Text>
