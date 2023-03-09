@@ -34,6 +34,10 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
     console.log('Create Community');
   };
 
+  const subTextStyles = {
+    fontSize: '8pt',
+    color: 'gray.500',
+  };
   return (
     <>
       <Modal isOpen={open} onClose={() => handleClose()}>
@@ -67,16 +71,14 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 </Heading>
                 <Radio size='md' name='1'>
                   <HStack>
-                    <Text display='inline'>Public</Text>
-                    <Text fontSize='8pt' color='gray.500'>
+                      <Text {...subTextStyles}>
                       Anyone can view, post, and comment to this community
                     </Text>
                   </HStack>
                 </Radio>
                 <Radio size='md' name='1'>
                   <HStack>
-                    <Text>Restricted</Text>
-                    <Text fontSize='8pt' color='gray.500'>
+                      <Text {...subTextStyles}>
                       Anyone can view this community, but only approved users
                       can post
                     </Text>
@@ -87,6 +89,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   <Text fontSize='8pt' color='gray.500'>
                     Only approved users can view and submit to this community{' '}
                   </Text>
+                      <Text {...subTextStyles}>
                 </Radio>
               </VStack>
 
