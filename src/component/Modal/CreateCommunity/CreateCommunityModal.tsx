@@ -187,7 +187,15 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
             </VStack>
           </ModalBody>
 
-          <ModalFooter bg='gray.100' borderRadius={'lg'}>
+          <ModalFooter
+            bg='gray.100'
+            borderRadius={'lg'}
+            position='relative'
+            left='-16px'
+            bottom='-16px'
+            width='512px'
+            height='64px'
+          >
             <Button
               colorScheme='blue'
               variant={'outline'}
