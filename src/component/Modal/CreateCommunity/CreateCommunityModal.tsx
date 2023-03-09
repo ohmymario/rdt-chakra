@@ -18,8 +18,16 @@ import {
   Highlight,
   HStack,
   RadioGroup,
+  Icon,
 } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
+
+// profile icon import
+import { FaUserCircle } from 'react-icons/fa';
+// eye icon import
+import { FaEye } from 'react-icons/fa';
+// lock icon import
+import { FaLock } from 'react-icons/fa';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -105,6 +113,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 >
                   <Radio size='md' mb={4} value='public'>
                     <HStack>
+                      <Icon as={FaUserCircle} color='gray.500' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Public
                       </Text>
@@ -115,6 +124,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   </Radio>
                   <Radio size='md' mb={4} value='restricted'>
                     <HStack>
+                      <Icon as={FaEye} color='gray.500' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Restricted
                       </Text>
@@ -126,6 +136,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   </Radio>
                   <Radio size='md' mb={4} value='private'>
                     <HStack>
+                      <Icon as={FaLock} color='gray.500' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Private
                       </Text>
