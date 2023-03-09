@@ -165,7 +165,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
               </VStack>
 
               <VStack width={'100%'} align='flex-start'>
-                <Heading as='h4' size='sm' mb={2} fontWeight='500'>
+                <Heading as='h4' size='sm' fontWeight='500'>
                   Adult Content
                 </Heading>
                 <Checkbox>
