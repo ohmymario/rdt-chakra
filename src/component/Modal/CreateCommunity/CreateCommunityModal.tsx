@@ -42,10 +42,14 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   type AccessLevel = 'public' | 'restricted' | 'private';
 
   const [communityName, setCommunityName] = useState<string>('');
+  const [charsRemain, setCharsRemain] = useState<number>(21);
   const [value, setValue] = useState<AccessLevel>('public');
 
   const handleCommunityInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(`🚀 ~ handleCommunityInput ~  e.target.value:`, e.target.value);
+    const name = e.target.value;
+    if (name.length > 21) return;
+    setCharsRemain(21 - name.length);
+    setCommunityName(name);
   };
 
   const handleRadioChange = (e: string) => {
@@ -76,6 +80,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
 
           <ModalBody px={0}>
             <VStack spacing={6}>
+              {/* Community Name */}
               <VStack width={'100%'} align='flex-start' mb={3}>
                 <Box>
                   <Heading as='h4' size='sm' mb={2} fontWeight='500'>
@@ -98,11 +103,18 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   position='relative'
                   pl='20px'
                   size='sm'
+                  value={communityName}
                   onChange={(e) => handleCommunityInput(e)}
                 />
-                <Text {...subTextStyles}>21 characters remaining</Text>
+                <Text
+                  {...subTextStyles}
+                  color={!charsRemain ? 'red' : 'gray.500'}
+                >
+                  {charsRemain} characters remaining
+                </Text>
               </VStack>
 
+              {/* Community Type */}
               <VStack width={'100%'} align='flex-start'>
                 <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                   Community Type
@@ -164,6 +176,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 </RadioGroup>
               </VStack>
 
+              {/* Adult Content */}
               <VStack width={'100%'} align='flex-start'>
                 <Heading as='h4' size='sm' fontWeight='500'>
                   Adult Content
