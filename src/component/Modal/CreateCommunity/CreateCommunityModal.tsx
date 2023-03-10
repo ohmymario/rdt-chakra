@@ -44,7 +44,9 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   const [communityName, setCommunityName] = useState<string>('');
   const [charsRemain, setCharsRemain] = useState<number>(21);
   const [communityType, setCommunityType] = useState<AccessLevel>('public');
+  const [isAdult, setIsAdult] = useState<boolean>(false);
 
+  console.log(communityName, charsRemain, communityType, isAdult);
 
   const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -183,7 +185,10 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 <Heading as='h4' size='sm' fontWeight='500'>
                   Adult Content
                 </Heading>
-                <Checkbox>
+                <Checkbox
+                  isChecked={isAdult}
+                  onChange={() => setIsAdult(!isAdult)}
+                >
                   <Highlight
                     query='NSFW'
                     styles={{
@@ -222,10 +227,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
             >
               Cancel
             </Button>
-            <Button
-              height='32px'
-              // onClick={() => submitCommunity()}
-            >
+            <Button height='32px' onClick={() => submitCommunity()}>
               Create Community
             </Button>
           </ModalFooter>
