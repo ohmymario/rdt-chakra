@@ -43,7 +43,8 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
 
   const [communityName, setCommunityName] = useState<string>('');
   const [charsRemain, setCharsRemain] = useState<number>(21);
-  const [value, setValue] = useState<AccessLevel>('public');
+  const [communityType, setCommunityType] = useState<AccessLevel>('public');
+
 
   const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -52,8 +53,8 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
     setCommunityName(name);
   };
 
-  const handleRadioChange = (e: string) => {
-    setValue(e as AccessLevel);
+  const handleCommunityType = (e: string) => {
+    setCommunityType(e as AccessLevel);
   };
 
   const submitCommunity = () => {
@@ -121,8 +122,8 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   Community Type
                 </Heading>
                 <RadioGroup
-                  onChange={(e) => handleRadioChange(e)}
-                  value={value}
+                  onChange={(e) => handleCommunityType(e)}
+                  value={communityType}
                 >
                   <Radio size='md' mb={4} value='public'>
                     <HStack>
