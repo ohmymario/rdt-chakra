@@ -19,8 +19,8 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
     <Flex
       as='header'
       bg='white'
-      height='44px'
-      padding='6px 12px'
+      height='48px'
+      padding='6px 20px 6px 20px'
       gap={2}
       justify={{
         md: 'space-between',
