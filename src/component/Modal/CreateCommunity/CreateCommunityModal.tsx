@@ -22,11 +22,13 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { FunctionComponent, useState } from 'react';
-
+import { auth, firestore } from '@/firebase/clientApp';
 import { FaUserCircle } from 'react-icons/fa';
 import { FaEye } from 'react-icons/fa';
 import { FaLock } from 'react-icons/fa';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -39,12 +41,15 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   const { open, handleClose } = props;
 
   type AccessLevel = 'public' | 'restricted' | 'private';
+  const [user] = useAuthState(auth);
 
   const [communityName, setCommunityName] = useState<string>('');
   const [charsRemain, setCharsRemain] = useState<number>(21);
   const [communityType, setCommunityType] = useState<AccessLevel>('public');
   const [isAdult, setIsAdult] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -62,9 +67,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   };
 
   const submitCommunity = async () => {
+    if (error) setError(''); // clear error
+
     // https://stackoverflow.com/a/32311188
     var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
+    // Validate
     if (format.test(communityName)) {
       setError('Community names can only contain letters and numbers');
       return;
@@ -80,9 +88,36 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
       return;
     }
 
-    // validate community name and if it already exists
+    setLoading(true);
 
-    // if that all passes then create the community in firestore
+    try {
+      // Check if a community with the same name already exists
+      // firestore - login
+      // communities - collection in firestore
+      // communityName - id of the document
+      const communityDocRef = doc(firestore, 'communities', communityName);
+      const communityDoc = await getDoc(communityDocRef);
+      if (communityDoc.exists()) {
+        throw new Error(`Sorry r/${communityName} is taken. Try another.`);
+      }
+
+      // create the communtiy in firestore
+      await setDoc(communityDocRef, {
+        name: communityName,
+        type: communityType,
+        creatorId: user?.uid,
+        createdAt: serverTimestamp(),
+        numberOfMembers: 1,
+        nsfw: isAdult,
+      });
+
+      // need to clear the input after creating a community
+    } catch (error: any) {
+      console.error(error);
+      setError(error.message);
+    }
+
+    setLoading(false);
   };
 
   const subTextStyles = {
@@ -138,14 +173,16 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   {charsRemain} characters remaining
                 </Text>
 
-                <Alert
-                  status='error'
-                  border={'1px solid red'}
-                  borderRadius='xl'
-                >
-                  <AlertIcon />
-                  {error}
-                </Alert>
+                {error && (
+                  <Alert
+                    status='error'
+                    border={'1px solid red'}
+                    borderRadius='xl'
+                  >
+                    <AlertIcon />
+                    {error}
+                  </Alert>
+                )}
               </VStack>
 
               {/* Community Type */}
@@ -254,7 +291,11 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
             >
               Cancel
             </Button>
-            <Button height='32px' onClick={() => submitCommunity()}>
+            <Button
+              height='32px'
+              onClick={() => submitCommunity()}
+              isLoading={loading}
+            >
               Create Community
             </Button>
           </ModalFooter>
