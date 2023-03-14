@@ -19,14 +19,13 @@ import {
   HStack,
   RadioGroup,
   Icon,
+  Alert,
+  AlertIcon,
 } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
-// profile icon import
 import { FaUserCircle } from 'react-icons/fa';
-// eye icon import
 import { FaEye } from 'react-icons/fa';
-// lock icon import
 import { FaLock } from 'react-icons/fa';
 
 interface CreateCommunityModalProps {
@@ -45,8 +44,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
   const [charsRemain, setCharsRemain] = useState<number>(21);
   const [communityType, setCommunityType] = useState<AccessLevel>('public');
   const [isAdult, setIsAdult] = useState<boolean>(false);
-
-  console.log(communityName, charsRemain, communityType, isAdult);
+  const [error, setError] = useState<string>('');
 
   const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value;
@@ -59,9 +57,32 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
     setCommunityType(e as AccessLevel);
   };
 
-  const submitCommunity = () => {
-    console.log(`🚀 ~ handleCreateCommunity ~ e:`, e);
-    console.log('Create Community');
+  const handleNSFW = () => {
+    setIsAdult(!isAdult);
+  };
+
+  const submitCommunity = async () => {
+    // https://stackoverflow.com/a/32311188
+    var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+    if (format.test(communityName)) {
+      setError('Community names can only contain letters and numbers');
+      return;
+    }
+
+    if (communityName.length < 3) {
+      setError('Community names must be at least 3 characters long');
+      return;
+    }
+
+    if (communityName.length > 21) {
+      setError('Community names must be less than 21 characters long');
+      return;
+    }
+
+    // validate community name and if it already exists
+
+    // if that all passes then create the community in firestore
   };
 
   const subTextStyles = {
@@ -116,6 +137,15 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 >
                   {charsRemain} characters remaining
                 </Text>
+
+                <Alert
+                  status='error'
+                  border={'1px solid red'}
+                  borderRadius='xl'
+                >
+                  <AlertIcon />
+                  {error}
+                </Alert>
               </VStack>
 
               {/* Community Type */}
@@ -185,10 +215,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 <Heading as='h4' size='sm' fontWeight='500'>
                   Adult Content
                 </Heading>
-                <Checkbox
-                  isChecked={isAdult}
-                  onChange={() => setIsAdult(!isAdult)}
-                >
+                <Checkbox isChecked={isAdult} onChange={() => handleNSFW()}>
                   <Highlight
                     query='NSFW'
                     styles={{
