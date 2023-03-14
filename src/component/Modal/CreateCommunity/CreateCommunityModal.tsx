@@ -22,7 +22,13 @@ import {
   Alert,
   AlertIcon,
 } from '@chakra-ui/react';
-import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  runTransaction,
+  serverTimestamp,
+  setDoc,
+} from 'firebase/firestore';
 import { FunctionComponent, useState } from 'react';
 import { auth, firestore } from '@/firebase/clientApp';
 import { FaUserCircle } from 'react-icons/fa';
@@ -91,24 +97,32 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
     setLoading(true);
 
     try {
-      // Check if a community with the same name already exists
-      // firestore - login
-      // communities - collection in firestore
-      // communityName - id of the document
-      const communityDocRef = doc(firestore, 'communities', communityName);
-      const communityDoc = await getDoc(communityDocRef);
-      if (communityDoc.exists()) {
-        throw new Error(`Sorry r/${communityName} is taken. Try another.`);
-      }
+      await runTransaction(firestore, async (transaction) => {
+        const communityDocRef = doc(firestore, 'communities', communityName);
+        // Check for Existing Community
+        const communityDoc = await transaction.get(communityDocRef);
+        if (communityDoc.exists()) {
+          throw new Error(`Sorry r/${communityName} is taken. Try another.`);
+        }
 
-      // create the communtiy in firestore
-      await setDoc(communityDocRef, {
-        name: communityName,
-        type: communityType,
-        creatorId: user?.uid,
-        createdAt: serverTimestamp(),
-        numberOfMembers: 1,
-        nsfw: isAdult,
+        // Create Community
+        transaction.set(communityDocRef, {
+          name: communityName,
+          type: communityType,
+          creatorId: user?.uid,
+          createdAt: serverTimestamp(),
+          numberOfMembers: 1,
+          nsfw: isAdult,
+        });
+
+        const communitySnippets = `users/${user?.uid}/communitySnippets`;
+        const userDocRef = doc(firestore, communitySnippets, communityName);
+
+        // Create Community Snippet on User
+        transaction.set(userDocRef, {
+          communityId: communityName,
+          isModerator: true,
+        });
       });
 
       resetForm();
