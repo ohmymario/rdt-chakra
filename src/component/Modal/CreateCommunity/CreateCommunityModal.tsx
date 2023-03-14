@@ -111,13 +111,21 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
         nsfw: isAdult,
       });
 
-      // need to clear the input after creating a community
+      resetForm();
     } catch (error: any) {
       console.error(error);
       setError(error.message);
     }
 
     setLoading(false);
+  };
+
+  const resetForm = () => {
+    setCommunityName('');
+    setCharsRemain(21);
+    setCommunityType('public');
+    setIsAdult(false);
+    setError('');
   };
 
   const subTextStyles = {
