@@ -11,10 +11,6 @@ interface NavbarProps {}
 const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
   const [user, loading, error] = useAuthState(auth);
 
-  if (user) {
-    console.log(`🚀 ~ user:`, user);
-  }
-
   return (
     <Flex
       as='header'
