@@ -1,16 +1,18 @@
+import { FunctionComponent } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
 import { firestore } from '@/firebase/clientApp';
 import { doc, getDoc } from 'firebase/firestore';
 import { GetServerSidePropsContext } from 'next';
-import { FunctionComponent } from 'react';
 import safeJsonStringify from 'safe-json-stringify';
+
+import NotFound from '@/component/Community/NotFound';
 
 interface CommunityPageProps {
   communityData: Community;
 }
 
 const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
-  if (!props.communityData) return <div>Community doesn&apos;t exist</div>;
+  if (!props.communityData) return <NotFound />;
   const { communityData } = props;
   return <div>CommunityPage {JSON.stringify(communityData)}</div>;
 };
