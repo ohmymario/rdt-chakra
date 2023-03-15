@@ -37,7 +37,7 @@ const menuButtonStyle = {
   color: 'gray.700',
   borderRadius: 'md',
   border: '1px solid transparent',
-  height: '32px',
+  height: '36px',
   pl: {
     md: 1,
     lg: 3,
