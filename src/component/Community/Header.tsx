@@ -15,7 +15,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
     <Flex height='146px' direction='column'>
       <Box height='50%' width='100%' bg='blue.400' />
       <Flex justify='center' bg='white' flexGrow='1'>
-        <Flex width='95%' maxW='860px' position='relative'>
+        <Flex width='95%' maxW='984px' position='relative'>
           {communityData.imageURL ? (
             <Image alt={communityData.name} />
           ) : (
@@ -48,7 +48,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                 variant={isJoined ? 'outline' : 'solid'}
                 onClick={() => {
                   console.log('clicked');
-                  console.log('clicked');
+                  alert(JSON.stringify(communityData));
                 }}
               >
                 {isJoined ? 'Joined' : 'Join'}
