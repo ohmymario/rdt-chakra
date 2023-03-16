@@ -10,4 +10,6 @@ export interface Community {
   nsfw: boolean;
   numberOfMembers: number;
   type: AccessLevel;
+  imageURL?: string;
+  id: string;
 }
