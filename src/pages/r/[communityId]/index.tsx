@@ -7,6 +7,7 @@ import safeJsonStringify from 'safe-json-stringify';
 
 import NotFound from '@/component/Community/NotFound';
 import Header from '@/component/Community/Header';
+import PageContent from '@/component/Layout/PageContent';
 
 interface CommunityPageProps {
   communityData: Community;
@@ -18,6 +19,10 @@ const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
   return (
     <>
       <Header communityData={communityData} />
+      <PageContent>
+        <>First</>
+        <>Second</>
+      </PageContent>
     </>
   );
 };
