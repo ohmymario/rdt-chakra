@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from 'next';
 import safeJsonStringify from 'safe-json-stringify';
 
 import NotFound from '@/component/Community/NotFound';
+import Header from '@/component/Community/Header';
 
 interface CommunityPageProps {
   communityData: Community;
@@ -14,7 +15,11 @@ interface CommunityPageProps {
 const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
   if (!props.communityData) return <NotFound />;
   const { communityData } = props;
-  return <div>CommunityPage {JSON.stringify(communityData)}</div>;
+  return (
+    <>
+      <Header communityData={communityData} />
+    </>
+  );
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
