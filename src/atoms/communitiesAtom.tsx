@@ -15,13 +15,15 @@ export interface Community {
   id: string;
 }
 
+export interface CommunitySnippet {
+  communityId: string;
+  isModerator?: boolean;
+  imageURL?: string;
+}
+
 // User Community State - users collection
 export interface CommunityState {
-  mySnippets: {
-    communityId: string;
-    isModerator?: boolean;
-    imageURL?: string;
-  }[];
+  mySnippets: CommunitySnippet[];
 }
 
 export const communitiesState = atom<CommunityState>({
