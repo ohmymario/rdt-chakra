@@ -16,7 +16,7 @@ export interface Community {
 }
 
 // User Community State - users collection
-interface CommunityState {
+export interface CommunityState {
   mySnippets: {
     communityId: string;
     isModerator?: boolean;
