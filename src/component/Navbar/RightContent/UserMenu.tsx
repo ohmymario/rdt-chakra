@@ -32,7 +32,8 @@ import { useSignOut } from 'react-firebase-hooks/auth';
 
 // Auth Modal
 import { authModalState } from '@/atoms/authModalAtom';
-import { useSetRecoilState } from 'recoil';
+import { useResetRecoilState, useSetRecoilState } from 'recoil';
+import { communitiesState } from '@/atoms/communitiesAtom';
 
 interface UserMenuProps {
   user: FirebaseUser | null | undefined;
@@ -71,8 +72,11 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
   const [signOut, loading, error] = useSignOut(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
+  const resetCommuntiyState = useResetRecoilState(communitiesState);
+
   const handleSignOut = async () => {
     const success = await signOut();
+    resetCommuntiyState();
   };
 
   return (
@@ -93,9 +97,7 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
                   xl: 'flex',
                 }}
               >
-                <Text color='gray.600'>
-                  {user?.displayName || user.email?.split('@')[0]}
-                </Text>
+                <Text color='gray.600'>{user?.displayName || user.email?.split('@')[0]}</Text>
                 <HStack color='gray.400' spacing={2}>
                   <HStack spacing={0.25}>
                     <Icon as={IoSparkles} color='brand.100' fontSize={12} />
