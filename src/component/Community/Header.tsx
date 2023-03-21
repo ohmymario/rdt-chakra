@@ -13,7 +13,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
   const { communityData } = props;
 
   // Logged in users data
-  const { communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
+  const { communityStateValue, onJoinOrLeaveCommunity, loading } = useCommunityData();
 
   // check if the user is joined
   // if they are, then show the leave button
@@ -54,6 +54,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                 height='32px'
                 pr={6}
                 pl={6}
+                isLoading={loading}
                 variant={isJoined ? 'outline' : 'solid'}
                 onClick={() => {
                   alert('JOINING OR LEAVING COMMUNITY');
