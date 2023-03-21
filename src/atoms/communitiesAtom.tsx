@@ -3,7 +3,9 @@ import { atom } from 'recoil';
 
 type AccessLevel = 'public' | 'restricted' | 'private';
 
-// Community - communities collection
+// COMMUNITIES COLLECTION
+
+// Community - SINGLE COMMUNITY
 export interface Community {
   createdAt: Timestamp;
   creatorId: string;
@@ -15,17 +17,21 @@ export interface Community {
   id: string;
 }
 
+// USER COLLECTION
+
+// Community Snippet - SINGLE SNIPPET
 export interface CommunitySnippet {
   communityId: string;
   isModerator?: boolean;
   imageURL?: string;
 }
 
-// User Community State - users collection
+// User Community State - COLLECTION OF SNIPPETS
 export interface CommunityState {
   mySnippets: CommunitySnippet[];
 }
 
+// Default Atom State
 export const communitiesState = atom<CommunityState>({
   key: 'communitiesState',
   default: {
