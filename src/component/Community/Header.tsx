@@ -3,6 +3,8 @@ import { Community } from '@/atoms/communitiesAtom';
 import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
 
+import useCommunityData from '@/hooks/useCommunityData';
+
 interface HeaderProps {
   communityData: Community;
 }
@@ -10,7 +12,14 @@ interface HeaderProps {
 const Header: FunctionComponent<HeaderProps> = (props) => {
   const { communityData } = props;
 
-  const isJoined = false;
+  // Logged in users data
+  const { communityStateValue, onJoinOrLeaveCommunity } = useCommunityData();
+
+  // check if the user is joined
+  // if they are, then show the leave button
+  // if they are not, then show the join button
+  const isJoined = !!communityStateValue.mySnippets.find((community) => community.communityId === communityData.id);
+
   return (
     <Flex height='146px' direction='column'>
       <Box height='50%' width='100%' bg='blue.400' />
@@ -47,8 +56,8 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                 pl={6}
                 variant={isJoined ? 'outline' : 'solid'}
                 onClick={() => {
-                  console.log('clicked');
-                  alert(JSON.stringify(communityData));
+                  alert('JOINING OR LEAVING COMMUNITY');
+                  onJoinOrLeaveCommunity(communityData, isJoined);
                 }}
               >
                 {isJoined ? 'Joined' : 'Join'}
