@@ -83,8 +83,34 @@ const useCommunityData = (): UseCommunityDataReturnType => {
     }
   };
 
-  const leaveCommunity = (communityId: string) => {
-    console.log('leaving community');
+  const leaveCommunity = async (communityId: string) => {
+    try {
+      // Batch write location
+      const batch = writeBatch(firestore);
+
+      // locations
+      const communitySnippets = `users/${user?.uid}/communitySnippets`;
+      const communities = `communities`;
+
+      // references
+      const userCommunitySnippetsRef = doc(firestore, communitySnippets, communityId);
+      const communityRef = doc(firestore, communities, communityId);
+
+      // batch write
+      batch.delete(userCommunitySnippetsRef);
+      batch.update(communityRef, { numberOfMembers: increment(-1) });
+
+      // commit batch
+      await batch.commit();
+
+      // update global atom state
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        mySnippets: prev.mySnippets.filter((x) => x.communityId !== communityId),
+      }));
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
