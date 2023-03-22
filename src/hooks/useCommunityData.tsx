@@ -45,10 +45,9 @@ const useCommunityData = (): UseCommunityDataReturnType => {
   };
 
   const joinCommunity = async (communityData: Community) => {
-    const { numberOfMembers, imageURL, id } = communityData;
+    const { imageURL, id } = communityData;
 
     try {
-      console.log('trying to join community');
       // Batch write location
       const batch = writeBatch(firestore);
 
@@ -61,11 +60,11 @@ const useCommunityData = (): UseCommunityDataReturnType => {
 
       // locations
       const communitySnippets = `users/${user?.uid}/communitySnippets`;
-      const communities = `communities/${id}/members`;
+      const communities = `communities`;
 
       // references
       const userCommunitySnippetsRef = doc(firestore, communitySnippets, id);
-      const communityRef = doc(firestore, communities);
+      const communityRef = doc(firestore, communities, id);
 
       // batch write
       batch.set(userCommunitySnippetsRef, newSnippet, { merge: true });
