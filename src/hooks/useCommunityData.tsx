@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { communitiesState, CommunityState, Community, CommunitySnippet } from '@/atoms/communitiesAtom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, firestore } from '@/firebase/clientApp';
 import { collection, doc, getDocs, increment, writeBatch } from 'firebase/firestore';
+import { authModalState } from '@/atoms/authModalAtom';
 
 type UseCommunityDataReturnType = {
   communityStateValue: CommunityState;
@@ -16,12 +17,18 @@ const useCommunityData = (): UseCommunityDataReturnType => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
-  // Where to save the community data to globally use
+  const setAuthModalState = useSetRecoilState(authModalState);
+
+  // Global state for a signed in user's communities
   const [communityStateValue, setCommunityStateValue] = useRecoilState(communitiesState);
 
-  // Check if the user is in the community
-  // removes or add them based on the isJoined boolean
+  // Join or leave a community
   const onJoinOrLeaveCommunity = (communityData: Community, isJoined: boolean) => {
+    // If the user is not logged in, open the login modal
+    if (!user) {
+      setAuthModalState({ isOpen: true, view: 'login' });
+      return;
+    }
     if (isJoined) return leaveCommunity(communityData.id);
     joinCommunity(communityData);
   };
