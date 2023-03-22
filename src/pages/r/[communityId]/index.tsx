@@ -8,6 +8,7 @@ import safeJsonStringify from 'safe-json-stringify';
 import NotFound from '@/component/Community/NotFound';
 import Header from '@/component/Community/Header';
 import PageContent from '@/component/Layout/PageContent';
+import CreatePostLink from '@/component/Community/CreatePostLink';
 
 interface CommunityPageProps {
   communityData: Community;
@@ -20,8 +21,12 @@ const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
     <>
       <Header communityData={communityData} />
       <PageContent>
-        <>First</>
-        <>Second</>
+        <>
+          <CreatePostLink />
+        </>
+        <>
+          <>RHS</>
+        </>
       </PageContent>
     </>
   );
@@ -29,11 +34,7 @@ const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
-    const communityDocRef = doc(
-      firestore,
-      'communities',
-      context.query.communityId as string
-    );
+    const communityDocRef = doc(firestore, 'communities', context.query.communityId as string);
     const communityDoc = await getDoc(communityDocRef);
 
     // Not Found
