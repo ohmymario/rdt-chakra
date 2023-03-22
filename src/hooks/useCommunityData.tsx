@@ -3,7 +3,7 @@ import { communitiesState, CommunityState, Community, CommunitySnippet } from '@
 import { useRecoilState } from 'recoil';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, firestore } from '@/firebase/clientApp';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, doc, getDocs, increment, writeBatch } from 'firebase/firestore';
 
 type UseCommunityDataReturnType = {
   communityStateValue: CommunityState;
@@ -44,8 +44,44 @@ const useCommunityData = (): UseCommunityDataReturnType => {
     setLoading(false);
   };
 
-  const joinCommunity = (communityData: Community) => {
-    console.log('joining community');
+  const joinCommunity = async (communityData: Community) => {
+    const { numberOfMembers, imageURL, id } = communityData;
+
+    try {
+      console.log('trying to join community');
+      // Batch write location
+      const batch = writeBatch(firestore);
+
+      // new snippet
+      const newSnippet: CommunitySnippet = {
+        communityId: id,
+        isModerator: false,
+        imageURL: imageURL || '',
+      };
+
+      // locations
+      const communitySnippets = `users/${user?.uid}/communitySnippets`;
+      const communities = `communities/${id}/members`;
+
+      // references
+      const userCommunitySnippetsRef = doc(firestore, communitySnippets, id);
+      const communityRef = doc(firestore, communities);
+
+      // batch write
+      batch.set(userCommunitySnippetsRef, newSnippet, { merge: true });
+      batch.update(communityRef, { numberOfMembers: increment(1) });
+
+      // commit batch
+      await batch.commit();
+
+      // update global atom state
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        mySnippets: [...prev.mySnippets, newSnippet],
+      }));
+    } catch (error: any) {
+      console.log(error);
+    }
   };
 
   const leaveCommunity = (communityId: string) => {
