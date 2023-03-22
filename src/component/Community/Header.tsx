@@ -57,7 +57,6 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                 isLoading={loading}
                 variant={isJoined ? 'outline' : 'solid'}
                 onClick={() => {
-                  alert('JOINING OR LEAVING COMMUNITY');
                   onJoinOrLeaveCommunity(communityData, isJoined);
                 }}
               >
