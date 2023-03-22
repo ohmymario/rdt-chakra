@@ -1,11 +1,40 @@
-import { Flex, Icon, Input } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
-import { BsLink45Deg } from 'react-icons/bs';
+import { Flex, Icon, Input } from '@chakra-ui/react';
+
+// Icons
 import { FaReddit } from 'react-icons/fa';
+import { BsLink45Deg } from 'react-icons/bs';
 import { IoImageOutline } from 'react-icons/io5';
 
-const CreatePostLink: FunctionComponent = (props) => {
-  const {} = props;
+// firebase
+import { auth } from '@/firebase/clientApp';
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+import { useRouter } from 'next/router';
+import { authModalState } from '@/atoms/authModalAtom';
+import { useSetRecoilState } from 'recoil';
+
+const CreatePostLink: FunctionComponent = () => {
+  // redirect and grab path id
+  const router = useRouter();
+
+  // Logged In User
+  const [user] = useAuthState(auth);
+
+  // Modals status
+  const setAuthModalState = useSetRecoilState(authModalState);
+
+  const clickHandler = () => {
+    const {
+      push,
+      query: { communityId },
+    } = router;
+    if (!user) {
+      setAuthModalState({ isOpen: true, view: 'login' });
+    }
+
+    router.push(`/r/${communityId}/submit`);
+  };
 
   const flexContainerStyles = {
     flex: 1,
@@ -44,7 +73,7 @@ const CreatePostLink: FunctionComponent = (props) => {
   return (
     <Flex {...flexContainerStyles}>
       <Icon as={FaReddit} fontSize={36} color='gray.300' mr={4} />
-      <Input {...inputStyles} onClick={() => console.log('INPUT CLICKED')} />
+      <Input {...inputStyles} onClick={() => clickHandler()} />
       <Icon as={IoImageOutline} fontSize={24} mr={4} color='gray.400' cursor='pointer' />
       <Icon as={BsLink45Deg} fontSize={24} color='gray.400' cursor='pointer' />
     </Flex>
