@@ -31,6 +31,7 @@ const CreatePostLink: FunctionComponent = () => {
     } = router;
     if (!user) {
       setAuthModalState({ isOpen: true, view: 'login' });
+      return;
     }
 
     router.push(`/r/${communityId}/submit`);

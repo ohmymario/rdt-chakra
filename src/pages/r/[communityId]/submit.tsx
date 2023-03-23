@@ -1,9 +1,7 @@
 import { FunctionComponent } from 'react';
 
-interface SubmitProps {}
-
-const Submit: FunctionComponent<SubmitProps> = (props: SubmitProps) => {
+const SubmitPostPage: FunctionComponent = (props) => {
   return <div>Submit</div>;
 };
 
-export default Submit;
+export default SubmitPostPage;
