@@ -8,9 +8,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import { IconType } from 'react-icons/lib';
 import TabItem from './TabItem';
 
-interface NewPostFormProps {}
-
-const formTabs = [
+const formTabs: tabType[] = [
   {
     label: 'Post',
     icon: IoDocumentText,
@@ -37,7 +35,7 @@ const formTabs = [
 
 export type tabType = { label: string; icon: IconType; disabled?: boolean };
 
-const NewPostForm: FunctionComponent<NewPostFormProps> = (props: NewPostFormProps) => {
+const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState('Post');
 
   return (
