@@ -33,10 +33,28 @@ const formTabs: tabType[] = [
   },
 ];
 
+interface inputType {
+  title: string;
+  description: string;
+}
+
 export type tabType = { label: string; icon: IconType; disabled?: boolean };
 
 const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState('Post');
+  const [textInput, setTextInput] = useState<inputType>({ title: '', description: '' });
+  const [selectedFile, setSelectedFile] = useState<string>();
+
+  // add post to firebase
+  const handleCreatePost = async () => {};
+
+  // add image to firebase
+  const onSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('onSelectImage');
+  };
+
+  // handle text field input
+  const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {};
 
   return (
     <Flex direction='column' bg='white' borderRadius={4} w='100%'>
@@ -45,6 +63,7 @@ const NewPostForm: FunctionComponent = () => {
           <TabItem tab={tab} key={index} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
         ))}
       </Flex>
+      <Flex>{/* <TextInputs /> */}</Flex>
     </Flex>
   );
 };
