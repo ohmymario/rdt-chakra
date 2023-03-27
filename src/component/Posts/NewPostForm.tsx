@@ -1,12 +1,12 @@
-import { Flex, Icon } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
+import TabItem from './TabItem';
 
+import { IconType } from 'react-icons/lib';
 import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { AiFillCloseCircle } from 'react-icons/ai';
-import { IconType } from 'react-icons/lib';
-import TabItem from './TabItem';
 
 const formTabs: tabType[] = [
   {
