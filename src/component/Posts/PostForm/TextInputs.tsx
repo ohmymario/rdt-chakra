@@ -12,8 +12,8 @@ interface TextInputsProps {
 }
 
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
-  const [title, setTitle] = useState<string>('');
-  const [text, setText] = useState<string>('');
+  const { textInput, onTextChange, handleCreatePost, loading } = props;
+  const { title, body } = textInput;
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // setTitle(e.target.value);
@@ -36,7 +36,7 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
 
   return (
     <Stack spacing={3} width='100%'>
-      <Input name='Title' placeholder='Title' value={title} onChange={handleTitleChange} {...inputStyles} />
+      <Input name='Title' placeholder='Title' {...inputStyles} />
       <Textarea name='body' placeholder='Text (optional)' height='100px' {...inputStyles} />
       <Flex justify={'flex-end'}>
         <Button
