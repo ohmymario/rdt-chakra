@@ -1,7 +1,15 @@
 import { Stack, Input, Flex, Textarea, Button } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
-interface TextInputsProps {}
+interface TextInputsProps {
+  textInput: {
+    title: string;
+    body: string;
+  };
+  onTextChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleCreatePost: () => void;
+  loading: boolean;
+}
 
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
   const [title, setTitle] = useState<string>('');
