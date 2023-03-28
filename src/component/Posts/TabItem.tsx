@@ -1,11 +1,11 @@
 import { Flex, Icon } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
-import { tabType } from './NewPostForm';
+import { tabType, tabLabels } from './NewPostForm';
 
 interface TabItemProps {
   tab: tabType;
   selected: boolean;
-  setActiveTab: (label: string) => void;
+  setActiveTab: (tab: tabLabels) => void;
 }
 
 const TabItem: FunctionComponent<TabItemProps> = (props) => {
