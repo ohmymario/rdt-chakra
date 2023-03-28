@@ -43,8 +43,8 @@ interface inputType {
 }
 
 const NewPostForm: FunctionComponent = () => {
-  const [activeTab, setActiveTab] = useState('Post');
-  const [textInput, setTextInput] = useState<inputType>({ title: '', description: '' });
+  const [activeTab, setActiveTab] = useState<tabLabels>('Post');
+  const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [selectedFile, setSelectedFile] = useState<string>();
 
   // add post to firebase
