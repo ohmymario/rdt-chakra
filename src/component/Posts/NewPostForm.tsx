@@ -45,12 +45,19 @@ interface inputType {
 const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<string>();
 
-  // add post to firebase
+  // Submit Post to Firebase
   const handleCreatePost = async () => {};
 
-  // add image to firebase
+  // ActiveTab Post
+  const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTextInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // ActiveTab Image & Video
   const onSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log('onSelectImage');
   };
