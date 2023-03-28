@@ -1,6 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import TabItem from './TabItem';
+import TextInputs from './PostForm/TextInputs';
 
 import { IconType } from 'react-icons/lib';
 import { BiPoll } from 'react-icons/bi';
@@ -63,7 +64,9 @@ const NewPostForm: FunctionComponent = () => {
           <TabItem tab={tab} key={index} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
         ))}
       </Flex>
-      <Flex>{/* <TextInputs /> */}</Flex>
+      <Flex p={4}>
+        <TextInputs />
+      </Flex>
     </Flex>
   );
 };
