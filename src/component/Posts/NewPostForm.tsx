@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import TabItem from './TabItem';
 import TextInputs from './PostForm/TextInputs';
@@ -62,9 +62,6 @@ const NewPostForm: FunctionComponent = () => {
     console.log('onSelectImage');
   };
 
-  // handle text field input
-  const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {};
-
   return (
     <Flex direction='column' bg='white' borderRadius={4} w='100%'>
       <Flex>
@@ -73,7 +70,16 @@ const NewPostForm: FunctionComponent = () => {
         ))}
       </Flex>
       <Flex p={4}>
-        <TextInputs />
+        {activeTab === 'Post' && (
+          <TextInputs
+            textInput={textInput}
+            handleCreatePost={handleCreatePost}
+            onTextChange={onTextChange}
+            loading={loading}
+          />
+        )}
+        {activeTab === 'Image & Video' && <Text>Image and Video Tab</Text>}
+        {activeTab === 'Link' && <Text>Link Tab</Text>}
       </Flex>
     </Flex>
   );
