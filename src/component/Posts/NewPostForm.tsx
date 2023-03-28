@@ -34,12 +34,13 @@ const formTabs: tabType[] = [
   },
 ];
 
+export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
+export type tabType = { label: tabLabels; icon: IconType; disabled?: boolean };
+
 interface inputType {
   title: string;
-  description: string;
+  body: string;
 }
-
-export type tabType = { label: string; icon: IconType; disabled?: boolean };
 
 const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState('Post');
