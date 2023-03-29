@@ -8,6 +8,7 @@ import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { AiFillCloseCircle } from 'react-icons/ai';
+import ImageUpload from './PostForm/ImageUpload';
 
 const formTabs: tabType[] = [
   {
@@ -78,7 +79,7 @@ const NewPostForm: FunctionComponent = () => {
             loading={loading}
           />
         )}
-        {activeTab === 'Image & Video' && <Text>Image and Video Tab</Text>}
+        {activeTab === 'Image & Video' && <ImageUpload />}
         {activeTab === 'Link' && <Text>Link Tab</Text>}
       </Flex>
     </Flex>
