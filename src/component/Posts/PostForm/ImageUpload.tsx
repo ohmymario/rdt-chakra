@@ -17,17 +17,18 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = (props) => {
     fileInputRef.current?.click();
   };
 
+  const inputContainerStyles = {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    border: '1px solid',
+    borderColor: 'gray.200',
+    width: '100%',
+    borderRadius: 4,
+  };
   return (
     <Flex justify='center' align='center' width='100%'>
-      <Flex
-        justify='center'
-        align='center'
-        p={20}
-        border='1px solid'
-        borderColor='gray.200'
-        width='100%'
-        borderRadius={4}
-      >
+          <Flex {...inputContainerStyles}>
         <input
           ref={fileInputRef}
           type='file'
