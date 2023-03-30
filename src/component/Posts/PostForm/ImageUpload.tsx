@@ -33,9 +33,8 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = (props: ImageUploadProp
         <input
           ref={fileInputRef}
           type='file'
-          accept='image/*'
-          onChange={handleFileChange}
-          style={{ display: 'none' }}
+          hidden
+          style={{ display: 'none', visibility: 'hidden', opacity: 0, height: 0, width: 0 }}
         />
         <Button variant='outline' height='28px' onClick={handleSubmitClick}>
           Upload
