@@ -49,7 +49,7 @@ const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<string | undefined>(undefined);
+  const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Submit Post to Firebase
   const handleCreatePost = async () => {};

@@ -2,8 +2,8 @@ import { Button, Flex } from '@chakra-ui/react';
 import { FunctionComponent, useRef } from 'react';
 
 interface ImageUploadProps {
-  selectedFile: string | undefined;
-  setSelectedFile: (file: string | undefined) => void;
+  selectedFile: string | null;
+  setSelectedFile: (file: string | null) => void;
   onSelectImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setActiveTab: (tab: tabLabels) => void;
 }
