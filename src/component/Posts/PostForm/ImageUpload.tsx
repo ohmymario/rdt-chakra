@@ -1,22 +1,17 @@
 import { Button, Flex } from '@chakra-ui/react';
 import { FunctionComponent, useRef } from 'react';
 
-interface ImageUploadProps {}
+interface ImageUploadProps {
+  onSelectImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
 const ImageUpload: FunctionComponent<ImageUploadProps> = (props: ImageUploadProps) => {
+  const { onSelectImage } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Listen for Button Click
   const handleSubmitClick = () => {
     fileInputRef.current?.click();
-  };
-
-  // Logic for Input Element / File Upload
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      console.log('Uploading image:', files[0]);
-    }
   };
 
   return (
@@ -33,10 +28,12 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = (props: ImageUploadProp
         <input
           ref={fileInputRef}
           type='file'
+          accept='image/jpeg, image/png'
+          onChange={(e) => onSelectImage(e)}
           hidden
           style={{ display: 'none', visibility: 'hidden', opacity: 0, height: 0, width: 0 }}
         />
-        <Button variant='outline' height='28px' onClick={handleSubmitClick}>
+        <Button variant='outline' height='28px' onClick={() => handleSubmitClick()}>
           Upload
         </Button>
       </Flex>
