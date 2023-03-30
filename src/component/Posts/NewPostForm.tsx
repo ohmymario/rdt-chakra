@@ -65,7 +65,15 @@ const NewPostForm: FunctionComponent = () => {
     const reader = new FileReader();
     const files = e.target.files;
     const checkForFile = files && files.length > 0;
+    const oneMB = 1000000;
     if (checkForFile) {
+      if (files[0].size > oneMB) {
+        alert(`
+          File size is too big!
+          Please select an image less than 1MB.
+          `);
+        return;
+      }
       reader.readAsDataURL(files[0]);
     }
 
