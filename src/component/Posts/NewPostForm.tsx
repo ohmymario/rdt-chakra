@@ -1,14 +1,16 @@
-import { Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
+import { Flex, Text } from '@chakra-ui/react';
+
+//Components
 import TabItem from './TabItem';
 import TextInputs from './PostForm/TextInputs';
+import ImageUpload from './PostForm/ImageUpload';
 
-import { IconType } from 'react-icons/lib';
+//Icons
 import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
-import { AiFillCloseCircle } from 'react-icons/ai';
-import ImageUpload from './PostForm/ImageUpload';
+import { IconType } from 'react-icons/lib';
 
 const formTabs: tabType[] = [
   {
@@ -47,7 +49,7 @@ const NewPostForm: FunctionComponent = () => {
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<string>();
+  const [selectedFile, setSelectedFile] = useState<string | undefined>(undefined);
 
   // Submit Post to Firebase
   const handleCreatePost = async () => {};
@@ -60,7 +62,23 @@ const NewPostForm: FunctionComponent = () => {
 
   // ActiveTab Image & Video
   const onSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('onSelectImage');
+    const reader = new FileReader();
+    const files = e.target.files;
+    const checkForFile = files && files.length > 0;
+    if (checkForFile) {
+      reader.readAsDataURL(files[0]);
+    }
+
+    reader.onload = () => {
+      const base64 = reader.result;
+      if (base64 && typeof base64 === 'string') {
+        setSelectedFile(base64);
+      }
+    };
+
+    reader.onerror = (error) => {
+      console.log('error', error);
+    };
   };
 
   return (
@@ -79,7 +97,15 @@ const NewPostForm: FunctionComponent = () => {
             loading={loading}
           />
         )}
-        {activeTab === 'Image & Video' && <ImageUpload />}
+
+        {activeTab === 'Image & Video' && (
+          <ImageUpload
+            onSelectImage={onSelectImage}
+            selectedFile={selectedFile}
+            setActiveTab={setActiveTab}
+            setSelectedFile={setSelectedFile}
+          />
+        )}
         {activeTab === 'Link' && <Text>Link Tab</Text>}
       </Flex>
     </Flex>
