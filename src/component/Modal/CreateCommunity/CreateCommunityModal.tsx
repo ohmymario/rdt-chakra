@@ -1,49 +1,39 @@
+import { auth, firestore } from '@/firebase/clientApp';
 import {
-  Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Box,
-  Heading,
-  Text,
-  Input,
-  Radio,
-  VStack,
-  Divider,
-  Checkbox,
-  Highlight,
-  HStack,
-  RadioGroup,
-  Icon,
   Alert,
   AlertIcon,
+  Box,
+  Button,
+  Checkbox,
+  Divider,
+  Heading,
+  Highlight,
+  HStack,
+  Icon,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Radio,
+  RadioGroup,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
-import {
-  doc,
-  getDoc,
-  runTransaction,
-  serverTimestamp,
-  setDoc,
-} from 'firebase/firestore';
+import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { FunctionComponent, useState } from 'react';
-import { auth, firestore } from '@/firebase/clientApp';
-import { FaUserCircle } from 'react-icons/fa';
-import { FaEye } from 'react-icons/fa';
-import { FaLock } from 'react-icons/fa';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
 
 interface CreateCommunityModalProps {
   open: boolean;
   handleClose: () => void;
 }
 
-const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
-  props: CreateCommunityModalProps
-) => {
+const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (props: CreateCommunityModalProps) => {
   const { open, handleClose } = props;
 
   type AccessLevel = 'public' | 'restricted' | 'private';
@@ -167,17 +157,9 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                     Name
                   </Heading>
-                  <Text {...subTextStyles}>
-                    Community names including capitalization cannot be changed.
-                  </Text>
+                  <Text {...subTextStyles}>Community names including capitalization cannot be changed.</Text>
                 </Box>
-                <Text
-                  position='relative'
-                  top='37px'
-                  left='10px'
-                  width='20px'
-                  color='gray.400'
-                >
+                <Text position='relative' top='37px' left='10px' width='20px' color='gray.400'>
                   r/
                 </Text>
                 <Input
@@ -188,19 +170,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                   value={communityName}
                   onChange={(e) => handleCommunityName(e)}
                 />
-                <Text
-                  {...subTextStyles}
-                  color={!charsRemain ? 'red' : 'gray.500'}
-                >
+                <Text {...subTextStyles} color={!charsRemain ? 'red' : 'gray.500'}>
                   {charsRemain} characters remaining
                 </Text>
 
                 {error && (
-                  <Alert
-                    status='error'
-                    border={'1px solid red'}
-                    borderRadius='xl'
-                  >
+                  <Alert status='error' border={'1px solid red'} borderRadius='xl'>
                     <AlertIcon />
                     {error}
                   </Alert>
@@ -212,58 +187,32 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
                 <Heading as='h4' size='sm' mb={2} fontWeight='500'>
                   Community Type
                 </Heading>
-                <RadioGroup
-                  onChange={(e) => handleCommunityType(e)}
-                  value={communityType}
-                >
+                <RadioGroup onChange={(e) => handleCommunityType(e)} value={communityType}>
                   <Radio size='md' mb={4} value='public'>
                     <HStack>
-                      <Icon
-                        as={FaUserCircle}
-                        color='gray.500'
-                        top='-1px'
-                        position='relative'
-                      />
+                      <Icon as={FaUserCircle} color='gray.500' top='-1px' position='relative' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Public
                       </Text>
-                      <Text {...subTextStyles}>
-                        Anyone can view, post, and comment to this community
-                      </Text>
+                      <Text {...subTextStyles}>Anyone can view, post, and comment to this community</Text>
                     </HStack>
                   </Radio>
                   <Radio size='md' mb={4} value='restricted'>
                     <HStack>
-                      <Icon
-                        as={FaEye}
-                        color='gray.500'
-                        top='-1px'
-                        position='relative'
-                      />
+                      <Icon as={FaEye} color='gray.500' top='-1px' position='relative' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Restricted
                       </Text>
-                      <Text {...subTextStyles}>
-                        Anyone can view this community, but only approved users
-                        can post
-                      </Text>
+                      <Text {...subTextStyles}>Anyone can view this community, but only approved users can post</Text>
                     </HStack>
                   </Radio>
                   <Radio size='md' mb={4} value='private'>
                     <HStack>
-                      <Icon
-                        as={FaLock}
-                        color='gray.500'
-                        top='-1px'
-                        position='relative'
-                      />
+                      <Icon as={FaLock} color='gray.500' top='-1px' position='relative' />
                       <Text fontSize='10pt' fontWeight='600'>
                         Private
                       </Text>
-                      <Text {...subTextStyles}>
-                        Only approved users can view and submit to this
-                        community{' '}
-                      </Text>
+                      <Text {...subTextStyles}>Only approved users can view and submit to this community </Text>
                     </HStack>
                   </Radio>
                 </RadioGroup>
@@ -304,20 +253,10 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (
             width='512px'
             height='64px'
           >
-            <Button
-              colorScheme='blue'
-              variant={'outline'}
-              height='32px'
-              mr={3}
-              onClick={() => handleClose()}
-            >
+            <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={() => handleClose()}>
               Cancel
             </Button>
-            <Button
-              height='32px'
-              onClick={() => submitCommunity()}
-              isLoading={loading}
-            >
+            <Button height='32px' onClick={() => submitCommunity()} isLoading={loading}>
               Create Community
             </Button>
           </ModalFooter>
