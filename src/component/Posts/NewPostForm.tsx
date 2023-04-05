@@ -1,23 +1,23 @@
+import { Alert, AlertIcon, Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
-import { Flex, Text } from '@chakra-ui/react';
 
 //Components
-import TabItem from './TabItem';
-import TextInputs from './PostForm/TextInputs';
 import ImageUpload from './PostForm/ImageUpload';
+import TextInputs from './PostForm/TextInputs';
+import TabItem from './TabItem';
 
 //Icons
+import { Post } from '@/atoms/postsAtoms';
 import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
-import { Post } from '@/atoms/postsAtoms';
 
-import { User as FirebaseUser } from 'firebase/auth';
-import { useRouter } from 'next/router';
-import { addDoc, collection, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
 import { firestore, storage } from '@/firebase/clientApp';
+import { User as FirebaseUser } from 'firebase/auth';
+import { addDoc, collection, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { useRouter } from 'next/router';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -62,6 +62,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Submit Post to Firebase
@@ -104,11 +105,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       }
     } catch (error) {
       console.error('Error adding Post: ', error);
+      setError(true);
     }
 
     setLoading(false);
-
-    // router.back();
+    router.back();
   };
 
   // ActiveTab Post
@@ -173,6 +174,12 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         )}
         {activeTab === 'Link' && <Text>Link Tab</Text>}
       </Flex>
+      {error && (
+        <Alert status='error' display='flex' justifyContent='center'>
+          <AlertIcon />
+          <Text>Error creating post</Text>
+        </Alert>
+      )}
     </Flex>
   );
 };
