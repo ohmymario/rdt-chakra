@@ -2,9 +2,10 @@ import { Timestamp } from 'firebase/firestore';
 import { atom } from 'recoil';
 
 export interface Post {
-  id: string;
+  id?: string;
   communityId: string;
   creatorId: string;
+  creatorDisplayName: string;
   title: string;
   body: string;
   numberOfComments: number;
