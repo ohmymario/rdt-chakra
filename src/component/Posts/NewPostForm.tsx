@@ -11,6 +11,17 @@ import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg, BsMic } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
+import { Post } from '@/atoms/postsAtoms';
+
+import { User as FirebaseUser } from 'firebase/auth';
+import { useRouter } from 'next/router';
+import { addDoc, collection, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
+import { firestore, storage } from '@/firebase/clientApp';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+
+interface NewPostFormProps {
+  user: FirebaseUser;
+}
 
 const formTabs: tabType[] = [
   {
@@ -45,14 +56,60 @@ interface inputType {
   body: string;
 }
 
-const NewPostForm: FunctionComponent = () => {
+const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
+  const { user } = props;
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
 
   // Submit Post to Firebase
-  const handleCreatePost = async () => {};
+  const handleCreatePost = async () => {
+    // grab all necessary data
+    const { communityId } = router.query;
+    const { title, body } = textInput;
+    const { uid, email } = user;
+
+    // create post object for firestore
+    const newPost: Post = {
+      communityId: communityId as string,
+      creatorId: uid,
+      creatorDisplayName: email!.split('@')[0],
+      title: title,
+      body: body,
+      numberOfComments: 0,
+      voteStatus: 1,
+      createdAt: serverTimestamp() as Timestamp,
+    };
+
+    setLoading(true);
+
+    try {
+      // add the post to the firestore
+      const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
+
+      if (selectedFile) {
+        // location of the image in the storage
+        const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
+        // upload the image to the storage
+        await uploadString(imageRef, selectedFile, 'data_url');
+        // get the download url of the image
+        const downloadURL = await getDownloadURL(imageRef);
+
+        // update the post object with the image url
+        await updateDoc(postDocRef, {
+          imageURL: downloadURL,
+        });
+      }
+    } catch (error) {
+      console.error('Error adding Post: ', error);
+    }
+
+    setLoading(false);
+
+    // router.back();
+  };
 
   // ActiveTab Post
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
