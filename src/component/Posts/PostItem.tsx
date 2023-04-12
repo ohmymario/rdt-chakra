@@ -54,7 +54,10 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     const weeksInMs = daysInMs * 7;
     const monthsInMs = daysInMs * 30.44; // Using the average number of days in a month (365.25 / 12)
 
-    if (timeDifference < daysInMs) {
+  if (timeDifference < hoursInMs) {
+    const minutes = Math.round(timeDifference / minutesInMs);
+    return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+  } else if (timeDifference < daysInMs) {
       const hours = Math.round(timeDifference / hoursInMs);
       return `${hours} hour${hours === 1 ? '' : 's'} ago`;
     } else if (timeDifference < weeksInMs) {
