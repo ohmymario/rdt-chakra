@@ -8,15 +8,27 @@ import { useRecoilState } from 'recoil';
 const usePosts = () => {
   const [postStateValue, setPostStateValue] = useRecoilState(postsState);
 
-  const onVote = async () => {};
+  // VOTING
+  const onVote = async () => {
+    alert('Voting not implemented yet');
+  };
 
-  const onSelectPost = async () => {};
+  // WHEN USER CLICKS ON A POST
+  const onSelectPost = () => {
+    alert('Selecting a post not implemented yet');
+  };
 
-  const onDeletePost = async () => {};
+  // WHEN USER DELETES A POST
+  const onDeletePost = async () => {
+    alert('Deleting a post not implemented yet');
+  };
 
   return {
     postStateValue,
     setPostStateValue,
+    onVote,
+    onSelectPost,
+    onDeletePost,
   };
 };
 
