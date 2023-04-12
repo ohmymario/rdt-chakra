@@ -12,7 +12,9 @@ const PageContent: FunctionComponent<PageContentProps> = (props) => {
     <Flex justify='center' p='1rem 0'>
       <Flex justify='center' maxW='976px' width='95%' align='center' gap={'1.5rem'}>
         {/* LHS */}
-        <Flex flex='1'>{children[0]}</Flex>
+        <Flex direction='column' flex='1'>
+          {children[0]}
+        </Flex>
         {/* RHS */}
         <Flex
           display={{
