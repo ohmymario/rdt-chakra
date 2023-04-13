@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BsChat, BsDot } from 'react-icons/bs';
 import { FaReddit } from 'react-icons/fa';
+import { SlPresent } from 'react-icons/sl';
 import {
   IoArrowDownCircleOutline,
   IoArrowDownCircleSharp,
@@ -87,6 +88,15 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     },
     cursor: 'pointer',
   };
+
+  const actionStyles = {
+    align: 'center',
+    gap: 1.5,
+    px: 1.5,
+    py: 2,
+    _hover: { bg: 'gray.200' },
+  };
+
   return (
     <Flex {...containerStyles} onClick={onSelectPost}>
       {/* VOTING COLUMN */}
@@ -135,7 +145,35 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
             <Image boxSize='512px' objectFit='cover' src={imageURL} alt={title} />
           </Grid>
         )}
+
+        {/* POST ACTIONS */}
+        <HStack fontSize='xs' spacing={1} fontWeight={600} color='gray.500'>
+          <Flex {...actionStyles}>
+            <Icon as={BsChat} fontSize={20} />
+            <Text>{numberOfComments} Comments</Text>
+          </Flex>
+          <Flex {...actionStyles}>
+            <Icon as={SlPresent} fontSize={20} />
+            <Text>Award</Text>
+          </Flex>
+          <Flex {...actionStyles}>
+            <Icon as={IoArrowRedoOutline} fontSize={20} />
+            <Text>Share</Text>
+          </Flex>
+          <Flex {...actionStyles}>
+            <Icon as={IoBookmarkOutline} fontSize={20} />
+            <Text>Save</Text>
+          </Flex>
+          <Flex {...actionStyles} onClick={onDeletePost}>
+            {userIsCreator && (
+              <>
+                <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
+                <Text>Delete</Text>
+              </>
+            )}
       </Flex>
+        </HStack>
+      </VStack>
     </Flex>
   );
 };
