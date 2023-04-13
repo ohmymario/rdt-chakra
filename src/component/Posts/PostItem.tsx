@@ -2,6 +2,7 @@ import { FunctionComponent } from 'react';
 import { Post } from '@/atoms/postsAtoms';
 import { Box, Flex, Grid, Heading, HStack, Icon, Image, Stack, Text, VStack } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 
 // Icons
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -72,6 +73,10 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     }
   }
 
+  // TODO: FIND A WAY TO DO THIS WITHOUT USING useRouter SEVERAL TIMES
+  const router = useRouter();
+  const pathname = router.pathname;
+  console.log(pathname === '/r/[communityId]');
   const containerStyles = {
     border: '1px solid',
     bg: 'white',
@@ -108,11 +113,11 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         {/* TEXT */}
         <VStack spacing={1} align='flex-start'>
           <HStack spacing={1} fontSize={'xs'}>
-            {/* {communityImageURL && (
-            <Link href={`/communities/${communityId}`}>
+            {pathname != '/r/[communityId]' && (
+              <Link href={`/r/${communityId}`}>
               <Image boxSize='20px' objectFit='cover' src={communityImageURL} alt={title} cursor='pointer' />
             </Link>
-          )} */}
+            )}
             <Text>Posted by u/{creatorDisplayName}</Text>
             <Text>{timestampToRelativeString(createdAt as Timestamp)}</Text>
           </HStack>
