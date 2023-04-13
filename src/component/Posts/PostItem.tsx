@@ -72,18 +72,18 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     }
   }
 
+  const containerStyles = {
+    border: '1px solid',
+    bg: 'white',
+    borderColor: 'gray.300',
+    borderRadius: 4,
+    _hover: {
+      borderColor: 'gray.500',
+    },
+    cursor: 'pointer',
+  };
   return (
-    <Flex
-      border='1px solid'
-      bg='white'
-      borderColor='gray.300'
-      borderRadius={4}
-      _hover={{
-        borderColor: 'gray.500',
-      }}
-      cursor='pointer'
-      onClick={onSelectPost}
-    >
+    <Flex {...containerStyles} onClick={onSelectPost}>
       {/* VOTING COLUMN */}
       <Flex flexDir='column' alignItems='center' justifyContent='flex-start' w={'40px'} p={2} bg='gray.300'>
         <Icon
