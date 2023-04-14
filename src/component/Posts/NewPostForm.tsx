@@ -103,13 +103,13 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           imageURL: downloadURL,
         });
       }
+      router.back();
     } catch (error) {
       console.error('Error adding Post: ', error);
       setError(true);
     }
 
     setLoading(false);
-    router.back();
   };
 
   // ActiveTab Post
