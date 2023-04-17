@@ -16,7 +16,7 @@ import {
   IoArrowUpCircleSharp,
   IoBookmarkOutline,
 } from 'react-icons/io5';
-import Link from 'next/link';
+import { SlPresent } from 'react-icons/sl';
 
 interface PostItemProps {
   post: Post;
@@ -118,10 +118,9 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         />
       </Flex>
 
-      {/* POST DATA */}
-      <VStack align={'flex-start'} flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
-        {/* TEXT */}
-        <VStack align='flex-start' border={'1px solid red'} spacing={2} ml='4px'>
+      {/* POST TEXT */}
+      <VStack align='flex-start' flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
+        <VStack align='flex-start' spacing={2} ml='4px'>
           <HStack fontSize={'xs'} spacing={1}>
             {pathname != '/r/[communityId]' && (
               <Link href={`/r/${communityId}`}>
@@ -141,7 +140,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
         {/* POST IMAGE */}
         {imageURL && (
-          <Grid justifyContent='center' alignItems='center' w={'100%'} pl='4px'>
+          <Grid justifyContent='center' alignItems='center' w='100%' pl='4px'>
             <Image boxSize='512px' objectFit='cover' src={imageURL} alt={`image of ${title}`} />
           </Grid>
         )}

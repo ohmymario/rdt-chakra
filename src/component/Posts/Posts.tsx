@@ -16,12 +16,13 @@ interface PostsProps {
 const Posts: FunctionComponent<PostsProps> = (props) => {
   const { communityData } = props;
   const [user] = useAuthState(auth);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
   const methods = { onVote, onSelectPost, onDeletePost };
 
   const getPosts = useCallback(async () => {
+    setLoading(true);
     try {
       // reference to the posts collection
       const postsCollection = collection(firestore, 'posts');
@@ -45,6 +46,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
     } catch (error: any) {
       console.error(error);
     }
+    setLoading(false);
   }, [communityData.id, setPostStateValue]);
 
   useEffect(() => {
@@ -52,17 +54,28 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
   }, [getPosts]);
 
   return (
-    <Stack>
-      {postStateValue.posts.map((post) => (
-        <PostItem
-          post={post}
-          key={post.id}
-          userIsCreator={user?.uid === post.creatorId}
-          userVoteValue={undefined}
-          {...methods}
-        />
-      ))}
-    </Stack>
+    <>
+      {loading ? (
+        <>
+          <PostLoader />
+          <PostLoader />
+          <PostLoader />
+          <PostLoader />
+        </>
+      ) : (
+        <Stack>
+          {postStateValue.posts.map((post) => (
+            <PostItem
+              post={post}
+              key={post.id}
+              userIsCreator={user?.uid === post.creatorId}
+              userVoteValue={undefined}
+              {...methods}
+            />
+          ))}
+        </Stack>
+      )}
+    </>
   );
 };
 
