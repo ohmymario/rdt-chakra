@@ -1,14 +1,13 @@
-import { FunctionComponent } from 'react';
 import { Post } from '@/atoms/postsAtoms';
-import { Box, Flex, Grid, Heading, HStack, Icon, Image, Stack, Text, VStack } from '@chakra-ui/react';
+import { Flex, Grid, Heading, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
+import { FunctionComponent } from 'react';
 
 // Icons
+import Link from 'next/link';
 import { AiOutlineDelete } from 'react-icons/ai';
-import { BsChat, BsDot } from 'react-icons/bs';
-import { FaReddit } from 'react-icons/fa';
-import { SlPresent } from 'react-icons/sl';
+import { BsChat } from 'react-icons/bs';
 import {
   IoArrowDownCircleOutline,
   IoArrowDownCircleSharp,

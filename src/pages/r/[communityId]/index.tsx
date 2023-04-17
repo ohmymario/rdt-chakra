@@ -1,14 +1,14 @@
-import { FunctionComponent } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
 import { firestore } from '@/firebase/clientApp';
 import { doc, getDoc } from 'firebase/firestore';
 import { GetServerSidePropsContext } from 'next';
+import { FunctionComponent } from 'react';
 import safeJsonStringify from 'safe-json-stringify';
 
-import NotFound from '@/component/Community/NotFound';
-import Header from '@/component/Community/Header';
-import PageContent from '@/component/Layout/PageContent';
 import CreatePostLink from '@/component/Community/CreatePostLink';
+import Header from '@/component/Community/Header';
+import NotFound from '@/component/Community/NotFound';
+import PageContent from '@/component/Layout/PageContent';
 import Posts from '@/component/Posts/Posts';
 
 interface CommunityPageProps {
