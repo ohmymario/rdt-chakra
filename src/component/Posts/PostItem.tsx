@@ -1,13 +1,14 @@
 import { Post } from '@/atoms/postsAtoms';
-import { Flex, Grid, Heading, HStack, Icon, Image, Text, VStack } from '@chakra-ui/react';
+import { Flex, Grid, Heading, HStack, Icon, Image, Skeleton, Text, VStack } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useState } from 'react';
 
 // Icons
 import Link from 'next/link';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BsChat } from 'react-icons/bs';
+import { SlPresent } from 'react-icons/sl';
 import {
   IoArrowDownCircleOutline,
   IoArrowDownCircleSharp,
@@ -16,7 +17,6 @@ import {
   IoArrowUpCircleSharp,
   IoBookmarkOutline,
 } from 'react-icons/io5';
-import { SlPresent } from 'react-icons/sl';
 
 interface PostItemProps {
   post: Post;
@@ -61,7 +61,6 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   // TODO: FIND A WAY TO DO THIS WITHOUT USING useRouter SEVERAL TIMES
   const router = useRouter();
   const pathname = router.pathname;
-  console.log(pathname === '/r/[communityId]');
 
   const { post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost } = props;
   const {
@@ -77,6 +76,8 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     communityImageURL,
     creatorDisplayName,
   } = post;
+
+  const [loadingImage, setLoadingImage] = useState<boolean>(true);
 
   const containerStyles = {
     border: '1px solid',
@@ -141,7 +142,17 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         {/* POST IMAGE */}
         {imageURL && (
           <Grid justifyContent='center' alignItems='center' w='100%' pl='4px'>
-            <Image boxSize='512px' objectFit='cover' src={imageURL} alt={`image of ${title}`} />
+            <Skeleton isLoaded={!loadingImage}>
+              <Image
+                boxSize='512px'
+                objectFit='cover'
+                src={imageURL}
+                alt={`image of ${title}`}
+                onLoad={() => {
+                  setLoadingImage(false);
+                }}
+              />
+            </Skeleton>
           </Grid>
         )}
 
