@@ -1,5 +1,5 @@
 import { Post } from '@/atoms/postsAtoms';
-import { Flex, Grid, Heading, HStack, Icon, Image, Skeleton, Text, VStack } from '@chakra-ui/react';
+import { Flex, Grid, Heading, HStack, Icon, Image, Skeleton, Spinner, Text, VStack } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
@@ -78,9 +78,14 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   } = post;
 
   const [loadingImage, setLoadingImage] = useState<boolean>(true);
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
+    // only one delete request at a time
+    if (loadingDelete) return;
+
+    setLoadingDelete(true);
     e.stopPropagation();
     try {
       const success = await onDeletePost(post);
@@ -91,6 +96,8 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     } catch (error: any) {
       setError(error.message);
     }
+
+    setLoadingDelete(false);
   };
 
   const containerStyles = {
@@ -158,8 +165,8 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
           <Grid justifyContent='center' alignItems='center' w='100%' pl='4px'>
             <Skeleton isLoaded={!loadingImage}>
               <Image
-                boxSize='512px'
-                objectFit='cover'
+                boxSize='100%'
+                objectFit='contain'
                 src={imageURL}
                 alt={`image of ${title}`}
                 onLoad={() => {
@@ -191,8 +198,14 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
           <Flex {...actionStyles} onClick={(e) => handleDelete(e)}>
             {userIsCreator && (
               <>
-                <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
-                <Text>Delete</Text>
+                {loadingDelete ? (
+                  <Spinner size='sm' color='gray.500' />
+                ) : (
+                  <>
+                    <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
+                    <Text>Delete</Text>
+                  </>
+                )}
               </>
             )}
           </Flex>
