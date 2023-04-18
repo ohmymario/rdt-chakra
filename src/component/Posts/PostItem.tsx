@@ -3,9 +3,9 @@ import { Flex, Grid, Heading, HStack, Icon, Image, Skeleton, Text, VStack } from
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
+import Link from 'next/link';
 
 // Icons
-import Link from 'next/link';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BsChat } from 'react-icons/bs';
 import { SlPresent } from 'react-icons/sl';
@@ -23,7 +23,7 @@ interface PostItemProps {
   userIsCreator: boolean;
   userVoteValue?: number;
   onVote: () => {};
-  onDeletePost: () => {};
+  onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost: () => void;
 }
 
@@ -78,6 +78,20 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   } = post;
 
   const [loadingImage, setLoadingImage] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const success = await onDeletePost(post);
+
+      if (!success) {
+        throw new Error('Failed to delete post');
+      }
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
 
   const containerStyles = {
     border: '1px solid',
@@ -174,7 +188,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
             <Icon as={IoBookmarkOutline} fontSize={20} />
             <Text>Save</Text>
           </Flex>
-          <Flex {...actionStyles} onClick={onDeletePost}>
+          <Flex {...actionStyles} onClick={(e) => handleDelete(e)}>
             {userIsCreator && (
               <>
                 <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
