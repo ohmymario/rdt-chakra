@@ -29,6 +29,7 @@ export interface CommunitySnippet {
 // User Community State - COLLECTION OF SNIPPETS
 export interface CommunityState {
   mySnippets: CommunitySnippet[];
+  currentCommunity?: Community;
 }
 
 // Default Atom State
