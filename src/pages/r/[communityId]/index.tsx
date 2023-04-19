@@ -1,8 +1,8 @@
-import { Community } from '@/atoms/communitiesAtom';
+import { communitiesState, Community } from '@/atoms/communitiesAtom';
 import { firestore } from '@/firebase/clientApp';
 import { doc, getDoc } from 'firebase/firestore';
 import { GetServerSidePropsContext } from 'next';
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import safeJsonStringify from 'safe-json-stringify';
 
 import CreatePostLink from '@/component/Community/CreatePostLink';
@@ -10,14 +10,29 @@ import Header from '@/component/Community/Header';
 import NotFound from '@/component/Community/NotFound';
 import PageContent from '@/component/Layout/PageContent';
 import Posts from '@/component/Posts/Posts';
+import { useSetRecoilState } from 'recoil';
 
 interface CommunityPageProps {
   communityData: Community;
 }
 
 const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
-  if (!props.communityData) return <NotFound />;
   const { communityData } = props;
+  const setCommunityStateValue = useSetRecoilState(communitiesState);
+
+  useEffect(() => {
+    if (!communityData) return;
+
+    setCommunityStateValue((prev) => {
+      return {
+        ...prev,
+        currentCommunity: communityData,
+      };
+    });
+  }, [communityData, setCommunityStateValue]);
+
+  if (!communityData) return <NotFound />;
+
   return (
     <>
       <Header communityData={communityData} />
