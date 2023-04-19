@@ -1,5 +1,18 @@
 import { Post } from '@/atoms/postsAtoms';
-import { Flex, Grid, Heading, HStack, Icon, Image, Skeleton, Spinner, Text, VStack } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Flex,
+  Grid,
+  Heading,
+  HStack,
+  Icon,
+  Image,
+  Skeleton,
+  Spinner,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
@@ -79,7 +92,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
   const [loadingImage, setLoadingImage] = useState<boolean>(true);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
     // only one delete request at a time
@@ -121,6 +134,12 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
   return (
     <Flex {...containerStyles} onClick={onSelectPost}>
+      {error && (
+        <Alert status='error' display='flex' justifyContent='center'>
+          <AlertIcon />
+          <Text>{error}</Text>
+        </Alert>
+      )}
       {/* VOTING COLUMN */}
       <Flex flexDir='column' alignItems='center' justifyContent='flex-start' w={'40px'} p={2} bg='gray.300'>
         <Icon
