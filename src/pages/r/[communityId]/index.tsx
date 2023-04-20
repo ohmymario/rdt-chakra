@@ -5,6 +5,7 @@ import { GetServerSidePropsContext } from 'next';
 import { FunctionComponent, useEffect } from 'react';
 import safeJsonStringify from 'safe-json-stringify';
 
+import About from '@/component/Community/About';
 import CreatePostLink from '@/component/Community/CreatePostLink';
 import Header from '@/component/Community/Header';
 import NotFound from '@/component/Community/NotFound';
@@ -42,7 +43,7 @@ const CommunityPage: FunctionComponent<CommunityPageProps> = (props) => {
           <Posts communityData={communityData} />
         </>
         <>
-          <>RHS</>
+          <About communityData={communityData} />
         </>
       </PageContent>
     </>
