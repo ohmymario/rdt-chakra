@@ -1,9 +1,11 @@
 import { FunctionComponent } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
-import { Box, VStack, Divider, Center, Flex, Text, Icon, HStack, Stack } from '@chakra-ui/react';
+import { Box, VStack, Divider, Center, Flex, Text, Icon, HStack, Stack, Button } from '@chakra-ui/react';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { RiCakeLine } from 'react-icons/ri';
 import { Timestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface AboutProps {
   communityData: Community;
@@ -22,6 +24,8 @@ function timestampToDate(timestampData: { seconds: number; nanoseconds: number }
 }
 
 const About: FunctionComponent<AboutProps> = (props) => {
+  const router = useRouter();
+  const { communityId } = router.query;
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
 
@@ -29,7 +33,9 @@ const About: FunctionComponent<AboutProps> = (props) => {
     <Box alignSelf='flex-start' width='100%'>
       {/* HEADER */}
       <Flex justify='space-between' align='center' bg='blue.400' color='white' p={3} borderRadius='4px 4px 0 0'>
-        <Text>About Community</Text>
+        <Text fontWeight={700} fontSize='10pt'>
+          About Community
+        </Text>
         <Icon
           as={HiOutlineDotsHorizontal}
           _hover={{
@@ -56,6 +62,12 @@ const About: FunctionComponent<AboutProps> = (props) => {
             <Icon as={RiCakeLine} fontSize={18} />
             <Text>Created {timestampToDate(createdAt)}</Text>
           </Flex>
+
+          <Link href={`/r/${communityId}/submit`} passHref>
+            <Button as='a' colorScheme='blue' height='30px' width='100%'>
+              Create Post
+            </Button>
+          </Link>
         </Stack>
       </Flex>
     </Box>
