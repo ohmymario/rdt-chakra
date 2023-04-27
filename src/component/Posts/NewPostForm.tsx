@@ -18,6 +18,7 @@ import { User as FirebaseUser } from 'firebase/auth';
 import { addDoc, collection, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRouter } from 'next/router';
+import useSelectFile from '@/hooks/useSelectFile';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -63,7 +64,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const { selectedFile, onSelectFile, setSelectedFile } = useSelectFile();
 
   // Submit Post to Firebase
   const handleCreatePost = async () => {
@@ -118,35 +119,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ActiveTab Image & Video
-  const onSelectImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    const files = e.target.files;
-    const checkForFile = files && files.length > 0;
-    const oneMB = 1000000;
-    if (checkForFile) {
-      if (files[0].size > oneMB) {
-        alert(`
-          File size is too big!
-          Please select an image less than 1MB.
-          `);
-        return;
-      }
-      reader.readAsDataURL(files[0]);
-    }
-
-    reader.onload = () => {
-      const base64 = reader.result;
-      if (base64 && typeof base64 === 'string') {
-        setSelectedFile(base64);
-      }
-    };
-
-    reader.onerror = (error) => {
-      console.log('error', error);
-    };
-  };
-
   return (
     <Flex direction='column' bg='white' borderRadius={4} w='100%'>
       <Flex>
@@ -166,7 +138,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
         {activeTab === 'Image & Video' && (
           <ImageUpload
-            onSelectImage={onSelectImage}
+            onSelectImage={onSelectFile}
             selectedFile={selectedFile}
             setActiveTab={setActiveTab}
             setSelectedFile={setSelectedFile}
