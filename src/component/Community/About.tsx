@@ -47,6 +47,16 @@ const About: FunctionComponent<AboutProps> = (props) => {
       {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
+          <Text>
+            Welcome to r/{communityId}, the place for almost anything {communityId} related.
+          </Text>
+          <Flex width='100%' fontSize='10pt' gap={2} fontWeight='500' p={1}>
+            <Icon color={'gray.600'} as={RiCakeLine} fontSize={18} />
+            <Text color={'gray.400'}>Created {timestampToDate(createdAt)}</Text>
+          </Flex>
+
+          <Divider />
+
           <Flex width='100%' p={2} fontSize='10pt' fontWeight={700}>
             <Flex direction='column' flexGrow={1}>
               <Text>{numberOfMembers.toLocaleString()}</Text>
@@ -57,17 +67,16 @@ const About: FunctionComponent<AboutProps> = (props) => {
               <Text>Online</Text>
             </Flex>
           </Flex>
+
           <Divider />
-          <Flex width='100%' fontSize='10pt' gap={2} fontWeight='500' p={1}>
-            <Icon as={RiCakeLine} fontSize={18} />
-            <Text>Created {timestampToDate(createdAt)}</Text>
-          </Flex>
 
           <Link href={`/r/${communityId}/submit`} passHref>
-            <Button as='a' colorScheme='blue' height='30px' width='100%'>
+            <Button as='a' colorScheme='blue' height='30px' width='100%' my={2}>
               Create Post
             </Button>
           </Link>
+
+          <Divider />
         </Stack>
       </Flex>
     </Box>
