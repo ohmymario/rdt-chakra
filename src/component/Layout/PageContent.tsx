@@ -22,6 +22,7 @@ const PageContent: FunctionComponent<PageContentProps> = (props) => {
             lg: 'flex',
           }}
           flex={{ base: '0 0 312px' }}
+          alignSelf='flex-start'
         >
           {children[1]}
         </Flex>
