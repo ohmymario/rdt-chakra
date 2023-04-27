@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
 import { Box, VStack, Divider, Center, Flex, Text, Icon, HStack, Stack, Button } from '@chakra-ui/react';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
@@ -28,6 +28,20 @@ const About: FunctionComponent<AboutProps> = (props) => {
   const { communityId } = router.query;
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
+  const [isMounted, setIsMounted] = useState(false);
+
+  // When the component is mounted, it sets the `isMounted` state to `true` using the `useEffect` hook.
+  // This ensures that the `Link` component is only rendered on the client side, after the component is mounted,
+  // which should prevent the hydration error from occurring. If `isMounted` is `false`, the component returns `null`.
+  // If `isMounted` is `true`, the component renders the `Link` component using the `next/link` package.
+  // If you're using an older version of `@chakra-ui/react` that doesn't have the `NoSsr` component, you can use this approach instead.
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <Box alignSelf='flex-start' width='100%'>
