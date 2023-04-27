@@ -61,6 +61,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     // Found
     const dataObj = { id: communityDoc.id, ...communityDoc.data() };
+    // JSON.stringify() only serializes data (properties), not methods.
+    // During serialization, the methods of the Firebase Timestamp object are lost,
+    // resulting in a plain object with 'seconds' and 'nanoseconds' properties.
     const communityData = JSON.parse(safeJsonStringify(dataObj));
     const data = { props: { communityData } };
 
