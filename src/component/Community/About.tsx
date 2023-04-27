@@ -9,6 +9,18 @@ interface AboutProps {
   communityData: Community;
 }
 
+function timestampToDate(timestampData: { seconds: number; nanoseconds: number }): string {
+  const timestamp = new Timestamp(timestampData.seconds, timestampData.nanoseconds);
+  const date = timestamp.toDate();
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  const month = monthNames[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear();
+
+  return `${month}, ${day} ${year}`;
+}
+
 const About: FunctionComponent<AboutProps> = (props) => {
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
@@ -29,7 +41,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
       {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
-          <Flex width='100%' p={2} fontSize='10pt'>
+          <Flex width='100%' p={2} fontSize='10pt' fontWeight={700}>
             <Flex direction='column' flexGrow={1}>
               <Text>{numberOfMembers.toLocaleString()}</Text>
               <Text>Members</Text>
@@ -39,16 +51,14 @@ const About: FunctionComponent<AboutProps> = (props) => {
               <Text>Online</Text>
             </Flex>
           </Flex>
-      <Divider />
-          <Flex width='100%' p={2} fontSize='10pt'>
-            <Flex gap={1}>
-              <Text>Created</Text>
-            </Flex>
+          <Divider />
+          <Flex width='100%' fontSize='10pt' gap={2} fontWeight='500' p={1}>
+            <Icon as={RiCakeLine} fontSize={18} />
+            <Text>Created {timestampToDate(createdAt)}</Text>
           </Flex>
         </Stack>
       </Flex>
-      </Box>
-    </VStack>
+    </Box>
   );
 };
 
