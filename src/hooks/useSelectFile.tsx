@@ -1,6 +1,12 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-const useSelectFile = () => {
+interface UseSelectFileResult {
+  selectedFile: string | null;
+  onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
+  setSelectedFile: Dispatch<SetStateAction<string | null>>;
+}
+
+const useSelectFile = (): UseSelectFileResult => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const reader = new FileReader();
