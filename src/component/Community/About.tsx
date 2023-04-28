@@ -1,6 +1,7 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
-import { Box, VStack, Divider, Center, Flex, Text, Icon, HStack, Stack, Button } from '@chakra-ui/react';
+import { auth } from '@/firebase/clientApp';
+import { Box, Button, Divider, Flex, Icon, Image, Spinner, Stack, Text } from '@chakra-ui/react';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { RiCakeLine } from 'react-icons/ri';
 import { Timestamp } from 'firebase/firestore';
@@ -25,6 +26,7 @@ function timestampToDate(timestampData: { seconds: number; nanoseconds: number }
 
 const About: FunctionComponent<AboutProps> = (props) => {
   const router = useRouter();
+  const [user] = useAuthState(auth);
   const { communityId } = router.query;
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
@@ -90,6 +92,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
             </Button>
           </Link>
 
+          {/* {user?.uid === creatorId && ( */}
           <>
           <Divider />
             <Stack spacing={1} fontSize='10pt'>
@@ -98,6 +101,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
               </Text>
             </Stack>
           </>
+          {/* )} */}
         </Stack>
       </Flex>
     </Box>
