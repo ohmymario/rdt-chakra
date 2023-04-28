@@ -32,6 +32,8 @@ const About: FunctionComponent<AboutProps> = (props) => {
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
   const [isMounted, setIsMounted] = useState(false);
 
+  const { selectedFile, onSelectFile, setSelectedFile } = useSelecfile();
+  const [uploadingImage, setUploadingImage] = useState(false);
   // When the component is mounted, it sets the `isMounted` state to `true` using the `useEffect` hook.
   // This ensures that the `Link` component is only rendered on the client side, after the component is mounted,
   // which should prevent the hydration error from occurring. If `isMounted` is `false`, the component returns `null`.
@@ -99,6 +101,23 @@ const About: FunctionComponent<AboutProps> = (props) => {
               <Text fontWeight={600} fontSize='10pt'>
                 Admin
               </Text>
+              <Flex align='center' justify='space-between'>
+                <Text
+                  color={'blue.500'}
+                  cursor='pointer'
+                  _hover={{
+                    textDecoration: 'underline',
+                  }}
+                  onClick={() => {}}
+                >
+                  Change Image
+                </Text>
+                {imageURL || selectedFile ? (
+                  <Image src={selectedFile || imageURL} borderRadius='full' boxSize='40px' alt='Community Image' />
+                ) : (
+                  <Icon as={FaReddit} fontSize={40} color='brand.100' />
+                )}
+              </Flex>
             </Stack>
           </>
           {/* )} */}
