@@ -1,12 +1,15 @@
-import { FunctionComponent, useEffect, useState } from 'react';
 import { Community } from '@/atoms/communitiesAtom';
 import { auth } from '@/firebase/clientApp';
 import { Box, Button, Divider, Flex, Icon, Image, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Timestamp } from 'firebase/firestore';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { FunctionComponent, useEffect, useRef, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import useSelecfile from '@/hooks/useSelectFile';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { RiCakeLine } from 'react-icons/ri';
-import { Timestamp } from 'firebase/firestore';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+import { FaReddit } from 'react-icons/fa';
 
 interface AboutProps {
   communityData: Community;
@@ -32,8 +35,23 @@ const About: FunctionComponent<AboutProps> = (props) => {
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
   const [isMounted, setIsMounted] = useState(false);
 
+  const selectedFileRef = useRef<HTMLInputElement>(null);
+
   const { selectedFile, onSelectFile, setSelectedFile } = useSelecfile();
   const [uploadingImage, setUploadingImage] = useState(false);
+
+  const onUpdateImage = async () => {
+    setUploadingImage(true);
+    // const file = selectedFileRef.current.files[0];
+    // const storageRef = storage.ref();
+    // const fileRef = storageRef.child(file.name);
+    // await fileRef.put(file);
+    // const imageURL = await fileRef.getDownloadURL();
+    // await updateCommunityImage(id, imageURL);
+    // setUploadingImage(false);
+    // setSelectedFile(null);
+  };
+
   // When the component is mounted, it sets the `isMounted` state to `true` using the `useEffect` hook.
   // This ensures that the `Link` component is only rendered on the client side, after the component is mounted,
   // which should prevent the hydration error from occurring. If `isMounted` is `false`, the component returns `null`.
@@ -96,7 +114,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
 
           {/* {user?.uid === creatorId && ( */}
           <>
-          <Divider />
+            <Divider />
             <Stack spacing={1} fontSize='10pt'>
               <Text fontWeight={600} fontSize='10pt'>
                 Admin
@@ -118,6 +136,28 @@ const About: FunctionComponent<AboutProps> = (props) => {
                   <Icon as={FaReddit} fontSize={40} color='brand.100' />
                 )}
               </Flex>
+
+              {/* If there is a selected file, check if an image is uploading */}
+              {/* If there is an image uploading then give a spinner */}
+              {/* If the image is uploaded then give an option to save the changes */}
+              {selectedFile ? (
+                uploadingImage ? (
+                  <Spinner />
+                ) : (
+                  <Text cursor='pointer' onClick={onUpdateImage}>
+                    Save Changes
+                  </Text>
+                )
+              ) : null}
+
+              <input
+                id='file-upload'
+                ref={selectedFileRef}
+                hidden
+                type='file'
+                accept='image/jpeg, image/png'
+                onChange={(e) => onSelectFile(e)}
+              />
             </Stack>
           </>
           {/* )} */}
