@@ -90,7 +90,14 @@ const About: FunctionComponent<AboutProps> = (props) => {
             </Button>
           </Link>
 
+          <>
           <Divider />
+            <Stack spacing={1} fontSize='10pt'>
+              <Text fontWeight={600} fontSize='10pt'>
+                Admin
+              </Text>
+            </Stack>
+          </>
         </Stack>
       </Flex>
     </Box>
