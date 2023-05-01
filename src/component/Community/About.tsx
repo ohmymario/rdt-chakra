@@ -30,28 +30,59 @@ function timestampToDate(timestampData: { seconds: number; nanoseconds: number }
 }
 
 const About: FunctionComponent<AboutProps> = (props) => {
+  // Grab the communityId from the router
   const router = useRouter();
-  const [user] = useAuthState(auth);
   const { communityId } = router.query;
+
+  // Grab the currently logged in user
+  const [user] = useAuthState(auth);
+
+  // Props
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
+
+  // Fix for hydration error
   const [isMounted, setIsMounted] = useState(false);
 
+  // Image Upload / Input Ref
   const selectedFileRef = useRef<HTMLInputElement>(null);
-
   const { selectedFile, onSelectFile, setSelectedFile } = useSelecfile();
   const [uploadingImage, setUploadingImage] = useState(false);
 
+  const [communityStateValue, setCommunityStateValue] = useRecoilState(communitiesState);
+
+  console.log(communityStateValue);
+
   const onUpdateImage = async () => {
+    if (!selectedFile) return;
     setUploadingImage(true);
-    // const file = selectedFileRef.current.files[0];
-    // const storageRef = storage.ref();
-    // const fileRef = storageRef.child(file.name);
-    // await fileRef.put(file);
-    // const imageURL = await fileRef.getDownloadURL();
-    // await updateCommunityImage(id, imageURL);
-    // setUploadingImage(false);
-    // setSelectedFile(null);
+
+    try {
+      // Uploading an image to a community, generating a download URL,
+      // and updating the community document with the image URL in Firestore.
+      const imageLocation = `communities/${id}/image`;
+      const imageRef = ref(storage, imageLocation);
+      await uploadString(imageRef, selectedFile, 'data_url');
+      const downloadURL = await getDownloadURL(imageRef);
+      await updateDoc(doc(firestore, 'communities', id), {
+        imageURL: downloadURL,
+      });
+
+      // Update the global state
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: {
+          ...communityData,
+          imageURL: downloadURL,
+        },
+      }));
+
+      // Operation Complete
+      setUploadingImage(false);
+    } catch (error) {
+      setUploadingImage(false);
+      console.error(error);
+    }
   };
 
   // When the component is mounted, it sets the `isMounted` state to `true` using the `useEffect` hook.
@@ -128,7 +159,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
                   _hover={{
                     textDecoration: 'underline',
                   }}
-                  onClick={() => {}}
+                  onClick={() => selectedFileRef.current?.click()}
                 >
                   Change Image
                 </Text>
@@ -155,10 +186,10 @@ const About: FunctionComponent<AboutProps> = (props) => {
               <input
                 id='file-upload'
                 ref={selectedFileRef}
-                hidden
                 type='file'
                 accept='image/jpeg, image/png'
                 onChange={(e) => onSelectFile(e)}
+                hidden
               />
             </Stack>
           </>
