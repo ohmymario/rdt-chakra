@@ -30,16 +30,14 @@ function timestampToDate(timestampData: { seconds: number; nanoseconds: number }
 }
 
 const About: FunctionComponent<AboutProps> = (props) => {
-  // Grab the communityId from the router
-  const router = useRouter();
-  const { communityId } = router.query;
-
   // Grab the currently logged in user
   const [user] = useAuthState(auth);
 
   // Props
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
+
+  console.log(communityData);
 
   // Fix for hydration error
   const [isMounted, setIsMounted] = useState(false);
@@ -117,7 +115,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
           <Text>
-            Welcome to r/{communityId}, the place for almost anything {communityId} related.
+            Welcome to r/{creatorId}, the place for almost anything {creatorId} related.
           </Text>
           <Flex width='100%' fontSize='10pt' gap={2} fontWeight='500' p={1}>
             <Icon color={'gray.600'} as={RiCakeLine} fontSize={18} />
@@ -139,7 +137,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
 
           <Divider />
 
-          <Link href={`/r/${communityId}/submit`} passHref>
+          <Link href={`/r/${creatorId}/submit`} passHref>
             <Button as='a' colorScheme='blue' height='30px' width='100%' my={2}>
               Create Post
             </Button>
