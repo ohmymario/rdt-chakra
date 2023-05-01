@@ -1,15 +1,17 @@
-import { Community } from '@/atoms/communitiesAtom';
-import { auth } from '@/firebase/clientApp';
+import { communitiesState, Community } from '@/atoms/communitiesAtom';
+import { auth, firestore, storage } from '@/firebase/clientApp';
+import useSelecfile from '@/hooks/useSelectFile';
 import { Box, Button, Divider, Flex, Icon, Image, Spinner, Stack, Text } from '@chakra-ui/react';
-import { Timestamp } from 'firebase/firestore';
+import { doc, Timestamp, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import useSelecfile from '@/hooks/useSelectFile';
+import { FaReddit } from 'react-icons/fa';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 import { RiCakeLine } from 'react-icons/ri';
-import { FaReddit } from 'react-icons/fa';
+import { useRecoilState } from 'recoil';
 
 interface AboutProps {
   communityData: Community;
