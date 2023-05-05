@@ -37,8 +37,6 @@ const About: FunctionComponent<AboutProps> = (props) => {
   const { communityData } = props;
   const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
 
-  console.log(communityData);
-
   // Fix for hydration error
   const [isMounted, setIsMounted] = useState(false);
 
@@ -48,8 +46,6 @@ const About: FunctionComponent<AboutProps> = (props) => {
   const [uploadingImage, setUploadingImage] = useState(false);
 
   const [communityStateValue, setCommunityStateValue] = useRecoilState(communitiesState);
-
-  console.log(communityStateValue);
 
   const onUpdateImage = async () => {
     if (!selectedFile) return;
