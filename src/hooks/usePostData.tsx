@@ -17,36 +17,38 @@ const usePosts = () => {
     alert('Voting not implemented yet');
 
     try {
+      // Retrieve the current vote status of the post.
+      // Check if the logged-in user has already voted on the post in the community.
+      // Create a batch to group multiple Firestore operations together.
+      // Make a copy of the post, global state of posts, and the post votes.
+      // Determine the change in vote value.
       const { voteStatus } = post;
-
-      // Check if the logged in user has a vote on the post community
       const existingVote = postStateValue.postVotes.find((vote) => vote.postId === post.id);
-
-      // copy all needed data from the post state
       const batch = writeBatch(firestore);
-      const updatedPost = { ...postStateValue.posts };
-      const updatedPosts = [...postStateValue.postVotes];
+      const updatedPost = { ...post };
+      const updatedPosts = [...postStateValue.posts];
+      let updatedPostVotes = [...postStateValue.postVotes];
       let voteChange = vote;
 
+      // If the user has not voted on the post yet:
       if (!existingVote) {
-        // location to store the votes
+        // Create a reference to where the vote will be stored in Firestore under the user's document.
+        // Create a new PostVote object to store the user's vote information.
+        // Add the new vote to the Firestore batch for the specific user.
+        // Update the post's vote status by adding the user's vote (either -1 or 1).
+        // Add the new vote object to the list of post votes.
         const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes`);
-
-        // completely new vote object
         const newVote: PostVote = {
           id: postVoteRef.id,
           postId: post.id!,
           communityId: communityId,
           voteValue: vote,
         };
-
-        // prime this operation in the batch
         batch.set(postVoteRef, newVote);
-
-        // if its a down vote or up vote
-        // total community votes = - 1
-        // total community votes = + 1;
+        updatedPost.voteStatus = voteStatus + vote;
+        updatedPostVotes = [...updatedPostVotes, newVote];
       } else {
+        // USER HAS A VOTE ON THIS POST
         if (removingVote) {
           // removing vote
           // add/substract 1 from post.voteStatus
