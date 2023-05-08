@@ -49,18 +49,39 @@ const usePosts = () => {
         updatedPostVotes = [...updatedPostVotes, newVote];
       } else {
         // USER HAS A VOTE ON THIS POST
+        // Get existing vote reference in Firestore.
+        // Determine if user is removing or changing vote.
+        const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes/${existingVote?.id}`);
+        const removingVote = existingVote.voteValue === vote;
+
         if (removingVote) {
-          // removing vote
-          // add/substract 1 from post.voteStatus
-          // delete the postVote document from the user
+          // Handle removing vote: update vote status, remove vote from array, delete vote document.
+          updatedPost.voteStatus = voteStatus - vote;
+          updatedPostVotes = updatedPostVotes.filter((vote) => vote.id !== existingVote.id);
+          batch.delete(postVoteRef);
+          voteChange *= -1;
         } else {
-          // Changing their vote
-          // add/substract 2 from post.voteStatus
-          // update the postVote document from the user
+          // Handle changing vote: update vote status, find vote index, update vote document, set vote change value.
+          updatedPost.voteStatus = voteStatus + 2 * vote;
+          const voteIdx = postStateValue.postVotes.findIndex((vote) => vote.id === existingVote.id);
+          batch.update(postVoteRef, { voteValue: vote });
+          voteChange = 2 * vote;
         }
       }
 
-      // Update the post in the batch
+      // Create post document reference in Firestore.
+      // Update post's vote status in Firestore batch.
+      // Commit Firestore batch to execute operations atomically.
+      // Update global state to reflect changes.
+      const postRef = doc(firestore, 'posts', post.id!);
+      batch.update(postRef, { voteStatus: voteStatus + voteChange });
+      await batch.commit();
+
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: updatedPosts,
+        postVotes: updatedPostVotes,
+      }));
     } catch (error: any) {
       console.log(error);
     }
