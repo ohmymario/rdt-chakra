@@ -76,7 +76,6 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
 
   const handleSignOut = async () => {
     const success = await signOut();
-    resetCommuntiyState();
   };
 
   return (
