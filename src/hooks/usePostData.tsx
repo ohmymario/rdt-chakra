@@ -37,7 +37,7 @@ const usePosts = () => {
         // Add the new vote to the Firestore batch for the specific user.
         // Update the post's vote status by adding the user's vote (either -1 or 1).
         // Add the new vote object to the list of post votes.
-        const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes`);
+        const postVoteRef = doc(collection(firestore, 'users', `${user?.uid}/postVotes`));
         const newVote: PostVote = {
           id: postVoteRef.id,
           postId: post.id!,
