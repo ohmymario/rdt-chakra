@@ -1,14 +1,16 @@
+import { communitiesState } from '@/atoms/communitiesAtom';
 import { Post, postsState, PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore, storage } from '@/firebase/clientApp';
-import { collection, deleteDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
-import { getClientBuildManifest } from 'next/dist/client/route-loader';
+import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const usePosts = () => {
   const [user] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postsState);
+  const currentCommunity = useRecoilValue(communitiesState).currentCommunity;
 
   // VOTING
   const onVote = async (post: Post, vote: number, communityId: string) => {
@@ -133,6 +135,33 @@ const usePosts = () => {
       return false;
     }
   };
+
+  useEffect(() => {
+    if (user && currentCommunity) {
+      const getCommunityPostVotes = async (communityId: string) => {
+        // Create a reference to the user's post votes in Firestore.
+        // Get the user's post votes from Firestore.
+        // Create a PostVote object for each post vote.
+        // Update the global state of post votes.
+        const postVotesRef = query(
+          collection(firestore, 'users', `${user?.uid}/postVotes`),
+          where('communityId', '==', communityId)
+        );
+
+        const postVotesSnapshot = await getDocs(postVotesRef);
+        const postVotes = postVotesSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as PostVote[];
+
+        setPostStateValue((prev) => ({
+          ...prev,
+          postVotes: postVotes,
+        }));
+      };
+      getCommunityPostVotes(currentCommunity.id);
+    }
+  }, [user, currentCommunity, setPostStateValue]);
 
   return {
     postStateValue,
