@@ -136,6 +136,7 @@ const usePosts = () => {
     }
   };
 
+  // GET POST VOTES FROM FIRESTORE TO UPDATE GLOBAL STATE
   useEffect(() => {
     if (user && currentCommunity) {
       const getCommunityPostVotes = async (communityId: string) => {
@@ -162,6 +163,16 @@ const usePosts = () => {
       getCommunityPostVotes(currentCommunity.id);
     }
   }, [user, currentCommunity, setPostStateValue]);
+
+  // RESET POST VOTES WHEN USER LOGS OUT
+  useEffect(() => {
+    if (!user) {
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
+    }
+  }, [user, setPostStateValue]);
 
   return {
     postStateValue,
