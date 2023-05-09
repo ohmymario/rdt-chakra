@@ -1,7 +1,8 @@
 import { Post, postsState, PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore, storage } from '@/firebase/clientApp';
-import { deleteDoc, doc, writeBatch } from 'firebase/firestore';
+import { collection, deleteDoc, doc, writeBatch } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
+import { getClientBuildManifest } from 'next/dist/client/route-loader';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState } from 'recoil';
 
@@ -14,7 +15,6 @@ const usePosts = () => {
     // 1. Whether or not its a down vote or up vote
     // 2. Check if user has already voted
     // 3. If user has already voted then check if its a down vote or up vote
-    alert('Voting not implemented yet');
 
     try {
       // Retrieve the current vote status of the post.
@@ -51,6 +51,7 @@ const usePosts = () => {
         // USER HAS A VOTE ON THIS POST
         // Get existing vote reference in Firestore.
         // Determine if user is removing or changing vote.
+
         const postVoteRef = doc(firestore, 'users', `${user?.uid}/postVotes/${existingVote?.id}`);
         const removingVote = existingVote.voteValue === vote;
 
@@ -64,10 +65,25 @@ const usePosts = () => {
           // Handle changing vote: update vote status, find vote index, update vote document, set vote change value.
           updatedPost.voteStatus = voteStatus + 2 * vote;
           const voteIdx = postStateValue.postVotes.findIndex((vote) => vote.id === existingVote.id);
+
+          updatedPostVotes[voteIdx] = {
+            ...existingVote,
+            voteValue: vote,
+          };
+
           batch.update(postVoteRef, { voteValue: vote });
           voteChange = 2 * vote;
         }
       }
+
+      const postIdx = updatedPosts.findIndex((post) => post.id === updatedPost.id);
+      updatedPosts[postIdx] = updatedPost;
+
+      setPostStateValue((prev) => ({
+        ...prev,
+        posts: updatedPosts,
+        postVotes: updatedPostVotes,
+      }));
 
       // Create post document reference in Firestore.
       // Update post's vote status in Firestore batch.
