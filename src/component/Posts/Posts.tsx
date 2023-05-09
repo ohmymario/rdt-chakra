@@ -69,7 +69,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
               post={post}
               key={post.id}
               userIsCreator={user?.uid === post.creatorId}
-              userVoteValue={undefined}
+              userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue}
               {...methods}
             />
           ))}
