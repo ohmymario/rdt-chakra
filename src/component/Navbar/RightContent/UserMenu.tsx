@@ -72,8 +72,6 @@ const UserMenu: FunctionComponent<UserMenuProps> = (props: UserMenuProps) => {
   const [signOut, loading, error] = useSignOut(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
-  const resetCommuntiyState = useResetRecoilState(communitiesState);
-
   const handleSignOut = async () => {
     const success = await signOut();
   };
