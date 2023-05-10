@@ -16,13 +16,12 @@ import { FunctionComponent } from 'react';
 
 import { User as FirebaseUser } from 'firebase/auth';
 
+// Icons
 import { FaRedditSquare } from 'react-icons/fa';
 import { VscAccount } from 'react-icons/vsc';
-
 import { AiOutlineEye } from 'react-icons/ai';
 import { CgProfile } from 'react-icons/cg';
 import { MdOutlineLogin } from 'react-icons/md';
-
 import { BiCoinStack } from 'react-icons/bi';
 import { IoSparkles } from 'react-icons/io5';
 
@@ -32,8 +31,7 @@ import { useSignOut } from 'react-firebase-hooks/auth';
 
 // Auth Modal
 import { authModalState } from '@/atoms/authModalAtom';
-import { useResetRecoilState, useSetRecoilState } from 'recoil';
-import { communitiesState } from '@/atoms/communitiesAtom';
+import { useSetRecoilState } from 'recoil';
 
 interface UserMenuProps {
   user: FirebaseUser | null | undefined;
