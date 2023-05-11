@@ -1,3 +1,4 @@
+import { authModalState } from '@/atoms/authModalAtom';
 import { communitiesState } from '@/atoms/communitiesAtom';
 import { Post, postsState, PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore, storage } from '@/firebase/clientApp';
@@ -5,15 +6,27 @@ import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from 'f
 import { deleteObject, ref } from 'firebase/storage';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const usePosts = () => {
   const [user] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postsState);
   const currentCommunity = useRecoilValue(communitiesState).currentCommunity;
 
+  const [modalState, setModalState] = useRecoilState(authModalState);
+
   // VOTING
   const onVote = async (post: Post, vote: number, communityId: string) => {
+    // Bring user to the login if there is no user
+    if (!user) {
+      setModalState((prev) => ({
+        view: 'login',
+        isOpen: true,
+      }));
+
+      return;
+    }
+
     // 1. Whether or not its a down vote or up vote
     // 2. Check if user has already voted
     // 3. If user has already voted then check if its a down vote or up vote
