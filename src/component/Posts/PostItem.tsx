@@ -37,7 +37,7 @@ interface PostItemProps {
   userVoteValue?: number;
   onVote: (post: Post, vote: number, communityId: string) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
-  onSelectPost: () => void;
+  onSelectPost?: (post: Post) => void;
 }
 
 // ChatGPT method to convert firebase timestamp to relative string
@@ -77,12 +77,10 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
   const { post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost } = props;
   const {
-    id,
     title,
     body,
     createdAt,
     communityId,
-    creatorId,
     imageURL,
     voteStatus,
     numberOfComments,
@@ -133,7 +131,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   };
 
   return (
-    <Flex {...containerStyles} onClick={onSelectPost}>
+    <Flex {...containerStyles} onClick={() => onSelectPost && onSelectPost(post)}>
       {error && (
         <Alert status='error' display='flex' justifyContent='center'>
           <AlertIcon />
