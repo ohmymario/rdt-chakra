@@ -4,11 +4,14 @@ import { Post, postsState, PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore, storage } from '@/firebase/clientApp';
 import { collection, deleteDoc, doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import { deleteObject, ref } from 'firebase/storage';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 const usePosts = () => {
+  const router = useRouter();
+
   const [user] = useAuthState(auth);
   const [postStateValue, setPostStateValue] = useRecoilState(postsState);
   const currentCommunity = useRecoilValue(communitiesState).currentCommunity;
@@ -23,7 +26,6 @@ const usePosts = () => {
         view: 'login',
         isOpen: true,
       }));
-
       return;
     }
 
@@ -119,8 +121,13 @@ const usePosts = () => {
   };
 
   // WHEN USER CLICKS ON A POST
-  const onSelectPost = () => {
-    alert('Selecting a post not implemented yet');
+  const onSelectPost = (post: Post) => {
+    const { id, communityId } = post;
+    setPostStateValue((prev) => ({
+      ...prev,
+      selectedPost: post,
+    }));
+    router.push(`/r/${communityId}/comments/${id}`);
   };
 
   // WHEN USER DELETES THEIR POST
