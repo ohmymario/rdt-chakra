@@ -88,6 +88,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     creatorDisplayName,
   } = post;
 
+  const singlePostPage = !onSelectPost;
   const [loadingImage, setLoadingImage] = useState<boolean>(true);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const [error, setError] = useState(false);
