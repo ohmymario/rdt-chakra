@@ -129,6 +129,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     w: '40px',
     p: 2,
     bg: singlePostPage ? 'none' : 'gray.100',
+    borderRadius: singlePostPage ? '0' : '3px 0px 0px 3px',
   };
 
   const actionStyles = {
