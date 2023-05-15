@@ -115,12 +115,20 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   const containerStyles = {
     border: '1px solid',
     bg: 'white',
-    borderColor: 'gray.300',
-    borderRadius: 4,
+    borderColor: singlePostPage ? 'white' : 'gray.300',
+    borderRadius: singlePostPage ? '4px 4px 0px 0px' : '4px',
     _hover: {
-      borderColor: 'gray.500',
+      borderColor: singlePostPage ? 'none' : 'gray.500',
     },
-    cursor: 'pointer',
+    cursor: singlePostPage ? 'unset' : 'pointer',
+  };
+
+  const votingStyles = {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    w: '40px',
+    p: 2,
+    bg: singlePostPage ? 'none' : 'gray.100',
   };
 
   const actionStyles = {
@@ -140,7 +148,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         </Alert>
       )}
       {/* VOTING COLUMN */}
-      <Flex flexDir='column' alignItems='center' justifyContent='flex-start' w={'40px'} p={2} bg='gray.300'>
+      <Flex {...votingStyles} direction='column'>
         <Icon
           as={userVoteValue === 1 ? IoArrowUpCircleSharp : IoArrowUpCircleOutline}
           color={userVoteValue === 1 ? 'brand.100' : 'gray.400'}
