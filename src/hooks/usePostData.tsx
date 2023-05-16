@@ -19,7 +19,13 @@ const usePosts = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
 
   // VOTING
-  const onVote = async (post: Post, vote: number, communityId: string) => {
+  const onVote = async (
+    event: React.MouseEvent<SVGElement, MouseEvent>,
+    post: Post,
+    vote: number,
+    communityId: string
+  ) => {
+    event.stopPropagation();
     // Bring user to the login if there is no user
     if (!user) {
       setModalState((prev) => ({
