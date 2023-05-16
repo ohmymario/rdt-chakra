@@ -102,6 +102,13 @@ const usePosts = () => {
         postVotes: updatedPostVotes,
       }));
 
+      if (postStateValue.selectedPost) {
+        setPostStateValue((prev) => ({
+          ...prev,
+          selectedPost: updatedPost,
+        }));
+      }
+
       // Create post document reference in Firestore.
       // Update post's vote status in Firestore batch.
       // Commit Firestore batch to execute operations atomically.
