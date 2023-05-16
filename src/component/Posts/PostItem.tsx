@@ -93,17 +93,21 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
   const [error, setError] = useState(false);
 
-  const handleDelete = async (e: React.MouseEvent) => {
+  const handleDelete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // only one delete request at a time
     if (loadingDelete) return;
 
     setLoadingDelete(true);
-    e.stopPropagation();
+    event.stopPropagation();
     try {
       const success = await onDeletePost(post);
 
       if (!success) {
         throw new Error('Failed to delete post');
+      }
+
+      if (singlePostPage) {
+        router.push(`/r/${communityId}`);
       }
     } catch (error: any) {
       setError(error.message);
