@@ -1,6 +1,7 @@
 import { Post } from '@/atoms/postsAtoms';
 import About from '@/component/Community/About';
 import PageContent from '@/component/Layout/PageContent';
+import Comments from '@/component/Posts/Comments/Comments';
 import PostItem from '@/component/Posts/PostItem';
 import { auth, firestore } from '@/firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
@@ -56,7 +57,7 @@ const PostPage: FunctionComponent<PostPageProps> = (props) => {
             userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
           />
         )}
-        {/* Comments */}
+        <Comments />
       </>
 
       <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</>
