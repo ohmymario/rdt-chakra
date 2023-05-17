@@ -1,12 +1,15 @@
+import About from '@/component/Community/About';
 import PageContent from '@/component/Layout/PageContent';
 import NewPostForm from '@/component/Posts/NewPostForm';
 import { auth } from '@/firebase/clientApp';
+import useCommunityData from '@/hooks/useCommunityData';
 import { Box, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const SubmitPostPage: FunctionComponent = (props) => {
   const [user] = useAuthState(auth);
+  const { communityStateValue } = useCommunityData();
   return (
     <PageContent>
       <VStack w='100%'>
@@ -15,8 +18,7 @@ const SubmitPostPage: FunctionComponent = (props) => {
         </Box>
         {user && <NewPostForm user={user} />}
       </VStack>
-
-      <>About Community</>
+      <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</>
     </PageContent>
   );
 };
