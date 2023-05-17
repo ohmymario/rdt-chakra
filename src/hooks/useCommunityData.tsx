@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { communitiesState, CommunityState, Community, CommunitySnippet } from '@/atoms/communitiesAtom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, firestore } from '@/firebase/clientApp';
-import { collection, doc, getDocs, increment, writeBatch } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, increment, writeBatch } from 'firebase/firestore';
 import { authModalState } from '@/atoms/authModalAtom';
+import { useRouter } from 'next/router';
+import { get } from 'http';
 
 type UseCommunityDataReturnType = {
   communityStateValue: CommunityState;
@@ -13,6 +15,7 @@ type UseCommunityDataReturnType = {
 };
 
 const useCommunityData = (): UseCommunityDataReturnType => {
+  const router = useRouter();
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -120,6 +123,40 @@ const useCommunityData = (): UseCommunityDataReturnType => {
     }
   };
 
+  /**
+   * A memoized function that fetches and sets the state of a community data given its ID.
+   *
+   * Uses the `useCallback` React hook to prevent unnecessary re-renders and performance degradation.
+   *
+   * @callback
+   * @async
+   * @param {string} communityId - The ID of the community to fetch data for.
+   * @returns {Promise<void>} A Promise that resolves when the operation is complete.
+   * @throws Will log any errors that occur during the operation to the console.
+   *
+   */
+  const getCommunityData = useCallback(async (communityId: string) => {
+    try {
+      const commDocRef = doc(firestore, 'communities', communityId);
+      const commDocSnap = await getDoc(commDocRef);
+
+      if (!commDocSnap.exists()) {
+        setError('Community does not exist');
+        return;
+      }
+
+      const communityData = { ...commDocSnap.data(), id: commDocSnap.id } as Community;
+
+      setCommunityStateValue((prev) => ({
+        ...prev,
+        currentCommunity: communityData,
+      }));
+    } catch (error: any) {
+      console.log(error);
+    }
+  }, []);
+
+  // LogOut
   useEffect(() => {
     if (!user) {
       setCommunityStateValue((prev) => ({
@@ -130,6 +167,15 @@ const useCommunityData = (): UseCommunityDataReturnType => {
     }
     getMySnippets();
   }, [user]);
+
+  //
+  useEffect(() => {
+    const { communityId } = router.query;
+
+    if (communityId && !communityStateValue.currentCommunity) {
+      getCommunityData(communityId as string);
+    }
+  }, [router.query, communityStateValue.currentCommunity, getCommunityData]);
 
   return {
     communityStateValue,
