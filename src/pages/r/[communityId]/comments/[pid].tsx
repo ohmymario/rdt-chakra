@@ -6,6 +6,7 @@ import PostItem from '@/component/Posts/PostItem';
 import { auth, firestore } from '@/firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
 import usePosts from '@/hooks/usePostData';
+import { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useCallback, useEffect } from 'react';
@@ -47,17 +48,21 @@ const PostPage: FunctionComponent<PostPageProps> = (props) => {
   return (
     <PageContent>
       <>
-        {postStateValue.selectedPost && (
-          <PostItem
-            post={postStateValue.selectedPost}
-            {...postMethods}
-            userVoteValue={
-              postStateValue.postVotes.find((vote) => vote.postId === postStateValue.selectedPost?.id)?.voteValue
-            }
-            userIsCreator={user?.uid === postStateValue.selectedPost?.creatorId}
-          />
+        {selectedPost && (
+          <>
+            <PostItem
+              post={selectedPost}
+              {...postMethods}
+              userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === selectedPost?.id)?.voteValue}
+              userIsCreator={user?.uid === selectedPost?.creatorId}
+            />
+            <Comments
+              user={user as User}
+              selectedPost={selectedPost}
+              communityId={selectedPost?.communityId as string}
+            />
+          </>
         )}
-        <Comments />
       </>
 
       <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</>
