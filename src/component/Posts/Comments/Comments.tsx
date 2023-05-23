@@ -18,12 +18,20 @@ const Comments = (props: CommentsProps) => {
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [createLoading, setCreateLoading] = useState<boolean>(false);
 
-  const onCreateComment = async () => {
-    console.log('create comment');
+  const onCreateComment = async (commentText: string) => {
+    console.log(`🚀 ~ onCreateComment ~ Creating a Comment:`, onCreateComment);
+
+    // create a comment document in firestore
+    // update post numberOfComments field by +1
+    // update global state to reflect changes
   };
 
-  const onDeleteComment = async () => {
-    console.log('delete comment');
+  const onDeleteComment = async (comment: any) => {
+    console.log(`🚀 ~ onDeleteComment ~ Deleting a Comment:`, onDeleteComment);
+
+    // delete comment document in firestore
+    // update post numberOfComments field by -1
+    // update global state to reflect changes
   };
 
   const getPostComments = async () => {
@@ -33,6 +41,12 @@ const Comments = (props: CommentsProps) => {
   useEffect(() => {
     getPostComments();
   }, []);
+
+  const BoxWrapperStyles = {
+    bg: 'white',
+    borderRadius: '0px 0px 4px 4px',
+    p: 2,
+  };
 
   const FlexWrapperStyles: FlexProps = {
     direction: 'column',
@@ -44,7 +58,7 @@ const Comments = (props: CommentsProps) => {
   };
 
   return (
-    <Box bg='white' borderRadius='0px 0px 4px 4px' p={2}>
+    <Box {...BoxWrapperStyles}>
       <Flex {...FlexWrapperStyles}>
         <CommentInput
           commentText={commentText}
