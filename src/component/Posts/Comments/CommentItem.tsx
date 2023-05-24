@@ -1,5 +1,6 @@
 import { Box, Flex, HStack, Icon, Text } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
+import moment from 'moment';
 import { FaReddit } from 'react-icons/fa';
 
 interface CommentItemProps {
@@ -20,21 +21,11 @@ export interface Comment {
   createdAt: Timestamp;
 }
 
-function timestampToDate(timestampData: { seconds: number; nanoseconds: number }): string {
-  const timestamp = new Timestamp(timestampData.seconds, timestampData.nanoseconds);
-  const date = timestamp.toDate();
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-  const month = monthNames[date.getMonth()];
-  const day = date.getDate();
-  const year = date.getFullYear();
-
-  return `${month}, ${day} ${year}`;
-}
-
 const CommentItem = (props: CommentItemProps) => {
   const { comment, onDeleteComment, loadingDelete, userId } = props;
   const { id, creatorId, creatorDisplayText, communityId, postId, postTitle, text, createdAt } = comment;
+
+  const timeFromNow = moment(new Date(createdAt.seconds * 1000)).fromNow();
   return (
     <Flex>
       <Box>
@@ -42,7 +33,7 @@ const CommentItem = (props: CommentItemProps) => {
       </Box>
       <HStack align='center' fontSize='10pt'>
         <Text>{creatorDisplayText}</Text>
-        <Text>{timestampToDate(createdAt)}</Text>
+        <Text>{timeFromNow}</Text>
       </HStack>
     </Flex>
   );
