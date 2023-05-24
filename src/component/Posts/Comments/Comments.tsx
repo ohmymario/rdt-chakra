@@ -1,12 +1,12 @@
 import { Post, postsState } from '@/atoms/postsAtoms';
 import { firestore } from '@/firebase/clientApp';
-import { Box, Flex, FlexProps } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Stack } from '@chakra-ui/react';
 import { User } from 'firebase/auth';
 import { collection, doc, increment, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { Comment } from './CommentItem';
 import CommentInput from './CommentInput';
+import CommentItem, { Comment } from './CommentItem';
 
 interface CommentsProps {
   user: User;
@@ -25,7 +25,6 @@ const Comments = (props: CommentsProps) => {
   const setPostState = useSetRecoilState(postsState);
 
   const onCreateComment = async () => {
-    console.log(`🚀 ~ onCreateComment ~ Creating a Comment:`, onCreateComment);
     setCreateLoading(true);
 
     try {
@@ -52,6 +51,8 @@ const Comments = (props: CommentsProps) => {
       };
 
       batch.set(commentDocRef, newComment);
+
+      newComment.createdAt = { seconds: Date.now() / 1000 } as Timestamp;
 
       // update post numberOfComments field by +1
       const postDocRef = doc(firestore, 'posts', postId!);
@@ -111,6 +112,7 @@ const Comments = (props: CommentsProps) => {
 
   return (
     <Box {...BoxWrapperStyles}>
+      {/* Input */}
       <Flex {...FlexWrapperStyles}>
         <CommentInput
           commentText={commentText}
@@ -120,6 +122,18 @@ const Comments = (props: CommentsProps) => {
           onCreateComment={onCreateComment}
         />
       </Flex>
+      {/* Comments Container */}
+      <Stack spacing={4}>
+        {comments.map((comment) => (
+          <CommentItem
+            key={comment.id}
+            comment={comment}
+            onDeleteComment={onDeleteComment}
+            loadingDelete={false}
+            userId={user.uid}
+          />
+        ))}
+      </Stack>
     </Box>
   );
 };
