@@ -1,12 +1,14 @@
 import { Post, postsState } from '@/atoms/postsAtoms';
 import { firestore } from '@/firebase/clientApp';
-import { Box, Flex, FlexProps, Stack } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, SkeletonCircle, SkeletonText, Stack, Text } from '@chakra-ui/react';
 import { User } from 'firebase/auth';
 import { collection, doc, increment, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import CommentInput from './CommentInput';
 import CommentItem, { Comment } from './CommentItem';
+import CommentsEmpty from './CommentsEmpty';
+import CommentsSkeleton from './CommentsSkeleton';
 
 interface CommentsProps {
   user: User;
@@ -123,16 +125,28 @@ const Comments = (props: CommentsProps) => {
         />
       </Flex>
       {/* Comments Container */}
-      <Stack spacing={4}>
-        {comments.map((comment) => (
-          <CommentItem
-            key={comment.id}
-            comment={comment}
-            onDeleteComment={onDeleteComment}
-            loadingDelete={false}
-            userId={user.uid}
-          />
-        ))}
+      <Stack spacing={6} p={2}>
+        {fetchLoading ? (
+          <CommentsSkeleton numberOfComments={3} />
+        ) : (
+          <>
+            {comments.length === 0 ? (
+              <CommentsEmpty />
+            ) : (
+              <>
+                {comments.map((comment) => (
+                  <CommentItem
+                    key={comment.id}
+                    comment={comment}
+                    onDeleteComment={onDeleteComment}
+                    loadingDelete={false}
+                    userId={user.uid}
+                  />
+                ))}
+              </>
+            )}
+          </>
+        )}
       </Stack>
     </Box>
   );
