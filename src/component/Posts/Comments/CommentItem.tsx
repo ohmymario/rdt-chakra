@@ -1,7 +1,8 @@
-import { Box, Flex, HStack, Icon, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Icon, Spinner, Stack, Text } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
 import moment from 'moment';
 import { FaReddit } from 'react-icons/fa';
+import { IoArrowDownCircleOutline, IoArrowUpCircleOutline } from 'react-icons/io5';
 
 interface CommentItemProps {
   comment: Comment;
@@ -26,15 +27,41 @@ const CommentItem = (props: CommentItemProps) => {
   const { id, creatorId, creatorDisplayText, communityId, postId, postTitle, text, createdAt } = comment;
 
   const timeFromNow = moment(new Date(createdAt.seconds * 1000)).fromNow();
+
+  const handleDeleteComment = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    e.preventDefault();
+    // onDeleteComment(comment);
+  };
+
   return (
     <Flex>
-      <Box>
-        <Icon as={FaReddit} />
+      <Box mr={2}>
+        <Icon as={FaReddit} fontSize={30} color='gray.300' />
       </Box>
-      <HStack align='center' fontSize='10pt'>
-        <Text>{creatorDisplayText}</Text>
-        <Text>{timeFromNow}</Text>
-      </HStack>
+      <Stack spacing={1}>
+        <HStack align='center' fontSize='8pt'>
+          <Text fontWeight={700}>{creatorDisplayText}</Text>
+          <Text color='gray.600'>{timeFromNow}</Text>
+          {loadingDelete && <Spinner />}
+        </HStack>
+
+        <Text fontSize='10pt'>{text}</Text>
+        <HStack align='center' cursor='pointer' color='gray.500'>
+          <Icon as={IoArrowUpCircleOutline} fontSize={12} />
+          <Icon as={IoArrowDownCircleOutline} fontSize={12} />
+
+          {userId === creatorId && (
+            <>
+              <Text fontSize='9pt' _hover={{ color: 'blue.500' }}>
+                Edit
+              </Text>
+              <Text fontSize='9pt' _hover={{ color: 'blue.500' }} onClick={(e) => handleDeleteComment(e)}>
+                Delete
+              </Text>
+            </>
+          )}
+        </HStack>
+      </Stack>
     </Flex>
   );
 };
