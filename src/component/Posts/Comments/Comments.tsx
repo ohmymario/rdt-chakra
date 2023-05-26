@@ -1,8 +1,19 @@
 import { Post, postsState } from '@/atoms/postsAtoms';
 import { firestore } from '@/firebase/clientApp';
-import { Box, Flex, FlexProps, SkeletonCircle, SkeletonText, Stack, Text } from '@chakra-ui/react';
+import { Box, Flex, FlexProps, Stack } from '@chakra-ui/react';
 import { User } from 'firebase/auth';
-import { collection, doc, increment, serverTimestamp, Timestamp, writeBatch } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  increment,
+  orderBy,
+  query,
+  serverTimestamp,
+  Timestamp,
+  where,
+  writeBatch,
+} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import CommentInput from './CommentInput';
