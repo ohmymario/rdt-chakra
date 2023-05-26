@@ -1,17 +1,22 @@
-import { Post } from '@/atoms/postsAtoms';
-import About from '@/component/Community/About';
-import PageContent from '@/component/Layout/PageContent';
-import Comments from '@/component/Posts/Comments/Comments';
-import PostItem from '@/component/Posts/PostItem';
-import { auth, firestore } from '@/firebase/clientApp';
-import useCommunityData from '@/hooks/useCommunityData';
-import usePosts from '@/hooks/usePostData';
-import { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useCallback, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { User } from 'firebase/auth';
+import { auth, firestore } from '@/firebase/clientApp';
 
+// Hooks
+import usePosts from '@/hooks/usePostData';
+import useCommunityData from '@/hooks/useCommunityData';
+
+// Atoms
+import { Post } from '@/atoms/postsAtoms';
+
+// Components
+import PageContent from '@/component/Layout/PageContent';
+import About from '@/component/Community/About';
+import PostItem from '@/component/Posts/PostItem';
+import Comments from '@/component/Posts/Comments/Comments';
 interface PostPageProps {}
 
 const PostPage: FunctionComponent<PostPageProps> = (props) => {
