@@ -28,6 +28,9 @@ const PostPage: FunctionComponent<PostPageProps> = (props) => {
 
   const { selectedPost } = postStateValue;
   const { pid } = router.query;
+
+  const { currentCommunity } = communityStateValue;
+
   const fetchPost = useCallback(
     async (postId: string) => {
       try {
@@ -52,25 +55,19 @@ const PostPage: FunctionComponent<PostPageProps> = (props) => {
 
   return (
     <PageContent>
-      <>
-        {selectedPost && (
-          <>
-            <PostItem
-              post={selectedPost}
-              {...postMethods}
-              userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === selectedPost?.id)?.voteValue}
-              userIsCreator={user?.uid === selectedPost?.creatorId}
-            />
-            <Comments
-              user={user as User}
-              selectedPost={selectedPost}
-              communityId={selectedPost?.communityId as string}
-            />
-          </>
-        )}
-      </>
+      {selectedPost && (
+        <>
+          <PostItem
+            post={selectedPost}
+            {...postMethods}
+            userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === selectedPost?.id)?.voteValue}
+            userIsCreator={user?.uid === selectedPost?.creatorId}
+          />
+          <Comments user={user as User} selectedPost={selectedPost} communityId={selectedPost?.communityId as string} />
+        </>
+      )}
 
-      <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</>
+      {currentCommunity && <About communityData={currentCommunity} />}
     </PageContent>
   );
 };
