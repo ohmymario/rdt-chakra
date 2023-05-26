@@ -11,7 +11,7 @@ const CommentsSkeleton = (props: CommentsSkeletonProps) => {
   return (
     <>
       {skeletonArray.map((_, index) => (
-        <Box key='index'>
+        <Box key={index}>
           <SkeletonCircle size='10' />
           <SkeletonText mt='4' />
         </Box>
