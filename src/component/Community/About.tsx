@@ -134,7 +134,13 @@ const About: FunctionComponent<AboutProps> = (props) => {
           <Divider />
 
           <Link href={`/r/${creatorId}/submit`} passHref>
-            <Button as='a' colorScheme='blue' height='30px' width='100%' my={2}>
+            <Button
+              // as='a'
+              colorScheme='blue'
+              height='30px'
+              width='100%'
+              my={2}
+            >
               Create Post
             </Button>
           </Link>
