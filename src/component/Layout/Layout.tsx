@@ -1,5 +1,5 @@
-import { FunctionComponent } from "react";
-import Navbar from "../Navbar/Navbar";
+import { FunctionComponent } from 'react';
+import Navbar from '../Navbar/Navbar';
 
 interface LayoutProps {
   children: React.ReactNode | React.ReactNode[];

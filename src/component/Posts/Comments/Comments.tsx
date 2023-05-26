@@ -101,7 +101,19 @@ const Comments = (props: CommentsProps) => {
   };
 
   const getPostComments = async () => {
-    console.log('get post comments');
+    setFetchLoading(true);
+    try {
+      const commentsRef = collection(firestore, 'comments');
+      const commentsWhere = where('postId', '==', selectedPost.id);
+      const commentsOrderBy = orderBy('createdAt', 'desc');
+      const commentsQuery = query(commentsRef, commentsWhere, commentsOrderBy);
+      const commentsSnapshot = await getDocs(commentsQuery);
+      const data = commentsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setComments(data as Comment[]);
+    } catch (error) {
+      console.log(error);
+    }
+    setFetchLoading(false);
   };
 
   useEffect(() => {
@@ -127,13 +139,15 @@ const Comments = (props: CommentsProps) => {
     <Box {...BoxWrapperStyles}>
       {/* Input */}
       <Flex {...FlexWrapperStyles}>
-        <CommentInput
-          commentText={commentText}
-          setCommentText={setCommentText}
-          user={user}
-          createLoading={createLoading}
-          onCreateComment={onCreateComment}
-        />
+        {!fetchLoading && (
+          <CommentInput
+            commentText={commentText}
+            setCommentText={setCommentText}
+            user={user}
+            createLoading={createLoading}
+            onCreateComment={onCreateComment}
+          />
+        )}
       </Flex>
       {/* Comments Container */}
       <Stack spacing={6} p={2}>
