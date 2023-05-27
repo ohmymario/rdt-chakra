@@ -92,12 +92,41 @@ const Comments = (props: CommentsProps) => {
     setCreateLoading(false);
   };
 
-  const onDeleteComment = async (comment: any) => {
-    console.log(`🚀 ~ onDeleteComment ~ Deleting a Comment:`, onDeleteComment);
+  const onDeleteComment = async (comment: Comment) => {
+    try {
+      // create firebase batch
+      const batch = writeBatch(firestore);
 
-    // delete comment document in firestore
-    // update post numberOfComments field by -1
-    // update global state to reflect changes
+      // reference to comment document to delete
+      const commentDocRef = doc(firestore, 'comments', comment.id);
+
+      // delete comment document in firestore
+      batch.delete(commentDocRef);
+
+      // reference to post document to update numberOfComments field
+      const postDocRef = doc(firestore, 'posts', comment.postId);
+
+      // update post numberOfComments field by -1
+      batch.update(postDocRef, {
+        numberOfComments: increment(-1),
+      });
+
+      // commit batch
+      await batch.commit();
+
+      // update global state to reflect changes
+      setPostState((prev) => ({
+        ...prev,
+        selectedPost: {
+          ...prev.selectedPost,
+          numberOfComments: prev.selectedPost?.numberOfComments! - 1,
+        } as Post,
+      }));
+
+      setComments((prev) => prev.filter((item) => item.id !== comment.id));
+    } catch (error) {
+      console.log('Error deleting comment: ', error);
+    }
   };
 
   const getPostComments = async () => {
