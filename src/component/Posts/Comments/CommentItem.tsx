@@ -30,7 +30,7 @@ const CommentItem = (props: CommentItemProps) => {
 
   const handleDeleteComment = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     e.preventDefault();
-    // onDeleteComment(comment);
+    onDeleteComment(comment);
   };
 
   return (

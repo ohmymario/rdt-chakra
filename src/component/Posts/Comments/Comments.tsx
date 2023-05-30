@@ -34,6 +34,7 @@ const Comments = (props: CommentsProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [fetchLoading, setFetchLoading] = useState<boolean>(false);
   const [createLoading, setCreateLoading] = useState<boolean>(false);
+  const [loadingDeleteId, setLoadingDeleteId] = useState<string>('');
 
   const setPostState = useSetRecoilState(postsState);
 
@@ -93,6 +94,7 @@ const Comments = (props: CommentsProps) => {
   };
 
   const onDeleteComment = async (comment: Comment) => {
+    setLoadingDeleteId(comment.id);
     try {
       // create firebase batch
       const batch = writeBatch(firestore);
@@ -127,6 +129,7 @@ const Comments = (props: CommentsProps) => {
     } catch (error) {
       console.log('Error deleting comment: ', error);
     }
+    setLoadingDeleteId('');
   };
 
   const getPostComments = async () => {
@@ -193,7 +196,7 @@ const Comments = (props: CommentsProps) => {
                     key={comment.id}
                     comment={comment}
                     onDeleteComment={onDeleteComment}
-                    loadingDelete={false}
+                    loadingDelete={loadingDeleteId === comment.id}
                     userId={user.uid}
                   />
                 ))}
