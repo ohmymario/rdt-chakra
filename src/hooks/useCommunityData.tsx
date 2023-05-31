@@ -64,8 +64,8 @@ const useCommunityData = (): UseCommunityDataReturnType => {
       // new snippet
       const newSnippet: CommunitySnippet = {
         communityId: id,
-        isModerator: false,
         imageURL: imageURL || '',
+        isModerator: user?.uid === communityData.creatorId,
       };
 
       // locations
