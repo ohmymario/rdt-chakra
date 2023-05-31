@@ -1,15 +1,4 @@
-import {
-  Button,
-  Flex,
-  HStack,
-  Icon,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Button, Flex, HStack, Icon, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from '@chakra-ui/react';
 
 // firebase
 import { User as FirebaseUser } from 'firebase/auth';
@@ -64,9 +53,7 @@ const menuButtonStyle = {
   },
 };
 
-const Directory: FunctionComponent<DirectoryProps> = (
-  props: DirectoryProps
-) => {
+const Directory = (props: DirectoryProps) => {
   const { user } = props;
   const [signOut, loading, error] = useSignOut(auth);
 
