@@ -10,7 +10,7 @@ const PageContent: FunctionComponent<PageContentProps> = (props) => {
   const { children } = props;
   return (
     <Flex justify='center' p='1rem 0'>
-      <Flex justify='center' maxW='976px' width='95%' align='center' gap={'1.5rem'}>
+      <Flex justify='center' maxW='976px' width='95%' align='flex-start' gap={'1.5rem'}>
         {/* LHS */}
         <Flex direction='column' flex='1'>
           {children[0]}
@@ -22,7 +22,6 @@ const PageContent: FunctionComponent<PageContentProps> = (props) => {
             lg: 'flex',
           }}
           flex={{ base: '0 0 312px' }}
-          alignSelf='flex-start'
         >
           {children[1]}
         </Flex>
