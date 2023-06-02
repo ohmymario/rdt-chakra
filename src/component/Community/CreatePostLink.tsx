@@ -13,28 +13,30 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
 import { authModalState } from '@/atoms/authModalAtom';
 import { useSetRecoilState } from 'recoil';
+import UseDirectory from '@/hooks/useDirectory';
 
 const CreatePostLink: FunctionComponent = () => {
-  // redirect and grab path id
   const router = useRouter();
-
-  // Logged In User
   const [user] = useAuthState(auth);
-
-  // Modals status
   const setAuthModalState = useSetRecoilState(authModalState);
 
+  const { toggleMenuOpen } = UseDirectory();
+
   const clickHandler = () => {
-    const {
-      push,
-      query: { communityId },
-    } = router;
+    const { push, query } = router;
+    const { communityId } = query;
+
     if (!user) {
       setAuthModalState({ isOpen: true, view: 'login' });
       return;
     }
 
-    router.push(`/r/${communityId}/submit`);
+    if (communityId) {
+      router.push(`/r/${communityId}/submit`);
+      return;
+    }
+
+    toggleMenuOpen();
   };
 
   const flexContainerStyles = {
