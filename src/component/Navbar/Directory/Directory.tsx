@@ -1,22 +1,16 @@
-import { Button, Flex, HStack, Icon, Menu, MenuButton, MenuItem, MenuList, Text, VStack } from '@chakra-ui/react';
+import { Button, Flex, HStack, Icon, Image, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
 
 // firebase
 import { User as FirebaseUser } from 'firebase/auth';
-import { FunctionComponent } from 'react';
 import { useSignOut } from 'react-firebase-hooks/auth';
 
 // icons
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { FaRedditSquare } from 'react-icons/fa';
-import { VscAccount } from 'react-icons/vsc';
-import { TiHome } from 'react-icons/ti';
 
 // set modal state
 import { auth } from '@/firebase/clientApp';
-import { authModalState } from '@/atoms/authModalAtom';
-import { useSetRecoilState } from 'recoil';
-import Communities from './Communities';
 import UseDirectory from '@/hooks/useDirectory';
+import Communities from './Communities';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -65,14 +59,29 @@ const Directory = (props: DirectoryProps) => {
       <MenuButton as={Button} {...menuButtonStyle} onClick={toggleMenuOpen}>
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
-            <Icon
-              as={TiHome}
-              fontSize={24}
-              mr={{
-                base: 1,
-                md: 2,
-              }}
-            />
+            {directoryState.selectedMenuItem.ImageURL ? (
+              <Image
+                src={directoryState.selectedMenuItem.ImageURL}
+                alt={`${directoryState.selectedMenuItem.displayText}`}
+                boxSize='24px'
+                borderRadius='full'
+                mr={{
+                  base: 1,
+                  md: 2,
+                }}
+              />
+            ) : (
+              <Icon
+                as={directoryState.selectedMenuItem.icon}
+                color={directoryState.selectedMenuItem.iconColor}
+                fontSize={24}
+                mr={{
+                  base: 1,
+                  md: 2,
+                }}
+              />
+            )}
+
             <Text
               pt={1}
               display={{
@@ -83,14 +92,13 @@ const Directory = (props: DirectoryProps) => {
               fontWeight={600}
               fontSize='10pt'
             >
-              Home
+              {directoryState.selectedMenuItem.displayText}
             </Text>
           </Flex>
           <ChevronDownIcon boxSize={5} color='gray.400' />
         </HStack>
       </MenuButton>
       <MenuList fontSize='10pt'>
-        {/* <MenuItem>Directories</MenuItem> */}
         <Communities />
       </MenuList>
     </Menu>
