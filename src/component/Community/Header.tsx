@@ -41,6 +41,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
           ) : (
             <Icon
               as={FaReddit}
+              color='blue.500'
               position='absolute'
               boxSize={20}
               top={-3}
