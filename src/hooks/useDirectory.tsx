@@ -9,6 +9,10 @@ const UseDirectory = () => {
   const onSelectMenuItem = (menuItem: DirectoryMenuItem) => {
     setDirectoryState((prev) => ({ ...prev, selectedMenuItem: menuItem }));
     router.push(menuItem.link);
+
+    if (directoryState.isOpen === true) {
+      toggleMenuOpen();
+    }
   };
 
   const toggleMenuOpen = () => {
