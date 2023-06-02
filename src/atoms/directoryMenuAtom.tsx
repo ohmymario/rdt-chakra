@@ -3,7 +3,7 @@ import { TiHome } from 'react-icons/ti';
 import { atom } from 'recoil';
 
 // TYPES
-interface DirectoryMenuItem {
+export interface DirectoryMenuItem {
   displayText: string;
   link: string;
   icon: IconType;

@@ -16,6 +16,7 @@ import { auth } from '@/firebase/clientApp';
 import { authModalState } from '@/atoms/authModalAtom';
 import { useSetRecoilState } from 'recoil';
 import Communities from './Communities';
+import UseDirectory from '@/hooks/useDirectory';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -57,9 +58,11 @@ const Directory = (props: DirectoryProps) => {
   const { user } = props;
   const [signOut, loading, error] = useSignOut(auth);
 
+  const { directoryState, toggleMenuOpen } = UseDirectory();
+
   return (
-    <Menu>
-      <MenuButton as={Button} {...menuButtonStyle}>
+    <Menu isOpen={directoryState.isOpen}>
+      <MenuButton as={Button} {...menuButtonStyle} onClick={toggleMenuOpen}>
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
             <Icon
