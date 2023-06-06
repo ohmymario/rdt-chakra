@@ -38,6 +38,7 @@ interface PostItemProps {
   onVote: (event: React.MouseEvent<SVGElement, MouseEvent>, post: Post, vote: number, communityId: string) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost?: (post: Post) => void;
+  homePage?: boolean;
 }
 
 // ChatGPT method to convert firebase timestamp to relative string
@@ -75,7 +76,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   const router = useRouter();
   const pathname = router.pathname;
 
-  const { post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost } = props;
+  const { post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost, homePage } = props;
   const {
     title,
     body,
