@@ -22,6 +22,7 @@ import useSelectFile from '@/hooks/useSelectFile';
 
 interface NewPostFormProps {
   user: FirebaseUser;
+  communityImageURL?: string;
 }
 
 const formTabs: tabType[] = [
@@ -58,7 +59,7 @@ interface inputType {
 }
 
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
-  const { user } = props;
+  const { user, communityImageURL } = props;
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
@@ -76,6 +77,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     // create post object for firestore
     const newPost: Post = {
       communityId: communityId as string,
+      communityImageURL: communityImageURL || '',
       creatorId: uid,
       creatorDisplayName: email!.split('@')[0],
       title: title,
