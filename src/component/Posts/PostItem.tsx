@@ -20,7 +20,7 @@ import Link from 'next/link';
 
 // Icons
 import { AiOutlineDelete } from 'react-icons/ai';
-import { BsChat } from 'react-icons/bs';
+import { BsChat, BsDot } from 'react-icons/bs';
 import { SlPresent } from 'react-icons/sl';
 import {
   IoArrowDownCircleOutline,
@@ -30,6 +30,7 @@ import {
   IoArrowUpCircleSharp,
   IoBookmarkOutline,
 } from 'react-icons/io5';
+import { FaReddit } from 'react-icons/fa';
 
 interface PostItemProps {
   post: Post;
@@ -74,7 +75,6 @@ function timestampToRelativeString(timestamp: Timestamp) {
 const PostItem: FunctionComponent<PostItemProps> = (props) => {
   // TODO: FIND A WAY TO DO THIS WITHOUT USING useRouter SEVERAL TIMES
   const router = useRouter();
-  const pathname = router.pathname;
 
   const { post, userIsCreator, userVoteValue, onVote, onDeletePost, onSelectPost, homePage } = props;
   const {
@@ -175,15 +175,28 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
       {/* POST TEXT */}
       <VStack align='flex-start' flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
         <VStack align='flex-start' spacing={2} ml='4px'>
-          <HStack fontSize={'xs'} spacing={1}>
-            {pathname != '/r/[communityId]' && (
-              <Link href={`/r/${communityId}`}>
-                <Image boxSize='20px' objectFit='cover' src={communityImageURL} alt={title} cursor='pointer' />
-              </Link>
+          <HStack fontSize={'xs'} spacing={0.6} align='center'>
+            {homePage && (
+              <>
+                {communityImageURL ? (
+                  <Image boxSize='18px' borderRadius='full' src={communityImageURL} alt={title} mr={2} />
+                ) : (
+                  <Icon as={FaReddit} fontSize='18pt' mr={1} color='blue.500' />
+                )}
+                <Link href={`/r/${communityId}`}>
+                  <Text
+                    fontWeight={'600'}
+                    _hover={{ textDecoration: 'underline' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >{`r/${communityId}`}</Text>
+                </Link>
+                <Icon as={BsDot} color='gray.500' fontSize={8} />
+              </>
             )}
             <Text>Posted by u/{creatorDisplayName}</Text>
             <Text>{timestampToRelativeString(createdAt)}</Text>
           </HStack>
+
           <Heading fontSize='lg' as={'h3'} fontWeight={'600'}>
             {title}
           </Heading>
