@@ -4,9 +4,10 @@ import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoader from '@/component/Posts/PostLoader';
 import { auth, firestore } from '@/firebase/clientApp';
+import useCommunityData from '@/hooks/useCommunityData';
 import usePosts from '@/hooks/usePostData';
 import { Stack } from '@chakra-ui/react';
-import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -15,16 +16,41 @@ import { useRecoilValue } from 'recoil';
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
-  const communityStateValue = useRecoilValue(communitiesState);
+
+  const { communityStateValue } = useCommunityData();
 
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
   const methods = { onVote, onSelectPost, onDeletePost };
 
-  const authUserFeed = () => {
+  const authUserFeed = async () => {
     setLoading(true);
 
     try {
-    } catch (error) {}
+      if (!communityStateValue.mySnippets.length) {
+        publicUserFeed();
+        return;
+      }
+
+      const userCommunityIDs = communityStateValue.mySnippets.map((snippet) => snippet.communityId);
+      const postsCollection = collection(firestore, 'posts');
+      const postVotesFilter = where('communityId', 'in', userCommunityIDs);
+      const postsQuery = query(postsCollection, postVotesFilter);
+
+      const postDocs = await getDocs(postsQuery);
+
+      const posts = postDocs.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setPostStateValue((prev) => {
+        return {
+          ...prev,
+          posts: posts as Post[],
+        };
+      });
+    } catch (error) {
+      console.log(error);
+    }
 
     setLoading(false);
   };
@@ -50,7 +76,7 @@ const Home: NextPage = () => {
         };
       });
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
 
     setLoading(false);
@@ -58,6 +84,14 @@ const Home: NextPage = () => {
 
   const getUserPostVotes = () => {};
 
+  // Authenticated user feed
+  useEffect(() => {
+    if (communityStateValue.snippetsFetched) {
+      authUserFeed();
+    }
+  }, [communityStateValue.snippetsFetched]);
+
+  // Public user feed
   useEffect(() => {
     if (!user && !loadingUser) {
       publicUserFeed();

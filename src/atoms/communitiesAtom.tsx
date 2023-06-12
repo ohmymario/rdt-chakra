@@ -30,6 +30,7 @@ export interface CommunitySnippet {
 export interface CommunityState {
   mySnippets: CommunitySnippet[];
   currentCommunity?: Community;
+  snippetsFetched: boolean;
 }
 
 // Default Atom State
@@ -37,5 +38,6 @@ export const communitiesState = atom<CommunityState>({
   key: 'communitiesState',
   default: {
     mySnippets: [],
+    snippetsFetched: false,
   },
 });

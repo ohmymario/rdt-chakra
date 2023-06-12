@@ -1,4 +1,5 @@
 import { auth, firestore } from '@/firebase/clientApp';
+import UseDirectory from '@/hooks/useDirectory';
 import {
   Alert,
   AlertIcon,
@@ -24,6 +25,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
@@ -35,6 +37,9 @@ interface CreateCommunityModalProps {
 
 const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (props: CreateCommunityModalProps) => {
   const { open, handleClose } = props;
+
+  const router = useRouter();
+  const { toggleMenuOpen } = UseDirectory();
 
   type AccessLevel = 'public' | 'restricted' | 'private';
   const [user] = useAuthState(auth);
@@ -122,6 +127,9 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
     }
 
     setLoading(false);
+    handleClose();
+    toggleMenuOpen();
+    router.push(`/r/${communityName}`);
   };
 
   const resetForm = () => {
