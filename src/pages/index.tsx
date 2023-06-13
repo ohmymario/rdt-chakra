@@ -1,5 +1,5 @@
 import { communitiesState } from '@/atoms/communitiesAtom';
-import { Post } from '@/atoms/postsAtoms';
+import { Post, PostVote } from '@/atoms/postsAtoms';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoader from '@/component/Posts/PostLoader';
@@ -82,21 +82,55 @@ const Home: NextPage = () => {
     setLoading(false);
   };
 
-  const getUserPostVotes = () => {};
+  const getUserPostVotes = async () => {
+    try {
+      const postIDs = postStateValue.posts.map((post) => post.id);
+
+      const postVotesCollection = collection(firestore, 'users/${user.uid}/postVotes');
+      const postVotesFilter = where('postId', 'in', postIDs);
+      const postVotesQuery = query(postVotesCollection, postVotesFilter);
+
+      const postVotesDocs = await getDocs(postVotesQuery);
+      const postVotes = postVotesDocs.docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+
+      setPostStateValue((prev) => {
+        return {
+          ...prev,
+          postVotes: postVotes as PostVote[],
+        };
+      });
+
+      console.log(postVotes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // Authenticated user feed
   useEffect(() => {
-    if (communityStateValue.snippetsFetched) {
-      authUserFeed();
-    }
+    if (communityStateValue.snippetsFetched) authUserFeed();
   }, [communityStateValue.snippetsFetched]);
 
   // Public user feed
   useEffect(() => {
-    if (!user && !loadingUser) {
-      publicUserFeed();
-    }
+    if (!user && !loadingUser) publicUserFeed();
   }, [user, loadingUser]);
+
+  // Get user post votes
+  useEffect(() => {
+    if (user && postStateValue.posts) getUserPostVotes();
+
+    return () => {
+      setPostStateValue((prev) => {
+        return {
+          ...prev,
+          postVotes: [],
+        };
+      });
+    };
+  }, [user, postStateValue.posts]);
 
   return (
     <PageContent>
