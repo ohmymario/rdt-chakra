@@ -85,6 +85,10 @@ const Home: NextPage = () => {
     try {
       const postIDs = postStateValue.posts.map((post) => post.id);
 
+      if (postIDs.length === 0) {
+        return;
+      }
+
       const postVotesCollection = collection(firestore, `users/${user?.uid}/postVotes`);
       const postVotesFilter = where('postId', 'in', postIDs);
       const postVotesQuery = query(postVotesCollection, postVotesFilter);
