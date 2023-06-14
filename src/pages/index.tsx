@@ -1,5 +1,5 @@
-import { communitiesState } from '@/atoms/communitiesAtom';
 import { Post, PostVote } from '@/atoms/postsAtoms';
+import Recommendations from '@/component/Community/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoader from '@/component/Posts/PostLoader';
@@ -11,7 +11,6 @@ import { collection, getDocs, limit, orderBy, query, where } from 'firebase/fire
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useRecoilValue } from 'recoil';
 
 const Home: NextPage = () => {
   const [user, loadingUser] = useAuthState(auth);
@@ -157,7 +156,9 @@ const Home: NextPage = () => {
           </Stack>
         )}
       </>
-      <h1>Recommendations</h1>
+      <>
+        <Recommendations />
+      </>
     </PageContent>
   );
 };
