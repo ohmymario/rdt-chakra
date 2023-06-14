@@ -85,11 +85,12 @@ const Home: NextPage = () => {
     try {
       const postIDs = postStateValue.posts.map((post) => post.id);
 
-      const postVotesCollection = collection(firestore, 'users/${user.uid}/postVotes');
+      const postVotesCollection = collection(firestore, `users/${user?.uid}/postVotes`);
       const postVotesFilter = where('postId', 'in', postIDs);
       const postVotesQuery = query(postVotesCollection, postVotesFilter);
 
       const postVotesDocs = await getDocs(postVotesQuery);
+
       const postVotes = postVotesDocs.docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
@@ -100,8 +101,6 @@ const Home: NextPage = () => {
           postVotes: postVotes as PostVote[],
         };
       });
-
-      console.log(postVotes);
     } catch (error) {
       console.log(error);
     }
