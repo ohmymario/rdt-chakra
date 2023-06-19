@@ -7,19 +7,14 @@ interface SearchInputProps {
   user: FirebaseUser | null | undefined;
 }
 
-const SearchInput: FunctionComponent<SearchInputProps> = (
-  props: SearchInputProps
-) => {
+const SearchInput: FunctionComponent<SearchInputProps> = (props: SearchInputProps) => {
   const { user } = props;
-  // 656
   return (
     <Flex flexGrow={1} maxWidth={user ? 'auto' : '656px'} alignItems='center'>
       <InputGroup>
-        <InputLeftElement
-          pointerEvents='none'
-          height='100%'
-          children={<SearchIcon boxSize={'5'} color='gray.500' mt='1px' />}
-        />
+        <InputLeftElement pointerEvents='none' height='100%'>
+          <SearchIcon boxSize={'5'} color='gray.500' mt='1px' />
+        </InputLeftElement>
         <Input
           placeholder='Search Reddit'
           fontSize='10pt'
