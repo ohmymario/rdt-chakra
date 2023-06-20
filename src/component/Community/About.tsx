@@ -145,55 +145,52 @@ const About: FunctionComponent<AboutProps> = (props) => {
             </Button>
           </Link>
 
-          {/* {user?.uid === creatorId && ( */}
-          <>
-            <Divider />
-            <Stack spacing={1} fontSize='10pt'>
-              <Text fontWeight={600} fontSize='10pt'>
-                Admin
-              </Text>
-              <Flex align='center' justify='space-between'>
-                <Text
-                  color={'blue.500'}
-                  cursor='pointer'
-                  _hover={{
-                    textDecoration: 'underline',
-                  }}
-                  onClick={() => selectedFileRef.current?.click()}
-                >
-                  Change Image
+          {user?.uid === creatorId && (
+            <>
+              <Divider />
+              <Stack spacing={1} fontSize='10pt'>
+                <Text fontWeight={600} fontSize='10pt'>
+                  Admin
                 </Text>
-                {imageURL || selectedFile ? (
-                  <Image src={selectedFile || imageURL} borderRadius='full' boxSize='40px' alt='Community Image' />
-                ) : (
-                  <Icon as={FaReddit} fontSize={40} color='brand.100' />
-                )}
-              </Flex>
-
-              {/* If there is a selected file, check if an image is uploading */}
-              {/* If there is an image uploading then give a spinner */}
-              {/* If the image is uploaded then give an option to save the changes */}
-              {selectedFile ? (
-                uploadingImage ? (
-                  <Spinner />
-                ) : (
-                  <Text cursor='pointer' onClick={onUpdateImage}>
-                    Save Changes
+                <Flex align='center' justify='space-between'>
+                  <Text
+                    color={'blue.500'}
+                    cursor='pointer'
+                    _hover={{
+                      textDecoration: 'underline',
+                    }}
+                    onClick={() => selectedFileRef.current?.click()}
+                  >
+                    Change Image
                   </Text>
-                )
-              ) : null}
+                  {imageURL || selectedFile ? (
+                    <Image src={selectedFile || imageURL} borderRadius='full' boxSize='40px' alt='Community Image' />
+                  ) : (
+                    <Icon as={FaReddit} fontSize={40} color='brand.100' />
+                  )}
+                </Flex>
 
-              <input
-                id='file-upload'
-                ref={selectedFileRef}
-                type='file'
-                accept='image/jpeg, image/png'
-                onChange={(e) => onSelectFile(e)}
-                hidden
-              />
-            </Stack>
-          </>
-          {/* )} */}
+                {selectedFile ? (
+                  uploadingImage ? (
+                    <Spinner />
+                  ) : (
+                    <Text cursor='pointer' onClick={onUpdateImage}>
+                      Save Changes
+                    </Text>
+                  )
+                ) : null}
+
+                <input
+                  id='file-upload'
+                  ref={selectedFileRef}
+                  type='file'
+                  accept='image/jpeg, image/png'
+                  onChange={(e) => onSelectFile(e)}
+                  hidden
+                />
+              </Stack>
+            </>
+          )}
         </Stack>
       </Flex>
     </Box>
