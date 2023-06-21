@@ -4,7 +4,7 @@ import { Community } from '@/atoms/communitiesAtom';
 import { useState } from 'react';
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import useCommunityData from '@/hooks/useCommunityData';
-import { Box, Button, Flex, Icon, Image, Skeleton, SkeletonCircle, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, Flex, FlexProps, Icon, Image, Skeleton, SkeletonCircle, Stack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FaReddit } from 'react-icons/fa';
 
@@ -45,21 +45,39 @@ const Recommendations = (props: RecommendationsProps) => {
     onJoinOrLeaveCommunity(item, isJoined);
   };
 
+  const topCommunitiesHeaderStyles: FlexProps = {
+    align: 'flex-end',
+    color: 'white',
+    p: '6px 10px',
+    height: '70px',
+    borderRadius: '4px 4px 0px 0px',
+    fontWeight: 700,
+    bgImage: 'url(/images/recCommsArt.png)',
+    backgroundSize: 'cover',
+    bgGradient: "linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75)), url('images/recCommsArt.png')",
+  };
+
+  const communityWrappersStyles: FlexProps = {
+    position: 'relative',
+    align: 'center',
+    fontSize: '10pt',
+    borderBottom: '1px solid',
+    borderColor: 'gray.200',
+    p: '10px 12px',
+  };
+
+  const recommendationsWrapperStyles: FlexProps = {
+    direction: 'column',
+    bg: 'white',
+    borderRadius: 4,
+    border: '1px solid',
+    borderColor: 'gray.300',
+    width: '100%',
+  };
+
   return (
-    <Flex direction='column' bg='white' borderRadius={4} border='1px solid' borderColor='gray.300' width='100%'>
-      <Flex
-        align='flex-end'
-        color='white'
-        p='6px 10px'
-        height='70px'
-        borderRadius='4px 4px 0px 0px'
-        fontWeight={700}
-        bgImage='url(/images/recCommsArt.png)'
-        backgroundSize='cover'
-        bgGradient="linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75)), url('images/recCommsArt.png')"
-      >
-        Top Communities
-      </Flex>
+    <Flex {...recommendationsWrapperStyles}>
+      <Flex {...topCommunitiesHeaderStyles}>Top Communities</Flex>
 
       <Flex direction='column'>
         {loading ? (
@@ -86,14 +104,7 @@ const Recommendations = (props: RecommendationsProps) => {
 
               return (
                 <Link key={item.id} href={`/r/${item.id}`}>
-                  <Flex
-                    position='relative'
-                    align='center'
-                    fontSize='10pt'
-                    borderBottom='1px solid'
-                    borderColor='gray.200'
-                    p='10px 12px'
-                  >
+                  <Flex {...communityWrappersStyles}>
                     <Flex w='80%' align='center'>
                       <Flex w='15%'>
                         <Text>{index + 1}</Text>
