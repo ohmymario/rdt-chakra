@@ -2,6 +2,8 @@ import { FunctionComponent } from 'react';
 import { Flex, Text, Button, Box } from '@chakra-ui/react';
 import Link from 'next/link';
 
+import { NOT_FOUND_TEXT_1, NOT_FOUND_TEXT_2, FOOTER_TEXT } from './constants';
+
 interface NotFoundProps {}
 
 const NotFound: FunctionComponent<NotFoundProps> = () => {
@@ -9,11 +11,9 @@ const NotFound: FunctionComponent<NotFoundProps> = () => {
     <Flex direction='column' justify='center' align='center' minHeight='60vh'>
       <Box mb={6} bg='gray.400' borderRadius='50px' h='100px' w='100px'></Box>
       <Text fontSize='xl' mb={2}>
-        Sorry, there aren&#39;t any communities on Reddit with that name.
+        {NOT_FOUND_TEXT_1}
       </Text>
-      <Text fontSize='sm'>
-        This community may have been banned or the community name is incorrect.
-      </Text>
+      <Text fontSize='sm'>{NOT_FOUND_TEXT_2}</Text>
       <Link href='/'>
         <Button my={6} textTransform='uppercase' height='32px'>
           Go Home
@@ -21,9 +21,7 @@ const NotFound: FunctionComponent<NotFoundProps> = () => {
       </Link>
 
       <Text maxW={470} fontSize='xs' textAlign='center' color='gray.600'>
-        Use of this site constitutes acceptance of our User Agreement and
-        Privacy Policy. ©2023 reddit inc. All rights reserved. REDDIT and the
-        ALIEN Logo are registered trademarks of reddit inc.
+        {FOOTER_TEXT}
       </Text>
     </Flex>
   );
