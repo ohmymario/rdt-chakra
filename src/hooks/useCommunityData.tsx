@@ -124,18 +124,6 @@ const useCommunityData = (): UseCommunityDataReturnType => {
     }
   };
 
-  /**
-   * A memoized function that fetches and sets the state of a community data given its ID.
-   *
-   * Uses the `useCallback` React hook to prevent unnecessary re-renders and performance degradation.
-   *
-   * @callback
-   * @async
-   * @param {string} communityId - The ID of the community to fetch data for.
-   * @returns {Promise<void>} A Promise that resolves when the operation is complete.
-   * @throws Will log any errors that occur during the operation to the console.
-   *
-   */
   const getCommunityData = useCallback(async (communityId: string) => {
     try {
       const commDocRef = doc(firestore, 'communities', communityId);

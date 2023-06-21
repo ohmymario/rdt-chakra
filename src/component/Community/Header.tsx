@@ -12,12 +12,8 @@ interface HeaderProps {
 const Header: FunctionComponent<HeaderProps> = (props) => {
   const { communityData } = props;
 
-  // Logged in users data
   const { communityStateValue, onJoinOrLeaveCommunity, loading } = useCommunityData();
 
-  // check if the user is joined
-  // if they are, then show the leave button
-  // if they are not, then show the join button
   const isJoined = !!communityStateValue.mySnippets.find((community) => community.communityId === communityData.id);
 
   return (
