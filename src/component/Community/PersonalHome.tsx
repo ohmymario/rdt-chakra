@@ -1,30 +1,35 @@
-import { Flex, Icon, Stack, Button, Text } from '@chakra-ui/react';
+import { Flex, Icon, Stack, Button, Text, FlexProps } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
 
 interface PersonalHomeProps {}
 
+const flexWrapperStyles: FlexProps = {
+  direction: 'column',
+  bg: 'white',
+  borderRadius: 4,
+  cursor: 'pointer',
+  p: '12px',
+  border: '1px solid',
+  borderColor: 'gray.300',
+  position: 'sticky',
+};
+
+const flexInnerStyles: FlexProps = {
+  align: 'flex-end',
+  color: 'white',
+  p: '6px 10px',
+  bg: 'blue.500',
+  height: '34px',
+  borderRadius: '4px 4px 0px 0px',
+  fontWeight: 600,
+  bgImage: 'url(/images/redditPersonalHome.png)',
+  backgroundSize: 'cover',
+};
+
 const PersonalHome = (props: PersonalHomeProps) => {
   return (
-    <Flex
-      direction='column'
-      bg='white'
-      borderRadius={4}
-      cursor='pointer'
-      border='1px solid'
-      borderColor='gray.300'
-      position='sticky'
-    >
-      <Flex
-        align='flex-end'
-        color='white'
-        p='6px 10px'
-        bg='blue.500'
-        height='34px'
-        borderRadius='4px 4px 0px 0px'
-        fontWeight={600}
-        bgImage='url(/images/redditPersonalHome.png)'
-        backgroundSize='cover'
-      ></Flex>
+    <Flex {...flexWrapperStyles}>
+      <Flex {...flexInnerStyles}></Flex>
       <Flex direction='column' p='12px'>
         <Flex align='center' mb={2}>
           <Icon as={FaReddit} fontSize={50} color='brand.100' mr={2} />
