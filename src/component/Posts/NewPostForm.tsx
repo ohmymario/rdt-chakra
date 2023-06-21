@@ -69,12 +69,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   // Submit Post to Firebase
   const handleCreatePost = async () => {
-    // grab all necessary data
     const { communityId } = router.query;
     const { title, body } = textInput;
     const { uid, email } = user;
 
-    // create post object for firestore
     const newPost: Post = {
       communityId: communityId as string,
       communityImageURL: communityImageURL || '',
@@ -90,18 +88,13 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoading(true);
 
     try {
-      // add the post to the firestore
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
 
       if (selectedFile) {
-        // location of the image in the storage
         const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
-        // upload the image to the storage
         await uploadString(imageRef, selectedFile, 'data_url');
-        // get the download url of the image
         const downloadURL = await getDownloadURL(imageRef);
 
-        // update the post object with the image url
         await updateDoc(postDocRef, {
           imageURL: downloadURL,
         });
