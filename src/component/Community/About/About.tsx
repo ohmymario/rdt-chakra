@@ -5,7 +5,6 @@ import { Box, Button, Divider, Flex, Icon, Image, Spinner, Stack, Text } from '@
 import { doc, Timestamp, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FunctionComponent, useEffect, useRef, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
@@ -134,13 +133,7 @@ const About: FunctionComponent<AboutProps> = (props) => {
           <Divider />
 
           <Link href={`/r/${creatorId}/submit`} passHref>
-            <Button
-              // as='a'
-              colorScheme='blue'
-              height='30px'
-              width='100%'
-              my={2}
-            >
+            <Button colorScheme='blue' height='30px' width='100%' my={2}>
               Create Post
             </Button>
           </Link>

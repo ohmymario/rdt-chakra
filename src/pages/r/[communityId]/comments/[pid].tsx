@@ -14,7 +14,7 @@ import { Post } from '@/atoms/postsAtoms';
 
 // Components
 import PageContent from '@/component/Layout/PageContent';
-import About from '@/component/Community/About';
+import About from '@/component/Community/About/About';
 import PostItem from '@/component/Posts/PostItem';
 import Comments from '@/component/Posts/Comments/Comments';
 interface PostPageProps {}

@@ -1,4 +1,4 @@
-import About from '@/component/Community/About';
+import About from '@/component/Community/About/About';
 import PageContent from '@/component/Layout/PageContent';
 import NewPostForm from '@/component/Posts/NewPostForm';
 import { auth } from '@/firebase/clientApp';
