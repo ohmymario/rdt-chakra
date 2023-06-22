@@ -6,8 +6,10 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
+import AboutCreatePost from './AboutCreatePost';
 import AboutHeader from './AboutHeader';
 import AboutInfo from './AboutInfo';
+import AboutStats from './AboutStats';
 import AboutWelcome from './AboutWelcome';
 
 interface AboutProps {
@@ -45,28 +47,16 @@ const About = (props: AboutProps) => {
       {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
-          <AboutWelcome creatorId={creatorId} />
+          <AboutWelcome name={name} />
           <AboutInfo createdAt={createdAt} />
-          <Divider />
-
-          <Flex width='100%' p={2} fontSize='10pt' fontWeight={700}>
-            <Flex direction='column' flexGrow={1}>
-              <Text>{numberOfMembers.toLocaleString()}</Text>
-              <Text>Members</Text>
-            </Flex>
-            <Flex direction='column' flexGrow={1}>
-              <Text>1</Text>
-              <Text>Online</Text>
-            </Flex>
-          </Flex>
 
           <Divider />
 
-          <Link href={`/r/${creatorId}/submit`} passHref>
-            <Button colorScheme='blue' height='30px' width='100%' my={2}>
-              Create Post
-            </Button>
-          </Link>
+          <AboutStats numberOfMembers={numberOfMembers} />
+
+          <Divider />
+
+          <AboutCreatePost creatorId={creatorId} />
 
           {user?.uid === creatorId && (
             <>
