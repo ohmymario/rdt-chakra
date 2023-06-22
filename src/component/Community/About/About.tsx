@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
 import AboutHeader from './AboutHeader';
+import AboutInfo from './AboutInfo';
 import AboutWelcome from './AboutWelcome';
 
 interface AboutProps {
@@ -44,7 +45,8 @@ const About = (props: AboutProps) => {
       {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
-          <AboutWelcome creatorId={creatorId} createdAt={createdAt} />
+          <AboutWelcome creatorId={creatorId} />
+          <AboutInfo createdAt={createdAt} />
           <Divider />
 
           <Flex width='100%' p={2} fontSize='10pt' fontWeight={700}>
