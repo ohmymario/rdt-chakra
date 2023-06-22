@@ -1,11 +1,10 @@
 import { Community } from '@/atoms/communitiesAtom';
 import { auth } from '@/firebase/clientApp';
 import { useImageUpload } from '@/hooks/useImageUpload';
-import { Box, Button, Divider, Flex, Icon, Image, Spinner, Stack, Text } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Box, Divider, Flex, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FaReddit } from 'react-icons/fa';
+import AboutAdminControls from './AboutAdminControls';
 import AboutCreatePost from './AboutCreatePost';
 import AboutHeader from './AboutHeader';
 import AboutInfo from './AboutInfo';
@@ -17,21 +16,14 @@ interface AboutProps {
 }
 
 const About = (props: AboutProps) => {
-  // Grab the currently logged in user
   const [user] = useAuthState(auth);
 
   // Props
   const { communityData } = props;
-  const { createdAt, creatorId, name, nsfw, numberOfMembers, type, imageURL, id } = communityData;
+  const { createdAt, creatorId, name, numberOfMembers, imageURL } = communityData;
   const { selectedFileRef, selectedFile, onSelectFile, uploadingImage, onUpdateImage } = useImageUpload(communityData);
-  // Fix for hydration error
   const [isMounted, setIsMounted] = useState(false);
 
-  // When the component is mounted, it sets the `isMounted` state to `true` using the `useEffect` hook.
-  // This ensures that the `Link` component is only rendered on the client side, after the component is mounted,
-  // which should prevent the hydration error from occurring. If `isMounted` is `false`, the component returns `null`.
-  // If `isMounted` is `true`, the component renders the `Link` component using the `next/link` package.
-  // If you're using an older version of `@chakra-ui/react` that doesn't have the `NoSsr` component, you can use this approach instead.
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -49,60 +41,20 @@ const About = (props: AboutProps) => {
         <Stack>
           <AboutWelcome name={name} />
           <AboutInfo createdAt={createdAt} />
-
           <Divider />
-
           <AboutStats numberOfMembers={numberOfMembers} />
-
           <Divider />
-
           <AboutCreatePost creatorId={creatorId} />
 
           {user?.uid === creatorId && (
-            <>
-              <Divider />
-              <Stack spacing={1} fontSize='10pt'>
-                <Text fontWeight={600} fontSize='10pt'>
-                  Admin
-                </Text>
-                <Flex align='center' justify='space-between'>
-                  <Text
-                    color={'blue.500'}
-                    cursor='pointer'
-                    _hover={{
-                      textDecoration: 'underline',
-                    }}
-                    onClick={() => selectedFileRef.current?.click()}
-                  >
-                    Change Image
-                  </Text>
-                  {imageURL || selectedFile ? (
-                    <Image src={selectedFile || imageURL} borderRadius='full' boxSize='40px' alt='Community Image' />
-                  ) : (
-                    <Icon as={FaReddit} fontSize={40} color='brand.100' />
-                  )}
-                </Flex>
-
-                {selectedFile ? (
-                  uploadingImage ? (
-                    <Spinner />
-                  ) : (
-                    <Text cursor='pointer' onClick={onUpdateImage}>
-                      Save Changes
-                    </Text>
-                  )
-                ) : null}
-
-                <input
-                  id='file-upload'
-                  ref={selectedFileRef}
-                  type='file'
-                  accept='image/jpeg, image/png'
-                  onChange={(e) => onSelectFile(e)}
-                  hidden
-                />
-              </Stack>
-            </>
+            <AboutAdminControls
+              selectedFileRef={selectedFileRef}
+              onSelectFile={onSelectFile}
+              onUpdateImage={onUpdateImage}
+              uploadingImage={uploadingImage}
+              selectedFile={selectedFile}
+              imageURL={imageURL}
+            />
           )}
         </Stack>
       </Flex>
