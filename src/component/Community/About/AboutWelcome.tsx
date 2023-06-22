@@ -1,14 +1,14 @@
 import { Text } from '@chakra-ui/react';
 
 interface AboutWelcomeProps {
-  creatorId: string;
+  name: string;
 }
 
 const AboutWelcome = (props: AboutWelcomeProps) => {
-  const { creatorId } = props;
+  const { name } = props;
   return (
     <Text>
-      Welcome to r/{creatorId}, the place for almost anything {creatorId} related.
+      Welcome to r/{name}, the place for almost anything {name} related.
     </Text>
   );
 };
