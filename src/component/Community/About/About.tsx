@@ -17,7 +17,6 @@ interface AboutProps {
 const About = (props: AboutProps) => {
   const [user] = useAuthState(auth);
 
-  // Props
   const { communityData } = props;
   const { createdAt, creatorId, name, numberOfMembers } = communityData;
   const [isMounted, setIsMounted] = useState(false);
@@ -32,8 +31,10 @@ const About = (props: AboutProps) => {
 
   return (
     <Box alignSelf='flex-start' width='100%'>
+      {/* HEADER */}
       <AboutHeader />
 
+      {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
           <AboutWelcome name={name} />
