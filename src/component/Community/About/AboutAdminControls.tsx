@@ -1,17 +1,15 @@
+import { Community } from '@/atoms/communitiesAtom';
+import { useImageUpload } from '@/hooks/useImageUpload';
 import { Divider, Flex, Icon, Image, Input, Spinner, Stack, Text } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
 
 interface AboutAdminControlsProps {
-  selectedFileRef: React.MutableRefObject<HTMLInputElement | null>;
-  onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onUpdateImage: () => void;
-  selectedFile: string | null;
-  uploadingImage: boolean;
-  imageURL: string | undefined;
+  communityData: Community;
 }
 
 const AboutAdminControls = (props: AboutAdminControlsProps) => {
-  const { selectedFileRef, selectedFile, imageURL, onSelectFile, onUpdateImage, uploadingImage } = props;
+  const { communityData } = props;
+  const { selectedFileRef, selectedFile, onSelectFile, uploadingImage, onUpdateImage } = useImageUpload(communityData);
 
   return (
     <>
@@ -32,8 +30,13 @@ const AboutAdminControls = (props: AboutAdminControlsProps) => {
           >
             Change Image
           </Text>
-          {imageURL || selectedFile ? (
-            <Image src={selectedFile || imageURL} borderRadius='full' boxSize='40px' alt='Community Image' />
+          {communityData.imageURL || selectedFile ? (
+            <Image
+              src={selectedFile || communityData.imageURL}
+              borderRadius='full'
+              boxSize='40px'
+              alt='Community Image'
+            />
           ) : (
             <Icon as={FaReddit} fontSize={40} color='brand.100' />
           )}

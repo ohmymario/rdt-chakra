@@ -1,6 +1,5 @@
 import { Community } from '@/atoms/communitiesAtom';
 import { auth } from '@/firebase/clientApp';
-import { useImageUpload } from '@/hooks/useImageUpload';
 import { Box, Divider, Flex, Stack } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -20,8 +19,7 @@ const About = (props: AboutProps) => {
 
   // Props
   const { communityData } = props;
-  const { createdAt, creatorId, name, numberOfMembers, imageURL } = communityData;
-  const { selectedFileRef, selectedFile, onSelectFile, uploadingImage, onUpdateImage } = useImageUpload(communityData);
+  const { createdAt, creatorId, name, numberOfMembers } = communityData;
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -36,7 +34,6 @@ const About = (props: AboutProps) => {
     <Box alignSelf='flex-start' width='100%'>
       <AboutHeader />
 
-      {/* BODY */}
       <Flex direction='column' p={3} bg='white' borderRadius='0 0 4px 4px'>
         <Stack>
           <AboutWelcome name={name} />
@@ -46,16 +43,7 @@ const About = (props: AboutProps) => {
           <Divider />
           <AboutCreatePost creatorId={creatorId} />
 
-          {user?.uid === creatorId && (
-            <AboutAdminControls
-              selectedFileRef={selectedFileRef}
-              onSelectFile={onSelectFile}
-              onUpdateImage={onUpdateImage}
-              uploadingImage={uploadingImage}
-              selectedFile={selectedFile}
-              imageURL={imageURL}
-            />
-          )}
+          {user?.uid === creatorId && <AboutAdminControls communityData={communityData} />}
         </Stack>
       </Flex>
     </Box>
