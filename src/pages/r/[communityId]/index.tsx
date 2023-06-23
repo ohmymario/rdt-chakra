@@ -7,7 +7,7 @@ import safeJsonStringify from 'safe-json-stringify';
 
 import About from '@/component/Community/About/About';
 import CreatePostLink from '@/component/Community/CreatePostLink';
-import Header from '@/component/Community/Header';
+import Header from '@/component/Community/Header/Header';
 import NotFound from '@/component/Community/NotFound/NotFound';
 import PageContent from '@/component/Layout/PageContent';
 import Posts from '@/component/Posts/Posts';

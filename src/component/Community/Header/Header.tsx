@@ -4,6 +4,7 @@ import { Box, Button, Flex, Icon, Image, Text } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
 
 import useCommunityData from '@/hooks/useCommunityData';
+import HeaderLogo from './HeaderLogo';
 
 interface HeaderProps {
   communityData: Community;
@@ -16,38 +17,16 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
 
   const isJoined = !!communityStateValue.mySnippets.find((community) => community.communityId === communityData.id);
 
+  const handleJoinOrLeaveCommunity = () => {
+    onJoinOrLeaveCommunity(communityData, isJoined);
+  };
+
   return (
     <Flex height='146px' direction='column'>
       <Box height='50%' width='100%' bg='blue.400' />
       <Flex justify='center' bg='white' flexGrow='1'>
         <Flex width='95%' maxW='984px' position='relative'>
-          {communityStateValue.currentCommunity?.imageURL ? (
-            <Image
-              src={communityStateValue.currentCommunity?.imageURL}
-              alt={'logo'}
-              boxSize='66px'
-              position='absolute'
-              top={-3}
-              color='blue.500'
-              bg='white'
-              borderRadius='full'
-              border='3px solid'
-              borderColor='white'
-            />
-          ) : (
-            <Icon
-              as={FaReddit}
-              color='blue.500'
-              position='absolute'
-              boxSize={20}
-              top={-3}
-              bg='white'
-              borderRadius='50%'
-              border='3px solid'
-              borderColor='white'
-            />
-          )}
-
+          <HeaderLogo imageURL={communityStateValue.currentCommunity?.imageURL} />
           <Flex padding='10px 16px' ml='80px' border=''>
             <Flex direction='column' mr={6}>
               <Text fontWeight={800} fontSize='16pt'>
@@ -64,9 +43,7 @@ const Header: FunctionComponent<HeaderProps> = (props) => {
                 pl={6}
                 isLoading={loading}
                 variant={isJoined ? 'outline' : 'solid'}
-                onClick={() => {
-                  onJoinOrLeaveCommunity(communityData, isJoined);
-                }}
+                onClick={handleJoinOrLeaveCommunity}
               >
                 {isJoined ? 'Joined' : 'Join'}
               </Button>
