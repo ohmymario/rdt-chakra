@@ -8,6 +8,7 @@ import { Box, Button, Flex, FlexProps, Icon, Image, Skeleton, SkeletonCircle, St
 import Link from 'next/link';
 import { FaReddit } from 'react-icons/fa';
 import RecommendationsSkeleton from './RecommendationsSkeleton';
+import RecommendationsJoinLeaveButton from './RecommendationsJoinLeaveButton';
 
 interface RecommendationsProps {}
 
@@ -105,16 +106,11 @@ const Recommendations = (props: RecommendationsProps) => {
                       </Flex>
                     </Flex>
 
-                    <Box position='absolute' right='10px'>
-                      <Button
-                        height='22px'
-                        fontSize='8pt'
-                        variant={isJoined ? 'outline' : 'solid'}
-                        onClick={(e) => handleCommunityStatus(item, isJoined, e)}
-                      >
-                        {isJoined ? 'Joined' : 'Join'}
-                      </Button>
-                    </Box>
+                    <RecommendationsJoinLeaveButton
+                      handleCommunityStatus={handleCommunityStatus}
+                      isJoined={isJoined}
+                      item={item}
+                    />
                   </Flex>
                 </Link>
               );
