@@ -7,6 +7,7 @@ import useCommunityData from '@/hooks/useCommunityData';
 import { Box, Button, Flex, FlexProps, Icon, Image, Skeleton, SkeletonCircle, Stack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { FaReddit } from 'react-icons/fa';
+import RecommendationsSkeleton from './RecommendationsSkeleton';
 
 interface RecommendationsProps {}
 
@@ -81,22 +82,7 @@ const Recommendations = (props: RecommendationsProps) => {
 
       <Flex direction='column'>
         {loading ? (
-          <>
-            <Stack mt={2} p={3}>
-              <Flex justify='space-between' align='center'>
-                <SkeletonCircle size='10' />
-                <Skeleton height='10px' w='70%' />
-              </Flex>
-              <Flex justify='space-between' align='center'>
-                <SkeletonCircle size='10' />
-                <Skeleton height='10px' w='70%' />
-              </Flex>
-              <Flex justify='space-between' align='center'>
-                <SkeletonCircle size='10' />
-                <Skeleton height='10px' w='70%' />
-              </Flex>
-            </Stack>
-          </>
+          <RecommendationsSkeleton />
         ) : (
           <>
             {communities.map((item, index) => {

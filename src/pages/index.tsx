@@ -1,7 +1,7 @@
 import { Post, PostVote } from '@/atoms/postsAtoms';
 import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
-import Recommendations from '@/component/Community/Recommendations';
+import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoader from '@/component/Posts/PostLoader';
