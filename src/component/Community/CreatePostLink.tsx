@@ -32,7 +32,7 @@ const CreatePostLink: FunctionComponent = () => {
     }
 
     if (communityId) {
-      router.push(`/r/${communityId}/submit`);
+      push(`/r/${communityId}/submit`);
       return;
     }
 
