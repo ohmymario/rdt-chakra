@@ -27,6 +27,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
+import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 
 interface CreateCommunityModalProps {
@@ -226,28 +227,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
               </VStack>
 
               {/* Adult Content */}
-              <VStack width={'100%'} align='flex-start'>
-                <Heading as='h4' size='sm' fontWeight='500'>
-                  Adult Content
-                </Heading>
-                <Checkbox isChecked={isAdult} onChange={() => handleNSFW()}>
-                  <Highlight
-                    query='NSFW'
-                    styles={{
-                      px: '1',
-                      py: '1',
-                      top: '-2px',
-                      position: 'relative',
-                      bg: 'red.400',
-                      color: 'white',
-                      fontSize: '2xs',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    NSFW 18+ year old community
-                  </Highlight>
-                </Checkbox>
-              </VStack>
+              <CreateCommunityModalAdult />
             </VStack>
           </ModalBody>
 
