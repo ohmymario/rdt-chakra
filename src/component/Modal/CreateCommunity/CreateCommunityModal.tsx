@@ -4,7 +4,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Button,
   Checkbox,
   Divider,
   Heading,
@@ -16,7 +15,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Radio,
@@ -29,6 +27,7 @@ import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
+import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -252,22 +251,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
             </VStack>
           </ModalBody>
 
-          <ModalFooter
-            bg='gray.100'
-            borderRadius={'lg'}
-            position='relative'
-            left='-16px'
-            bottom='-16px'
-            width='512px'
-            height='64px'
-          >
-            <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={() => handleClose()}>
-              Cancel
-            </Button>
-            <Button height='32px' onClick={() => submitCommunity()} isLoading={loading}>
-              Create Community
-            </Button>
-          </ModalFooter>
+          <CreateCommunityModalFooter loading={loading} submitCommunity={submitCommunity} handleClose={handleClose} />
         </ModalContent>
       </Modal>
     </>
