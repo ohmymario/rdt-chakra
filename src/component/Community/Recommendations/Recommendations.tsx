@@ -9,6 +9,8 @@ import Link from 'next/link';
 import { FaReddit } from 'react-icons/fa';
 import RecommendationsSkeleton from './RecommendationsSkeleton';
 import RecommendationsJoinLeaveButton from './RecommendationsJoinLeaveButton';
+import RecommendationsLink from './RecommendationsLink';
+import RecommendationsViewAll from './RecommendationsViewAll';
 
 interface RecommendationsProps {}
 
@@ -92,19 +94,7 @@ const Recommendations = (props: RecommendationsProps) => {
               return (
                 <Link key={item.id} href={`/r/${item.id}`}>
                   <Flex {...communityWrappersStyles}>
-                    <Flex w='80%' align='center'>
-                      <Flex w='15%'>
-                        <Text>{index + 1}</Text>
-                      </Flex>
-                      <Flex w='80%' align='center'>
-                        {item.imageURL ? (
-                          <Image src={item.imageURL} alt={item.name} borderRadius='full' boxSize='28px' mr={2} />
-                        ) : (
-                          <Icon as={FaReddit} fontSize={30} color='brand.100' mr={2} />
-                        )}
-                        <span>{`r/${item.id}`}</span>
-                      </Flex>
-                    </Flex>
+                    <RecommendationsLink item={item} index={index} />
 
                     <RecommendationsJoinLeaveButton
                       handleCommunityStatus={handleCommunityStatus}
@@ -115,11 +105,7 @@ const Recommendations = (props: RecommendationsProps) => {
                 </Link>
               );
             })}
-            <Box p='10px 20px'>
-              <Button height='30px' width='100%'>
-                View All
-              </Button>
-            </Box>
+            <RecommendationsViewAll />
           </>
         )}
       </Flex>
