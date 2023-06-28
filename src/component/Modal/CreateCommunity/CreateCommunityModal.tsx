@@ -29,6 +29,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
+import CreateCommunityModalHeader from './CreateCommunityModalHeader';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -150,13 +151,9 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
       <Modal isOpen={open} onClose={() => handleClose()}>
         <ModalOverlay />
         <ModalContent maxW={'lg'} p={4}>
-          <ModalHeader fontSize='md' fontWeight='500' p={0}>
-            Create a community
-          </ModalHeader>
+          <CreateCommunityModalHeader />
           <ModalCloseButton />
-
           <Divider mt={3} mb={2} />
-
           <ModalBody px={0}>
             <VStack spacing={6}>
               {/* Community Name */}
@@ -230,7 +227,6 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
               <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
             </VStack>
           </ModalBody>
-
           <CreateCommunityModalFooter loading={loading} submitCommunity={submitCommunity} handleClose={handleClose} />
         </ModalContent>
       </Modal>
