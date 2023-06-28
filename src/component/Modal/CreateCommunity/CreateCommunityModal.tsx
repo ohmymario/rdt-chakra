@@ -31,6 +31,7 @@ import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalError from './CreateCommunityModalError';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 import CreateCommunityModalHeader from './CreateCommunityModalHeader';
+import CreateCommunityModalName from './CreateCommunityModalName';
 import CreateCommunityModalTypes from './CreateCommunityModalTypes';
 
 interface CreateCommunityModalProps {
@@ -47,13 +48,11 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
   const { toggleMenuOpen } = UseDirectory();
 
   const [user] = useAuthState(auth);
-
   const [communityName, setCommunityName] = useState<string>('');
   const [charsRemain, setCharsRemain] = useState<number>(21);
   const [communityType, setCommunityType] = useState<AccessLevel>('public');
   const [isAdult, setIsAdult] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleCommunityName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,11 +143,6 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
     setError('');
   };
 
-  const subTextStyles = {
-    fontSize: '8pt',
-    color: 'gray.500',
-  };
-
   return (
     <>
       <Modal isOpen={open} onClose={() => handleClose()}>
@@ -161,27 +155,12 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
             <VStack spacing={6}>
               {/* Community Name */}
               <VStack width={'100%'} align='flex-start' mb={3}>
-                <Box>
-                  <Heading as='h4' size='sm' mb={2} fontWeight='500'>
-                    Name
-                  </Heading>
-                  <Text {...subTextStyles}>Community names including capitalization cannot be changed.</Text>
-                </Box>
-                <Text position='relative' top='37px' left='10px' width='20px' color='gray.400'>
-                  r/
-                </Text>
-                <Input
-                  position='relative'
-                  pl='20px'
-                  size='sm'
-                  borderRadius='md'
-                  value={communityName}
-                  onChange={(e) => handleCommunityName(e)}
+                <CreateCommunityModalName
+                  charsRemain={charsRemain}
+                  communityName={communityName}
+                  handleCommunityName={handleCommunityName}
                 />
-                <Text {...subTextStyles} color={!charsRemain ? 'red' : 'gray.500'}>
-                  {charsRemain} characters remaining
-                </Text>
-
+                {/* Community Error */}
                 {error && <CreateCommunityModalError error={error} />}
               </VStack>
               {/* Community Type */}
