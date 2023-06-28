@@ -48,40 +48,34 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
     setIsAdult(!isAdult);
   };
 
-  const submitCommunity = async () => {
-    if (error) setError(''); // clear error
-
+  const validateCommunityName = () => {
     // https://stackoverflow.com/a/32311188
     var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
 
-    // Validate
     if (format.test(communityName)) {
-      setError('Community names can only contain letters and numbers');
-      return;
+      return 'Community names can only contain letters and numbers';
     }
 
     if (communityName.length < 3) {
-      setError('Community names must be at least 3 characters long');
-      return;
+      return 'Community names must be at least 3 characters long';
     }
 
     if (communityName.length > 21) {
-      setError('Community names must be less than 21 characters long');
-      return;
+      return 'Community names must be less than 21 characters long';
     }
 
-    setLoading(true);
+    return null;
+  };
 
+  const firestoreOperation = async () => {
     try {
       await runTransaction(firestore, async (transaction) => {
         const communityDocRef = doc(firestore, 'communities', communityName);
-        // Check for Existing Community
         const communityDoc = await transaction.get(communityDocRef);
         if (communityDoc.exists()) {
           throw new Error(`Sorry r/${communityName} is taken. Try another.`);
         }
 
-        // Create Community
         transaction.set(communityDocRef, {
           name: communityName,
           type: communityType,
@@ -93,21 +87,36 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
 
         const communitySnippets = `users/${user?.uid}/communitySnippets`;
         const userDocRef = doc(firestore, communitySnippets, communityName);
-
-        // Create Community Snippet on User
         transaction.set(userDocRef, {
           communityId: communityName,
           isModerator: true,
         });
       });
+    } catch (error) {
+      throw error;
+    }
+  };
 
+  const submitCommunity = async () => {
+    const validationError = validateCommunityName();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
+    try {
+      await firestoreOperation();
       resetForm();
     } catch (error: any) {
       console.error(error);
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
 
-    setLoading(false);
     handleClose();
     toggleMenuOpen();
     router.push(`/r/${communityName}`);
