@@ -227,7 +227,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
               </VStack>
 
               {/* Adult Content */}
-              <CreateCommunityModalAdult />
+              <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
             </VStack>
           </ModalBody>
 
