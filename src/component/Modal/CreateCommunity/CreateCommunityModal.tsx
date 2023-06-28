@@ -28,6 +28,7 @@ import { FunctionComponent, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
+import CreateCommunityModalError from './CreateCommunityModalError';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 import CreateCommunityModalHeader from './CreateCommunityModalHeader';
 import CreateCommunityModalTypes from './CreateCommunityModalTypes';
@@ -181,12 +182,7 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
                   {charsRemain} characters remaining
                 </Text>
 
-                {error && (
-                  <Alert status='error' border={'1px solid red'} borderRadius='xl'>
-                    <AlertIcon />
-                    {error}
-                  </Alert>
-                )}
+                {error && <CreateCommunityModalError error={error} />}
               </VStack>
               {/* Community Type */}
               <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
