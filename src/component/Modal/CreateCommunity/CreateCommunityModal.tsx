@@ -30,6 +30,7 @@ import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 import CreateCommunityModalHeader from './CreateCommunityModalHeader';
+import CreateCommunityModalTypes from './CreateCommunityModalTypes';
 
 interface CreateCommunityModalProps {
   open: boolean;
@@ -187,43 +188,8 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
                   </Alert>
                 )}
               </VStack>
-
               {/* Community Type */}
-              <VStack width={'100%'} align='flex-start'>
-                <Heading as='h4' size='sm' mb={2} fontWeight='500'>
-                  Community Type
-                </Heading>
-                <RadioGroup onChange={(e) => handleCommunityType(e)} value={communityType}>
-                  <Radio size='md' mb={4} value='public'>
-                    <HStack>
-                      <Icon as={FaUserCircle} color='gray.500' top='-1px' position='relative' />
-                      <Text fontSize='10pt' fontWeight='600'>
-                        Public
-                      </Text>
-                      <Text {...subTextStyles}>Anyone can view, post, and comment to this community</Text>
-                    </HStack>
-                  </Radio>
-                  <Radio size='md' mb={4} value='restricted'>
-                    <HStack>
-                      <Icon as={FaEye} color='gray.500' top='-1px' position='relative' />
-                      <Text fontSize='10pt' fontWeight='600'>
-                        Restricted
-                      </Text>
-                      <Text {...subTextStyles}>Anyone can view this community, but only approved users can post</Text>
-                    </HStack>
-                  </Radio>
-                  <Radio size='md' mb={4} value='private'>
-                    <HStack>
-                      <Icon as={FaLock} color='gray.500' top='-1px' position='relative' />
-                      <Text fontSize='10pt' fontWeight='600'>
-                        Private
-                      </Text>
-                      <Text {...subTextStyles}>Only approved users can view and submit to this community </Text>
-                    </HStack>
-                  </Radio>
-                </RadioGroup>
-              </VStack>
-
+              <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
               {/* Adult Content */}
               <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
             </VStack>
