@@ -1,32 +1,10 @@
 import { auth, firestore } from '@/firebase/clientApp';
 import UseDirectory from '@/hooks/useDirectory';
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Checkbox,
-  Divider,
-  Heading,
-  Highlight,
-  HStack,
-  Icon,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Radio,
-  RadioGroup,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, VStack } from '@chakra-ui/react';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { FaEye, FaLock, FaUserCircle } from 'react-icons/fa';
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalError from './CreateCommunityModalError';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
@@ -145,12 +123,13 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
 
   return (
     <>
-      <Modal isOpen={open} onClose={() => handleClose()}>
+      <Modal isOpen={open} onClose={handleClose}>
         <ModalOverlay />
         <ModalContent maxW={'lg'} p={4}>
           <CreateCommunityModalHeader />
           <ModalCloseButton />
           <Divider mt={3} mb={2} />
+          {/* Modal Body */}
           <ModalBody px={0}>
             <VStack spacing={6}>
               {/* Community Name */}
