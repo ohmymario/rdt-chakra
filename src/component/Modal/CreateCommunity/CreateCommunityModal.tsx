@@ -3,8 +3,10 @@ import UseDirectory from '@/hooks/useDirectory';
 import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, VStack } from '@chakra-ui/react';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { FunctionComponent, useState } from 'react';
+import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
+// Components
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalError from './CreateCommunityModalError';
 import CreateCommunityModalFooter from './CreateCommunityModalFooter';
@@ -19,11 +21,11 @@ interface CreateCommunityModalProps {
 
 export type AccessLevel = 'public' | 'restricted' | 'private';
 
-const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (props: CreateCommunityModalProps) => {
+const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   const { open, handleClose } = props;
 
   const router = useRouter();
-  const { toggleMenuOpen } = UseDirectory();
+  const { toggleMenuOpen, directoryState } = UseDirectory();
 
   const [user] = useAuthState(auth);
   const [communityName, setCommunityName] = useState<string>('');
@@ -46,6 +48,13 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
 
   const handleNSFW = () => {
     setIsAdult(!isAdult);
+  };
+
+  const closeModalandMenu = () => {
+    if (directoryState.isOpen === true) {
+      handleClose();
+      toggleMenuOpen();
+    }
   };
 
   const validateCommunityName = () => {
@@ -97,6 +106,14 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
     }
   };
 
+  const resetForm = () => {
+    setCommunityName('');
+    setCharsRemain(21);
+    setCommunityType('public');
+    setIsAdult(false);
+    setError('');
+  };
+
   const submitCommunity = async () => {
     const validationError = validateCommunityName();
     if (validationError) {
@@ -110,24 +127,14 @@ const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (prop
     try {
       await firestoreOperation();
       resetForm();
+      closeModalandMenu();
+      router.push(`/r/${communityName}`);
     } catch (error: any) {
       console.error(error);
       setError(error.message);
     } finally {
       setLoading(false);
     }
-
-    handleClose();
-    toggleMenuOpen();
-    router.push(`/r/${communityName}`);
-  };
-
-  const resetForm = () => {
-    setCommunityName('');
-    setCharsRemain(21);
-    setCommunityType('public');
-    setIsAdult(false);
-    setError('');
   };
 
   return (
