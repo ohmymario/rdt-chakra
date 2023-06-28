@@ -36,13 +36,14 @@ interface CreateCommunityModalProps {
   handleClose: () => void;
 }
 
+export type AccessLevel = 'public' | 'restricted' | 'private';
+
 const CreateCommunityModal: FunctionComponent<CreateCommunityModalProps> = (props: CreateCommunityModalProps) => {
   const { open, handleClose } = props;
 
   const router = useRouter();
   const { toggleMenuOpen } = UseDirectory();
 
-  type AccessLevel = 'public' | 'restricted' | 'private';
   const [user] = useAuthState(auth);
 
   const [communityName, setCommunityName] = useState<string>('');
