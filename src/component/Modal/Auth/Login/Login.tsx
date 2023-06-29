@@ -1,14 +1,5 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  Flex,
-  Input,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Alert, AlertIcon, Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
@@ -16,13 +7,13 @@ import { useSetRecoilState } from 'recoil';
 import { auth } from '@/firebase/clientApp';
 import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import AuthSwitch from '../AuthView';
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
   const setAuthModalState = useSetRecoilState(authModalState);
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, user, loading, error] = useSignInWithEmailAndPassword(auth);
 
   const [loginForm, setLoginForm] = useState({
     email: '',
@@ -67,13 +58,7 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
     <Box mb={4} width='100%'>
       <form onSubmit={(e) => handleSubmit(e)}>
         <VStack spacing={4} align='stretch'>
-          <Input
-            name='email'
-            type='email'
-            placeholder='Email'
-            onChange={(e) => handleLoginForm(e)}
-            {...inputStyles}
-          />
+          <Input name='email' type='email' placeholder='Email' onChange={(e) => handleLoginForm(e)} {...inputStyles} />
           <Input
             name='password'
             type='password'
@@ -96,16 +81,11 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             </Alert>
           )}
 
-          <Button
-            height='36px'
-            variant='auth'
-            type='submit'
-            isLoading={loading}
-          >
+          <Button height='36px' variant='auth' type='submit' isLoading={loading}>
             Log In
           </Button>
 
-          <Flex justifyContent='center' mb={2}>
+          {/* <Flex justifyContent='center' mb={2}>
             <Text fontSize='9pt' mr={1}>
               Forgot your password?
             </Text>
@@ -122,9 +102,11 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             >
               Reset
             </Text>
-          </Flex>
+          </Flex> */}
 
-          <Flex fontSize='10pt'>
+          <AuthSwitch view={'resetPassword'} setAuthModalState={setAuthModalState} />
+
+          {/* <Flex fontSize='10pt'>
             <Text mr={1}>New Here?</Text>
             <Text
               color='blue.500'
@@ -140,7 +122,9 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             >
               Sign Up
             </Text>
-          </Flex>
+          </Flex> */}
+
+          <AuthSwitch view={'signup'} setAuthModalState={setAuthModalState} />
         </VStack>
       </form>
     </Box>

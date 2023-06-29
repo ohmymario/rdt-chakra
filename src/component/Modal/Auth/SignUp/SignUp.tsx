@@ -1,5 +1,5 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { Alert, AlertIcon, Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
+import { Alert, AlertIcon, Box, Button, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
@@ -7,6 +7,7 @@ import { FIREBASE_ERRORS } from '@/firebase/errors';
 
 import { auth } from '@/firebase/clientApp';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import AuthView from '../AuthView';
 import SignUpInput from './SignUpInput';
 
 const SignUp = () => {
@@ -74,23 +75,7 @@ const SignUp = () => {
           <Button height='36px' variant='auth' type='submit' isLoading={authLoading}>
             Sign Up
           </Button>
-          <Flex fontSize='10pt'>
-            <Text mr={1}>Already a redditor?</Text>
-            <Text
-              color='blue.500'
-              fontWeight={700}
-              cursor='pointer'
-              textDecoration={'underline'}
-              onClick={() =>
-                setAuthModalState({
-                  isOpen: true,
-                  view: 'login',
-                })
-              }
-            >
-              Log In
-            </Text>
-          </Flex>
+          <AuthView view={'login'} setAuthModalState={setAuthModalState} />
         </VStack>
       </form>
     </Box>
