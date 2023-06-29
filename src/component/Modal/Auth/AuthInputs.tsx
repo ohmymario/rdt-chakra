@@ -4,15 +4,13 @@ import { FunctionComponent } from 'react';
 import { useRecoilValue } from 'recoil';
 import Login from './Login';
 import ResetPassword from './ResetPassword';
-import SignUp from './SignUp';
+import SignUp from './SignUp/SignUp';
 
 interface AuthInputsProps {
   // props later :)
 }
 
-const AuthInputs: FunctionComponent<AuthInputsProps> = (
-  props: AuthInputsProps
-) => {
+const AuthInputs: FunctionComponent<AuthInputsProps> = (props: AuthInputsProps) => {
   // only need state view
   const modalState = useRecoilValue(authModalState);
 
