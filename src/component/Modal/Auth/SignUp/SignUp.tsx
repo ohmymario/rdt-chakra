@@ -1,14 +1,5 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  Flex,
-  Input,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
+import { Alert, AlertIcon, Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
@@ -17,10 +8,9 @@ import { FIREBASE_ERRORS } from '@/firebase/errors';
 // firebase hooks email & password
 import { auth } from '@/firebase/clientApp';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import SignUpInput from './SignUpInput';
 
-interface SignUpProps {}
-
-const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
+const SignUp = () => {
   const setAuthModalState = useSetRecoilState(authModalState);
 
   const [SignupForm, setSignupForm] = useState({
@@ -31,8 +21,7 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
 
   const [error, setError] = useState<string | null>(null);
 
-  const [createUserWithEmailAndPassword, authUser, authLoading, authError] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword, authUser, authLoading, authError] = useCreateUserWithEmailAndPassword(auth);
 
   const handleSignupForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupForm({
@@ -54,73 +43,38 @@ const SignUp: FunctionComponent<SignUpProps> = (props: SignUpProps) => {
     createUserWithEmailAndPassword(email, password);
   };
 
-  const inputStyles = {
-    fontSize: '10pt',
-    _placeholder: {
-      color: 'gray.500',
-    },
-    _hover: {
-      bg: 'white',
-      border: '1px solid',
-      borderColor: 'blue.500',
-    },
-    _focus: {
-      outline: 'white',
-      bg: 'white',
-      border: '1px solid',
-      borderColor: 'blue.500',
-    },
-    bg: 'gray.50',
-  };
-
   return (
     <Box mb={4} width='100%'>
       <form onSubmit={(e) => handleSubmit(e)}>
         <VStack spacing={4} align='stretch'>
-          <Input
-            name='email'
-            type='email'
-            required
-            placeholder='Email'
-            onChange={(e) => handleSignupForm(e)}
-            {...inputStyles}
-          />
-          <Input
+          <SignUpInput name='email' type='email' placeholder='Email' isRequired handleSignupForm={handleSignupForm} />
+          <SignUpInput
             name='password'
             type='password'
-            required
             placeholder='Password'
-            onChange={(e) => handleSignupForm(e)}
-            {...inputStyles}
+            isRequired
+            handleSignupForm={handleSignupForm}
           />
-          <Input
+          <SignUpInput
             name='confirmPassword'
             type='password'
-            required
             placeholder='Confirm Password'
-            onChange={(e) => handleSignupForm(e)}
-            {...inputStyles}
+            isRequired
+            handleSignupForm={handleSignupForm}
           />
 
           {(error || authError) && (
             <Alert status='error' borderRadius='xl'>
               <AlertIcon />
               {error ||
-                FIREBASE_ERRORS[
-                  authError?.message as keyof typeof FIREBASE_ERRORS
-                ]}
+                (authError?.message &&
+                  FIREBASE_ERRORS.hasOwnProperty(authError.message) &&
+                  FIREBASE_ERRORS[authError.message as keyof typeof FIREBASE_ERRORS])}
             </Alert>
           )}
-
-          <Button
-            height='36px'
-            variant='auth'
-            type='submit'
-            isLoading={authLoading}
-          >
+          <Button height='36px' variant='auth' type='submit' isLoading={authLoading}>
             Sign Up
           </Button>
-
           <Flex fontSize='10pt'>
             <Text mr={1}>Already a redditor?</Text>
             <Text
