@@ -1,11 +1,10 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { Alert, AlertIcon, Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
-import { FunctionComponent, useState } from 'react';
+import { Alert, AlertIcon, Box, Button, Flex, Text, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { FIREBASE_ERRORS } from '@/firebase/errors';
 
-// firebase hooks email & password
 import { auth } from '@/firebase/clientApp';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import SignUpInput from './SignUpInput';
