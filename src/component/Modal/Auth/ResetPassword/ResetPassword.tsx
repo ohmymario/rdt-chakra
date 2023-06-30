@@ -25,6 +25,7 @@ import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
 import ResetPasswordRedirect from './ResetPasswordRedirect';
+import ResetPasswordSuccess from './ResetPasswordSuccess';
 
 interface ResetPasswordProps {}
 
@@ -70,24 +71,7 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswo
     <>
       <VStack spacing={2} align='stretch' mb={2}>
         {success ? (
-          <Alert
-            status='success'
-            borderRadius='xl'
-            mb={3}
-            flexDirection='column'
-            alignItems='center'
-            justifyContent='center'
-            textAlign='center'
-          >
-            <AlertIcon boxSize='32px' />
-            <AlertTitle mt={4} mb={3} fontSize='xl'>
-              Email Sent!
-            </AlertTitle>
-            <AlertDescription maxWidth='sm' fontSize='md'>
-              Check your email for a link to reset your password. If it doesn&apos;t appear within a few minutes, check
-              your spam folder.
-            </AlertDescription>
-          </Alert>
+          <ResetPasswordSuccess />
         ) : (
           <VStack spacing={3} textAlign='center' mb={2}>
             <Icon alignSelf='center' as={BsReddit} color='brand.100' fontSize={40} />
