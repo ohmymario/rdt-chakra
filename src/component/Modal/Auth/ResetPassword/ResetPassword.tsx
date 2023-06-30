@@ -1,29 +1,12 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Button,
-  Flex,
-  Heading,
-  Icon,
-  Input,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-
-import { BsDot, BsReddit } from 'react-icons/bs';
-
+import { Alert, AlertIcon, Button, Heading, Icon, Input, Text, VStack } from '@chakra-ui/react';
+import { BsReddit } from 'react-icons/bs';
 import { FunctionComponent, useState } from 'react';
 
-// change modal state
-import { authModalState } from '@/atoms/authModalAtom';
-import { useSetRecoilState } from 'recoil';
-
 // firebase password reset hook
-import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
+import ResetPasswordForm from './ResetPasswordForm';
 import ResetPasswordRedirect from './ResetPasswordRedirect';
 import ResetPasswordSuccess from './ResetPasswordSuccess';
 
@@ -94,6 +77,13 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswo
                 Reset Password
               </Button>
             </form>
+
+            <ResetPasswordForm
+              error={error}
+              sending={sending}
+              handlePasswordReset={handlePasswordReset}
+              handleEmail={handleEmail}
+            />
           </VStack>
         )}
         <ResetPasswordRedirect />
