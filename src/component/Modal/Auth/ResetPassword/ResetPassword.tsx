@@ -24,12 +24,11 @@ import { useSetRecoilState } from 'recoil';
 import { useSendPasswordResetEmail } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/clientApp';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import ResetPasswordRedirect from './ResetPasswordRedirect';
 
 interface ResetPasswordProps {}
 
 const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswordProps) => {
-  // setting between login and signup and reset password
-  const setAuthModalState = useSetRecoilState(authModalState);
   const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
 
   const [email, setEmail] = useState<string | null>(null);
@@ -65,13 +64,6 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswo
       borderColor: 'blue.500',
     },
     bg: 'gray.50',
-  };
-
-  const authStyles = {
-    color: 'blue.500',
-    fontWeight: '700',
-    cursor: 'pointer',
-    textDecoration: 'underline',
   };
 
   return (
@@ -120,31 +112,7 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswo
             </form>
           </VStack>
         )}
-        <Flex justify='center' alignItems='center' color='blue.500' fontSize='9pt'>
-          <Text
-            {...authStyles}
-            onClick={() =>
-              setAuthModalState((prev) => ({
-                ...prev,
-                view: 'login',
-              }))
-            }
-          >
-            Login
-          </Text>
-          <Icon as={BsDot} />
-          <Text
-            {...authStyles}
-            onClick={() =>
-              setAuthModalState((prev) => ({
-                ...prev,
-                view: 'signup',
-              }))
-            }
-          >
-            Sign Up
-          </Text>
-        </Flex>
+        <ResetPasswordRedirect />
       </VStack>
     </>
   );
