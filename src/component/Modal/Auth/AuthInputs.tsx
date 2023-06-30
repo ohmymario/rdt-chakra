@@ -3,7 +3,7 @@ import { Flex } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useRecoilValue } from 'recoil';
 import Login from './Login/Login';
-import ResetPassword from './ResetPassword';
+import ResetPassword from './ResetPassword/ResetPassword';
 import SignUp from './SignUp/SignUp';
 
 interface AuthInputsProps {

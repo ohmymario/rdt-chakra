@@ -27,13 +27,10 @@ import { FIREBASE_ERRORS } from '@/firebase/errors';
 
 interface ResetPasswordProps {}
 
-const ResetPassword: FunctionComponent<ResetPasswordProps> = (
-  props: ResetPasswordProps
-) => {
+const ResetPassword: FunctionComponent<ResetPasswordProps> = (props: ResetPasswordProps) => {
   // setting between login and signup and reset password
   const setAuthModalState = useSetRecoilState(authModalState);
-  const [sendPasswordResetEmail, sending, error] =
-    useSendPasswordResetEmail(auth);
+  const [sendPasswordResetEmail, sending, error] = useSendPasswordResetEmail(auth);
 
   const [email, setEmail] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
@@ -95,62 +92,35 @@ const ResetPassword: FunctionComponent<ResetPasswordProps> = (
               Email Sent!
             </AlertTitle>
             <AlertDescription maxWidth='sm' fontSize='md'>
-              Check your email for a link to reset your password. If it
-              doesn&apos;t appear within a few minutes, check your spam folder.
+              Check your email for a link to reset your password. If it doesn&apos;t appear within a few minutes, check
+              your spam folder.
             </AlertDescription>
           </Alert>
         ) : (
           <VStack spacing={3} textAlign='center' mb={2}>
-            <Icon
-              alignSelf='center'
-              as={BsReddit}
-              color='brand.100'
-              fontSize={40}
-            />
+            <Icon alignSelf='center' as={BsReddit} color='brand.100' fontSize={40} />
             <Heading size='md'>Reset your password</Heading>
             <Text fontSize='sm'>
-              Enter the email associated with your account and we&apos;ll send
-              you a reset link.
+              Enter the email associated with your account and we&apos;ll send you a reset link.
             </Text>
 
             <form onSubmit={(e) => handlePasswordReset(e)}>
               {error && (
                 <Alert status='error' borderRadius='xl' mb={3}>
                   <AlertIcon />
-                  {
-                    FIREBASE_ERRORS[
-                      error.message as keyof typeof FIREBASE_ERRORS
-                    ]
-                  }
+                  {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
                 </Alert>
               )}
 
-              <Input
-                type='email'
-                placeholder='Email'
-                required
-                onChange={(e) => handleEmail(e)}
-                {...inputStyles}
-              />
+              <Input type='email' placeholder='Email' required onChange={(e) => handleEmail(e)} {...inputStyles} />
 
-              <Button
-                height='36px'
-                variant='auth'
-                type='submit'
-                width={'100%'}
-                isLoading={sending}
-              >
+              <Button height='36px' variant='auth' type='submit' width={'100%'} isLoading={sending}>
                 Reset Password
               </Button>
             </form>
           </VStack>
         )}
-        <Flex
-          justify='center'
-          alignItems='center'
-          color='blue.500'
-          fontSize='9pt'
-        >
+        <Flex justify='center' alignItems='center' color='blue.500' fontSize='9pt'>
           <Text
             {...authStyles}
             onClick={() =>
