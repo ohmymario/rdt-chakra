@@ -1,15 +1,11 @@
 import { FIREBASE_ERRORS } from '@/firebase/errors';
 import { Alert, AlertIcon, Button, VStack } from '@chakra-ui/react';
 import { AuthError } from 'firebase/auth';
-import { FunctionComponent, useState } from 'react';
+import { useState } from 'react';
 
 import OAuthGoogle from './OAuthGoogle';
 
-interface OAuthButtonsProps {}
-
-const OAuthButtons: FunctionComponent<OAuthButtonsProps> = (
-  props: OAuthButtonsProps
-) => {
+const OAuthButtons = () => {
   const [oAuthError, setOAuthError] = useState<AuthError | null>(null);
 
   return (
