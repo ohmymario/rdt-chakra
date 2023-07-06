@@ -1,14 +1,23 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, VStack } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalBody,
+  ModalBodyProps,
+  ModalCloseButton,
+  ModalContent,
+  ModalOverlay,
+  StackProps,
+  VStack,
+} from '@chakra-ui/react';
 import { useEffect } from 'react';
 
 import { useRecoilState } from 'recoil';
 import AuthInputs from './AuthInputs';
-import OAuthButtons from '../OAuthButtons';
 
 import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import AuthModalHeader from './AuthModalHeader';
+import AuthModalOAuth from './AuthModalOAuth';
 
 const AuthModal = () => {
   const [modalState, setModalState] = useRecoilState(authModalState);
@@ -23,32 +32,34 @@ const AuthModal = () => {
     if (user) handleClose();
   }, [user]);
 
+  const ModalBodyStyles: ModalBodyProps = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+
+  const VStackStyles: StackProps = {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '70%',
+    spacing: 4,
+  };
+
   return (
     <>
       <Modal isOpen={modalState.isOpen} onClose={() => handleClose()}>
         <ModalOverlay />
         <ModalContent>
+          {/* HEADER */}
           <AuthModalHeader modalState={modalState} />
           <ModalCloseButton />
-          <ModalBody display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
-            <VStack
-              display='flex'
-              direction='column'
-              alignItems='center'
-              justifyContent='center'
-              width='70%'
-              spacing={4}
-            >
-              {modalState.view != 'resetPassword' && (
-                <>
-                  <OAuthButtons />
-
-                  <Text color='gray.500' fontWeight='700' textTransform='uppercase'>
-                    Or
-                  </Text>
-                </>
-              )}
-
+          {/* BODY */}
+          <ModalBody {...ModalBodyStyles}>
+            <VStack {...VStackStyles}>
+              {modalState.view != 'resetPassword' && <AuthModalOAuth />}
               <AuthInputs />
             </VStack>
           </ModalBody>
