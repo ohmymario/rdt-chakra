@@ -1,13 +1,18 @@
-import { authModalState } from '@/atoms/authModalAtom';
-import { Alert, AlertIcon, Box, Button, Flex, Input, Text, VStack } from '@chakra-ui/react';
+import { Alert, AlertIcon, AlertProps, Box, Button, VStack } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
 
-// Firebase sign in with email and password
+// Recoil
+import { useSetRecoilState } from 'recoil';
+import { authModalState } from '@/atoms/authModalAtom';
+
+// Firebase
 import { auth } from '@/firebase/clientApp';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { FIREBASE_ERRORS } from '@/firebase/errors';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+
+// Components
 import AuthSwitch from '../AuthView';
+import LoginInput from './LoginInput';
 
 interface LoginProps {}
 
@@ -20,11 +25,11 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
     password: '',
   });
 
-  // update login form state
   const handleLoginForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
     setLoginForm({
       ...loginForm,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
@@ -35,47 +40,30 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
     signInWithEmailAndPassword(email, password);
   };
 
-  const inputStyles = {
-    fontSize: '10pt',
-    _placeholder: {
-      color: 'gray.500',
-    },
-    _hover: {
-      bg: 'white',
-      border: '1px solid',
-      borderColor: 'blue.500',
-    },
-    _focus: {
-      outline: 'white',
-      bg: 'white',
-      border: '1px solid',
-      borderColor: 'blue.500',
-    },
-    bg: 'gray.50',
+  const alertStyles: AlertProps = {
+    status: 'error',
+    borderRadius: 'xl',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   };
 
   return (
     <Box mb={4} width='100%'>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit}>
         <VStack spacing={4} align='stretch'>
-          <Input name='email' type='email' placeholder='Email' onChange={(e) => handleLoginForm(e)} {...inputStyles} />
-          <Input
+          <LoginInput name='email' type='email' isRequired placeholder='Email' handleLoginForm={handleLoginForm} />
+          <LoginInput
             name='password'
             type='password'
+            isRequired
             placeholder='Password'
-            onChange={(e) => handleLoginForm(e)}
-            {...inputStyles}
+            handleLoginForm={handleLoginForm}
           />
 
           {error && (
-            <Alert
-              status='error'
-              borderRadius='xl'
-              flexDirection='column'
-              alignItems='center'
-              justifyContent='center'
-              textAlign='center'
-            >
+            <Alert {...alertStyles}>
               <AlertIcon mb={1} />
               {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
             </Alert>
@@ -85,45 +73,7 @@ const Login: FunctionComponent<LoginProps> = (props: LoginProps) => {
             Log In
           </Button>
 
-          {/* <Flex justifyContent='center' mb={2}>
-            <Text fontSize='9pt' mr={1}>
-              Forgot your password?
-            </Text>
-            <Text
-              fontSize='9pt'
-              color='blue.500'
-              cursor='pointer'
-              onClick={() =>
-                setAuthModalState({
-                  isOpen: true,
-                  view: 'resetPassword',
-                })
-              }
-            >
-              Reset
-            </Text>
-          </Flex> */}
-
           <AuthSwitch view={'resetPassword'} setAuthModalState={setAuthModalState} />
-
-          {/* <Flex fontSize='10pt'>
-            <Text mr={1}>New Here?</Text>
-            <Text
-              color='blue.500'
-              fontWeight={700}
-              cursor='pointer'
-              textDecoration={'underline'}
-              onClick={() =>
-                setAuthModalState({
-                  isOpen: true,
-                  view: 'signup',
-                })
-              }
-            >
-              Sign Up
-            </Text>
-          </Flex> */}
-
           <AuthSwitch view={'signup'} setAuthModalState={setAuthModalState} />
         </VStack>
       </form>
