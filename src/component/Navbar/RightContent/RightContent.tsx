@@ -1,4 +1,4 @@
-import AuthModal from '@/component/Modal/Auth/AuthModal';
+import AuthModal from '@/component/Modal/Auth/AuthModal/AuthModal';
 import { Flex } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import AuthButtons from './AuthButtons';
@@ -14,9 +14,7 @@ interface RightContentProps {
   user: FirebaseUser | null | undefined;
 }
 
-const RightContent: FunctionComponent<RightContentProps> = (
-  props: RightContentProps
-) => {
+const RightContent: FunctionComponent<RightContentProps> = (props: RightContentProps) => {
   const [user, loading, error] = useAuthState(auth);
 
   return (
