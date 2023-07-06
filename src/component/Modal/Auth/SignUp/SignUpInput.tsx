@@ -2,6 +2,7 @@ import { Input, InputProps } from '@chakra-ui/react';
 
 interface SignUpInputProps extends InputProps {
   name: string;
+  type: string;
   handleSignupForm: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -25,8 +26,8 @@ const inputStyles: InputProps = {
 };
 
 const SignUpInput = (props: SignUpInputProps) => {
-  const { name, handleSignupForm, ...rest } = props;
-  return <Input name={name} onChange={(e) => handleSignupForm(e)} {...inputStyles} {...rest} />;
+  const { name, type, handleSignupForm, ...rest } = props;
+  return <Input name={name} type={type} onChange={(e) => handleSignupForm(e)} {...inputStyles} {...rest} />;
 };
 
 export default SignUpInput;
