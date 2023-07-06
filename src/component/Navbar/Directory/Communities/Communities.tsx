@@ -5,6 +5,7 @@ import { FunctionComponent, useState } from 'react';
 import { FaReddit } from 'react-icons/fa';
 import { GrAdd } from 'react-icons/gr';
 import { useRecoilValue } from 'recoil';
+import CommunitiesListItem from './CommunitiesListItem';
 import CommunitiesModerating from './CommunitiesModerating';
 import MenuListItem from './MenuListItem';
 
@@ -56,10 +57,9 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
         </MenuItem>
 
         {mySnippets.map((snippet) => (
-          <MenuListItem
+          <CommunitiesListItem
             key={snippet.communityId}
-            displayText={`r/${snippet.communityId}`}
-            link={`/r/${snippet.communityId}`}
+            communityId={snippet.communityId}
             icon={FaReddit}
             iconColor='blue.500'
             ImageURL={snippet.imageURL}
