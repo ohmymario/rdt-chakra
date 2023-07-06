@@ -10,7 +10,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 // set modal state
 import { auth } from '@/firebase/clientApp';
 import UseDirectory from '@/hooks/useDirectory';
-import Communities from './Communities';
+import Communities from './Communities/Communities';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
