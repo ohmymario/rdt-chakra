@@ -31,11 +31,13 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
     color: 'gray.500',
   };
 
+  const modCommunities = mySnippets.filter((community) => community.isModerator);
+
   return (
     <>
       <CreateCommunityModal open={open} handleClose={handleClose} />
 
-      <CommunitiesModerating mySnippets={mySnippets} />
+      {modCommunities.length > 0 && <CommunitiesModerating modCommunities={modCommunities} />}
 
       <Box mt={3} mb={4}>
         <Text {...communityHeaderStyles}>My Communities</Text>

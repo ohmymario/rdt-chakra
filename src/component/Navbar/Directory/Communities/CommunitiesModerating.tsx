@@ -4,7 +4,7 @@ import { FaReddit } from 'react-icons/fa';
 import MenuListItem from './MenuListItem';
 
 interface CommunitiesModeratingProps {
-  mySnippets: CommunitySnippet[];
+  modCommunities: CommunitySnippet[];
 }
 
 const communityHeaderStyles = {
@@ -16,8 +16,7 @@ const communityHeaderStyles = {
 };
 
 const CommunitiesModerating = (props: CommunitiesModeratingProps) => {
-  const { mySnippets } = props;
-  const modCommunities = mySnippets.filter((community) => community.isModerator);
+  const { modCommunities } = props;
 
   return (
     <Box mt={3} mb={4}>
