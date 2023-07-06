@@ -1,16 +1,18 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
+import { Alert, AlertDescription, AlertIcon, AlertProps, AlertTitle } from '@chakra-ui/react';
+
+const AlertContainer: AlertProps = {
+  status: 'success',
+  borderRadius: 'xl',
+  mb: 3,
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
+};
 
 const ResetPasswordSuccess = () => {
   return (
-    <Alert
-      status='success'
-      borderRadius='xl'
-      mb={3}
-      flexDirection='column'
-      alignItems='center'
-      justifyContent='center'
-      textAlign='center'
-    >
+    <Alert {...AlertContainer}>
       <AlertIcon boxSize='32px' />
       <AlertTitle mt={4} mb={3} fontSize='xl'>
         Email Sent!
