@@ -56,14 +56,8 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
           </HStack>
         </MenuItem>
 
-        {mySnippets.map((snippet) => (
-          <CommunitiesListItem
-            key={snippet.communityId}
-            communityId={snippet.communityId}
-            icon={FaReddit}
-            iconColor='blue.500'
-            ImageURL={snippet.imageURL}
-          />
+        {mySnippets.map(({ communityId, imageURL }) => (
+          <CommunitiesListItem key={communityId} communityId={communityId} ImageURL={imageURL} />
         ))}
       </Box>
     </>
