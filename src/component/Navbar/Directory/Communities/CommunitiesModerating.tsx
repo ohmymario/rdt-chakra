@@ -1,7 +1,7 @@
 import { CommunitySnippet } from '@/atoms/communitiesAtom';
 import { Box, Text } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
-import MenuListItem from './MenuListItem';
+import CommunitiesListItem from './CommunitiesListItem';
 
 interface CommunitiesModeratingProps {
   modCommunities: CommunitySnippet[];
@@ -22,15 +22,8 @@ const CommunitiesModerating = (props: CommunitiesModeratingProps) => {
     <Box mt={3} mb={4}>
       <Text {...communityHeaderStyles}>Moderating</Text>
 
-      {modCommunities.map((snippet) => (
-        <MenuListItem
-          key={snippet.communityId}
-          displayText={`r/${snippet.communityId}`}
-          link={`/r/${snippet.communityId}`}
-          icon={FaReddit}
-          iconColor='brand.100'
-          ImageURL={snippet.imageURL}
-        />
+      {modCommunities.map(({ communityId, imageURL }) => (
+        <CommunitiesListItem key={communityId} communityId={communityId} iconColor='brand.100' ImageURL={imageURL} />
       ))}
     </Box>
   );
