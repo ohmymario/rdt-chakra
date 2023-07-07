@@ -2,12 +2,10 @@ import { communitiesState } from '@/atoms/communitiesAtom';
 import CreateCommunityModal from '@/component/Modal/CreateCommunity/CreateCommunityModal';
 import { Box, HStack, Icon, MenuItem, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
-import { FaReddit } from 'react-icons/fa';
 import { GrAdd } from 'react-icons/gr';
 import { useRecoilValue } from 'recoil';
 import CommunitiesListItem from './CommunitiesListItem';
 import CommunitiesModerating from './CommunitiesModerating';
-import MenuListItem from './MenuListItem';
 
 interface CommunitiesProps {}
 
