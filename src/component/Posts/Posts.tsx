@@ -2,7 +2,7 @@ import { Community } from '@/atoms/communitiesAtom';
 import { Post } from '@/atoms/postsAtoms';
 import { auth, firestore } from '@/firebase/clientApp';
 import usePosts from '@/hooks/usePostData';
-import { Stack } from '@chakra-ui/react';
+import { Stack, Text } from '@chakra-ui/react';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -18,33 +18,30 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const [error, setError] = useState<string | null>('EORRR');
+
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
   const methods = { onVote, onSelectPost, onDeletePost };
 
   const getPosts = useCallback(async () => {
     setLoading(true);
-    try {
-      // reference to the posts collection
-      const postsCollection = collection(firestore, 'posts');
+    setError(null);
 
-      // query to get the posts
+    try {
+      const postsCollection = collection(firestore, 'posts');
       const postFilter = where('communityId', '==', communityData.id);
       const postOrder = orderBy('createdAt', 'desc');
       const postQuery = query(postsCollection, postFilter, postOrder);
-
-      // fetch the posts
       const postDocs = await getDocs(postQuery);
-
-      // create array of post objects
       const posts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 
-      // update the posts state with the array of posts from firestore
       setPostStateValue((prev) => ({
         ...prev,
         posts: posts as Post[],
       }));
     } catch (error: any) {
       console.error(error);
+      setError(error.message);
     }
     setLoading(false);
   }, [communityData.id, setPostStateValue]);
@@ -55,14 +52,15 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
 
   return (
     <>
-      {loading ? (
+      {loading && (
         <>
           <PostLoader />
           <PostLoader />
           <PostLoader />
           <PostLoader />
         </>
-      ) : (
+      )}
+      {!loading && !error && (
         <Stack>
           {postStateValue.posts.map((post) => (
             <PostItem
@@ -75,6 +73,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
           ))}
         </Stack>
       )}
+      {error && <Text>{error}</Text>}
     </>
   );
 };
