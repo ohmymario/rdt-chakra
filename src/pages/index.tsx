@@ -4,7 +4,7 @@ import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
-import PostLoader from '@/component/Posts/PostLoader';
+import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
 import { auth, firestore } from '@/firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
 import usePosts from '@/hooks/usePostData';
@@ -140,12 +140,7 @@ const Home: NextPage = () => {
     <PageContent>
       <>
         {loading ? (
-          <>
-            <PostLoader />
-            <PostLoader />
-            <PostLoader />
-            <PostLoader />
-          </>
+          <PostLoaderSkeleton count={4} />
         ) : (
           <Stack>
             {postStateValue.posts.map((post) => (

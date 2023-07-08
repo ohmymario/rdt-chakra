@@ -7,7 +7,7 @@ import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FunctionComponent, useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import PostItem from './PostItem';
-import PostLoader from './PostLoader';
+import PostLoaderSkeleton from './PostLoaderSkeleton';
 
 interface PostsProps {
   communityData: Community;
@@ -52,14 +52,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
 
   return (
     <>
-      {loading && (
-        <>
-          <PostLoader />
-          <PostLoader />
-          <PostLoader />
-          <PostLoader />
-        </>
-      )}
+      {loading && <PostLoaderSkeleton count={4} />}
       {!loading && !error && (
         <Stack>
           {postStateValue.posts.map((post) => (
