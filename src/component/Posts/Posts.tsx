@@ -18,7 +18,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
   const [user] = useAuthState(auth);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [error, setError] = useState<string | null>('EORRR');
+  const [error, setError] = useState<string | null>('');
 
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
   const methods = { onVote, onSelectPost, onDeletePost };
@@ -28,13 +28,7 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
     setError(null);
 
     try {
-      const postsCollection = collection(firestore, 'posts');
-      const postFilter = where('communityId', '==', communityData.id);
-      const postOrder = orderBy('createdAt', 'desc');
-      const postQuery = query(postsCollection, postFilter, postOrder);
-      const postDocs = await getDocs(postQuery);
-      const posts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-
+      const posts = await fetchPosts();
       setPostStateValue((prev) => ({
         ...prev,
         posts: posts as Post[],
@@ -46,6 +40,15 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
     setLoading(false);
   }, [communityData.id, setPostStateValue]);
 
+  const fetchPosts = async () => {
+    const postsCollection = collection(firestore, 'posts');
+    const postFilter = where('communityId', '==', communityData.id);
+    const postOrder = orderBy('createdAt', 'desc');
+    const postQuery = query(postsCollection, postFilter, postOrder);
+    const postDocs = await getDocs(postQuery);
+    return postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  };
+
   useEffect(() => {
     getPosts();
   }, [getPosts]);
@@ -55,15 +58,20 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
       {loading && <PostLoaderSkeleton count={4} />}
       {!loading && !error && (
         <Stack>
-          {postStateValue.posts.map((post) => (
-            <PostItem
-              post={post}
-              key={post.id}
-              userIsCreator={user?.uid === post.creatorId}
-              userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue}
-              {...methods}
-            />
-          ))}
+          {postStateValue.posts.map((post) => {
+            const userIsCreator = user?.uid === post.creatorId;
+            const userVoteValue = postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue;
+
+            return (
+              <PostItem
+                post={post}
+                key={post.id}
+                userIsCreator={userIsCreator}
+                userVoteValue={userVoteValue}
+                {...methods}
+              />
+            );
+          })}
         </Stack>
       )}
       {error && <Text>{error}</Text>}
