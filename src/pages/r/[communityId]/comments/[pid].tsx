@@ -6,7 +6,7 @@ import { User } from 'firebase/auth';
 import { auth, firestore } from '@/firebase/clientApp';
 
 // Hooks
-import usePosts from '@/hooks/usePostData';
+import usePostsData from '@/hooks/usePostData';
 import useCommunityData from '@/hooks/useCommunityData';
 
 // Atoms
@@ -22,7 +22,7 @@ interface PostPageProps {}
 const PostPage: FunctionComponent<PostPageProps> = (props) => {
   const router = useRouter();
   const [user] = useAuthState(auth);
-  const { postStateValue, setPostStateValue, onDeletePost, onVote } = usePosts();
+  const { postStateValue, setPostStateValue, onDeletePost, onVote } = usePostsData();
   const postMethods = { setPostStateValue, onDeletePost, onVote };
   const { communityStateValue } = useCommunityData();
 

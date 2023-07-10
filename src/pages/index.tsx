@@ -7,7 +7,7 @@ import PostItem from '@/component/Posts/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
 import { auth, firestore } from '@/firebase/clientApp';
 import useCommunityData from '@/hooks/useCommunityData';
-import usePosts from '@/hooks/usePostData';
+import usePostsData from '@/hooks/usePostData';
 import { Stack } from '@chakra-ui/react';
 import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import type { NextPage } from 'next';
@@ -20,7 +20,7 @@ const Home: NextPage = () => {
 
   const { communityStateValue } = useCommunityData();
 
-  const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
+  const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
   const methods = { onVote, onSelectPost, onDeletePost };
 
   const authUserFeed = async () => {

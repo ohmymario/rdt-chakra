@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-const usePosts = () => {
+const usePostsData = () => {
   const router = useRouter();
 
   const [user] = useAuthState(auth);
@@ -216,4 +216,4 @@ const usePosts = () => {
   };
 };
 
-export default usePosts;
+export default usePostsData;
