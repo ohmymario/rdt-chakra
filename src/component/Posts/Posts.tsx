@@ -1,10 +1,9 @@
 import { Community } from '@/atoms/communitiesAtom';
-import { Post } from '@/atoms/postsAtoms';
-import { auth, firestore } from '@/firebase/clientApp';
-import usePosts from '@/hooks/usePostData';
+import { auth } from '@/firebase/clientApp';
+import usePostsData from '@/hooks/usePostData';
+import usePostLoader from '@/hooks/usePostLoader';
 import { Stack, Text } from '@chakra-ui/react';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
-import { FunctionComponent, useCallback, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import PostItem from './PostItem';
 import PostLoaderSkeleton from './PostLoaderSkeleton';
@@ -16,42 +15,18 @@ interface PostsProps {
 const Posts: FunctionComponent<PostsProps> = (props) => {
   const { communityData } = props;
   const [user] = useAuthState(auth);
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const [error, setError] = useState<string | null>('');
+  const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
+  const { loading, error, posts } = usePostLoader(communityData.id);
 
-  const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePosts();
   const methods = { onVote, onSelectPost, onDeletePost };
 
-  const getPosts = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const posts = await fetchPosts();
-      setPostStateValue((prev) => ({
-        ...prev,
-        posts: posts as Post[],
-      }));
-    } catch (error: any) {
-      console.error(error);
-      setError(error.message);
-    }
-    setLoading(false);
-  }, [communityData.id, setPostStateValue]);
-
-  const fetchPosts = async () => {
-    const postsCollection = collection(firestore, 'posts');
-    const postFilter = where('communityId', '==', communityData.id);
-    const postOrder = orderBy('createdAt', 'desc');
-    const postQuery = query(postsCollection, postFilter, postOrder);
-    const postDocs = await getDocs(postQuery);
-    return postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  };
-
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
+    setPostStateValue((prev) => ({
+      ...prev,
+      posts,
+    }));
+  }, [posts, setPostStateValue]);
 
   return (
     <>
