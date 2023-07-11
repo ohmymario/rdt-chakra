@@ -5,6 +5,7 @@ import { authModalState } from '@/atoms/authModalAtom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
 import { useSetRecoilState } from 'recoil';
+import UseDirectory from '@/hooks/useDirectory';
 
 interface PersonalHomeProps {}
 
@@ -35,6 +36,7 @@ const PersonalHome = (props: PersonalHomeProps) => {
   // grab the user from the store and check if they are signed in
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
+  const { toggleMenuOpen } = UseDirectory();
 
   const handleCreatePost = () => {
     if (!user) {
@@ -45,7 +47,7 @@ const PersonalHome = (props: PersonalHomeProps) => {
     }
 
     if (user) {
-      alert('OPEN DIRECTORY MENU');
+      toggleMenuOpen();
     }
   };
 
