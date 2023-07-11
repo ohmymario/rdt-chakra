@@ -2,13 +2,11 @@ import { Button, Flex, HStack, Icon, Image, Menu, MenuButton, MenuList, Text } f
 
 // firebase
 import { User as FirebaseUser } from 'firebase/auth';
-import { useSignOut } from 'react-firebase-hooks/auth';
 
 // icons
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 // set modal state
-import { auth } from '@/firebase/clientApp';
 import UseDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
 
@@ -49,9 +47,6 @@ const menuButtonStyle = {
 };
 
 const Directory = (props: DirectoryProps) => {
-  const { user } = props;
-  const [signOut, loading, error] = useSignOut(auth);
-
   const { directoryState, toggleMenuOpen } = UseDirectory();
 
   return (
