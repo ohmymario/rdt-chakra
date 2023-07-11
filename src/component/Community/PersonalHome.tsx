@@ -1,5 +1,10 @@
-import { Flex, Icon, Stack, Button, Text, FlexProps } from '@chakra-ui/react';
+import { auth } from '@/firebase/clientApp';
+import { Button, Flex, FlexProps, Icon, Stack, Text } from '@chakra-ui/react';
+
+import { authModalState } from '@/atoms/authModalAtom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
+import { useSetRecoilState } from 'recoil';
 
 interface PersonalHomeProps {}
 
@@ -27,6 +32,36 @@ const flexInnerStyles: FlexProps = {
 };
 
 const PersonalHome = (props: PersonalHomeProps) => {
+  // grab the user from the store and check if they are signed in
+  const [user] = useAuthState(auth);
+  const setAuthModalState = useSetRecoilState(authModalState);
+
+  const handleCreatePost = () => {
+    if (!user) {
+      setAuthModalState({
+        isOpen: true,
+        view: 'login',
+      });
+    }
+
+    if (user) {
+      alert('OPEN DIRECTORY MENU');
+    }
+  };
+
+  const handleCreateCommunity = () => {
+    if (!user) {
+      setAuthModalState({
+        isOpen: true,
+        view: 'login',
+      });
+    }
+
+    if (user) {
+      alert('OPEN CREATE COMMUNITY MODAL');
+    }
+  };
+
   return (
     <Flex {...flexWrapperStyles}>
       <Flex {...flexInnerStyles}></Flex>
@@ -38,13 +73,13 @@ const PersonalHome = (props: PersonalHomeProps) => {
         <Stack spacing={3}>
           <Text fontSize='9pt'>Your personal Reddit frontpage, built for you.</Text>
 
-          {/* TODO: Check if the user is signed in if not open up the login */}
-          {/* TODO: If they are signed in then scroll up and open menu */}
-          <Button height='30px'>Create Post</Button>
+          {user ? <Text fontSize='9pt'>USER FOUND</Text> : <Text fontSize='9pt'>NO USER FOUND</Text>}
 
-          {/* TODO: Check if the user is signed in if not open up the login */}
-          {/* TODO: signed in then open up create community modal */}
-          <Button variant='outline' height='30px'>
+          <Button height='30px' onClick={handleCreatePost}>
+            Create Post
+          </Button>
+
+          <Button variant='outline' height='30px' onClick={handleCreateCommunity}>
             Create Community
           </Button>
         </Stack>
