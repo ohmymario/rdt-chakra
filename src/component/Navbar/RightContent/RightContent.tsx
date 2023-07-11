@@ -4,9 +4,6 @@ import { FunctionComponent } from 'react';
 import AuthButtons from './AuthButtons';
 import UserMenu from './UserMenu';
 
-import { auth } from '@/firebase/clientApp';
-import { useAuthState } from 'react-firebase-hooks/auth';
-
 import { User as FirebaseUser } from 'firebase/auth';
 import Icons from './Icons';
 
@@ -15,8 +12,7 @@ interface RightContentProps {
 }
 
 const RightContent: FunctionComponent<RightContentProps> = (props: RightContentProps) => {
-  const [user, loading, error] = useAuthState(auth);
-
+  const { user } = props;
   return (
     <>
       <AuthModal />
