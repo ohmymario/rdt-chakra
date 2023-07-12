@@ -1,7 +1,8 @@
 import { communitiesState } from '@/atoms/communitiesAtom';
 import CreateCommunityModal from '@/component/Modal/CreateCommunity/CreateCommunityModal';
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
 import { Box, HStack, Icon, MenuItem, Text } from '@chakra-ui/react';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent } from 'react';
 import { GrAdd } from 'react-icons/gr';
 import { useRecoilValue } from 'recoil';
 import CommunitiesListItem from './CommunitiesListItem';
@@ -10,17 +11,11 @@ import CommunitiesModerating from './CommunitiesModerating';
 interface CommunitiesProps {}
 
 const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProps) => {
-  const [open, setOpen] = useState<boolean>(false);
   const communityStateValue = useRecoilValue(communitiesState);
   const { mySnippets } = communityStateValue;
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  // use the hook
+  const { modalState, openModal, closeModal } = useCreateCommunityModalState();
 
   const communityHeaderStyles = {
     paddingLeft: 3,
@@ -34,10 +29,8 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
 
   return (
     <>
-      <CreateCommunityModal open={open} handleClose={handleClose} />
-
+      <CreateCommunityModal open={modalState.isModalOpen} handleClose={closeModal} />
       {modCommunities.length > 0 && <CommunitiesModerating modCommunities={modCommunities} />}
-
       <Box mt={3} mb={4}>
         <Text {...communityHeaderStyles}>My Communities</Text>
         <MenuItem
@@ -46,7 +39,7 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
           _hover={{
             bg: 'gray.100',
           }}
-          onClick={() => handleOpen()}
+          onClick={openModal}
         >
           <HStack spacing={2}>
             <Icon as={GrAdd} fontSize={20} />
