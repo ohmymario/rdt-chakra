@@ -1,7 +1,7 @@
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
 import { Button, ModalFooter, ModalFooterProps } from '@chakra-ui/react';
 
 interface CreateCommunityModalFooterProps {
-  handleClose: () => void;
   submitCommunity: () => Promise<void>;
   loading: boolean;
 }
@@ -17,11 +17,12 @@ const modalFooterStyles: ModalFooterProps = {
 };
 
 const CreateCommunityModalFooter = (props: CreateCommunityModalFooterProps) => {
-  const { handleClose, submitCommunity, loading } = props;
+  const { closeModal } = useCreateCommunityModalState();
+  const { submitCommunity, loading } = props;
 
   return (
     <ModalFooter {...modalFooterStyles}>
-      <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={handleClose}>
+      <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={closeModal}>
         Cancel
       </Button>
       <Button height='32px' onClick={submitCommunity} isLoading={loading}>
