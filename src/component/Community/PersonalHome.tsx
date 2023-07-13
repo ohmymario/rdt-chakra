@@ -6,6 +6,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
 import { useSetRecoilState } from 'recoil';
 import UseDirectory from '@/hooks/useDirectory';
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
 
 interface PersonalHomeProps {}
 
@@ -33,9 +34,9 @@ const flexInnerStyles: FlexProps = {
 };
 
 const PersonalHome = (props: PersonalHomeProps) => {
-  // grab the user from the store and check if they are signed in
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
+  const { openModal } = useCreateCommunityModalState();
   const { toggleMenuOpen } = UseDirectory();
 
   const handleCreatePost = () => {
@@ -46,9 +47,7 @@ const PersonalHome = (props: PersonalHomeProps) => {
       });
     }
 
-    if (user) {
-      toggleMenuOpen();
-    }
+    if (user) toggleMenuOpen();
   };
 
   const handleCreateCommunity = () => {
@@ -59,9 +58,7 @@ const PersonalHome = (props: PersonalHomeProps) => {
       });
     }
 
-    if (user) {
-      alert('OPEN CREATE COMMUNITY MODAL');
-    }
+    if (user) openModal();
   };
 
   return (
