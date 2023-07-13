@@ -14,8 +14,7 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
   const communityStateValue = useRecoilValue(communitiesState);
   const { mySnippets } = communityStateValue;
 
-  // use the hook
-  const { modalState, openModal, closeModal } = useCreateCommunityModalState();
+  const { openModal } = useCreateCommunityModalState();
 
   const communityHeaderStyles = {
     paddingLeft: 3,
@@ -29,7 +28,7 @@ const Communities: FunctionComponent<CommunitiesProps> = (props: CommunitiesProp
 
   return (
     <>
-      <CreateCommunityModal open={modalState.isModalOpen} handleClose={closeModal} />
+      <CreateCommunityModal />
       {modCommunities.length > 0 && <CommunitiesModerating modCommunities={modCommunities} />}
       <Box mt={3} mb={4}>
         <Text {...communityHeaderStyles}>My Communities</Text>
