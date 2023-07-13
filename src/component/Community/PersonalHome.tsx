@@ -7,6 +7,7 @@ import { FaReddit } from 'react-icons/fa';
 import { useSetRecoilState } from 'recoil';
 import UseDirectory from '@/hooks/useDirectory';
 import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
+import useDirectory from '@/hooks/useDirectory';
 
 interface PersonalHomeProps {}
 
@@ -37,7 +38,7 @@ const PersonalHome = (props: PersonalHomeProps) => {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
   const { openModal } = useCreateCommunityModalState();
-  const { toggleMenuOpen } = UseDirectory();
+  const { toggleMenuOpen } = useDirectory();
 
   const handleCreatePost = () => {
     if (!user) {

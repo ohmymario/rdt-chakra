@@ -1,6 +1,6 @@
 import { defaultMenuItem } from '@/atoms/directoryMenuAtom';
 import { auth } from '@/firebase/clientApp';
-import UseDirectory from '@/hooks/useDirectory';
+import useDirectory from '@/hooks/useDirectory';
 import { Flex, Image } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -12,7 +12,7 @@ interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
   const [user, loading, error] = useAuthState(auth);
-  const { onSelectMenuItem } = UseDirectory();
+  const { onSelectMenuItem } = useDirectory();
 
   const handleHomeClick = () => {
     onSelectMenuItem(defaultMenuItem);

@@ -1,26 +1,26 @@
-import { FunctionComponent } from 'react';
 import { Flex, Icon, Input } from '@chakra-ui/react';
+import { FunctionComponent } from 'react';
 
 // Icons
-import { FaReddit } from 'react-icons/fa';
 import { BsLink45Deg } from 'react-icons/bs';
+import { FaReddit } from 'react-icons/fa';
 import { IoImageOutline } from 'react-icons/io5';
 
 // firebase
 import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import { useRouter } from 'next/router';
 import { authModalState } from '@/atoms/authModalAtom';
+import useDirectory from '@/hooks/useDirectory';
+import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
-import UseDirectory from '@/hooks/useDirectory';
 
 const CreatePostLink: FunctionComponent = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
 
-  const { toggleMenuOpen } = UseDirectory();
+  const { toggleMenuOpen } = useDirectory();
 
   const clickHandler = () => {
     const { push, query } = router;

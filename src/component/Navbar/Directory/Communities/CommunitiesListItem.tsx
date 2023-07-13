@@ -1,8 +1,8 @@
-import UseDirectory from '@/hooks/useDirectory';
-import { Flex, Icon, Image, MenuItem } from '@chakra-ui/react';
-import { IconType } from 'react-icons/lib';
-import { FaReddit } from 'react-icons/fa';
 import { DirectoryMenuItem } from '@/atoms/directoryMenuAtom';
+import useDirectory from '@/hooks/useDirectory';
+import { Flex, Icon, Image, MenuItem } from '@chakra-ui/react';
+import { FaReddit } from 'react-icons/fa';
+import { IconType } from 'react-icons/lib';
 
 interface CommunitiesListItemProps {
   communityId: string;
@@ -16,7 +16,7 @@ const IconDefault = FaReddit;
 
 const CommunitiesListItem = (props: CommunitiesListItemProps) => {
   const { communityId, icon = IconDefault, iconColor = IconColorDefault, ImageURL } = props;
-  const { onSelectMenuItem } = UseDirectory();
+  const { onSelectMenuItem } = useDirectory();
 
   const displayText = `r/${communityId}`;
   const link = `/r/${communityId}`;

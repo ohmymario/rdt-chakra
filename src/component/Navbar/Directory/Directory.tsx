@@ -7,7 +7,7 @@ import { User as FirebaseUser } from 'firebase/auth';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 // set modal state
-import UseDirectory from '@/hooks/useDirectory';
+import useDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
 
 interface DirectoryProps {
@@ -47,7 +47,7 @@ const menuButtonStyle = {
 };
 
 const Directory = (props: DirectoryProps) => {
-  const { directoryState, toggleMenuOpen } = UseDirectory();
+  const { directoryState, toggleMenuOpen } = useDirectory();
 
   return (
     <Menu isOpen={directoryState.isOpen}>

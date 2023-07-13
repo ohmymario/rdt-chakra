@@ -5,7 +5,7 @@ import { FaReddit } from 'react-icons/fa';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DirectoryMenuItem, directoryMenuState } from '../atoms/directoryMenuAtom';
 
-const UseDirectory = () => {
+const useDirectory = () => {
   const router = useRouter();
   const [directoryState, setDirectoryState] = useRecoilState(directoryMenuState);
 
@@ -45,4 +45,4 @@ const UseDirectory = () => {
   return { directoryState, toggleMenuOpen, onSelectMenuItem };
 };
 
-export default UseDirectory;
+export default useDirectory;
