@@ -1,4 +1,5 @@
 import { auth, firestore } from '@/firebase/clientApp';
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
 import UseDirectory from '@/hooks/useDirectory';
 import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, VStack } from '@chakra-ui/react';
 import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
@@ -14,15 +15,12 @@ import CreateCommunityModalHeader from './CreateCommunityModalHeader';
 import CreateCommunityModalName from './CreateCommunityModalName';
 import CreateCommunityModalTypes from './CreateCommunityModalTypes';
 
-interface CreateCommunityModalProps {
-  open: boolean;
-  handleClose: () => void;
-}
+interface CreateCommunityModalProps {}
 
 export type AccessLevel = 'public' | 'restricted' | 'private';
 
 const CreateCommunityModal = (props: CreateCommunityModalProps) => {
-  const { open, handleClose } = props;
+  const { modalState, closeModal } = useCreateCommunityModalState();
 
   const router = useRouter();
   const { toggleMenuOpen, directoryState } = UseDirectory();
@@ -52,7 +50,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
 
   const closeModalandMenu = () => {
     if (directoryState.isOpen === true) {
-      handleClose();
+      closeModal();
       toggleMenuOpen();
     }
   };
@@ -139,32 +137,27 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
 
   return (
     <>
-      <Modal isOpen={open} onClose={handleClose}>
+      <Modal isOpen={modalState.isModalOpen} onClose={closeModal}>
         <ModalOverlay />
         <ModalContent maxW={'lg'} p={4}>
           <CreateCommunityModalHeader />
           <ModalCloseButton />
           <Divider mt={3} mb={2} />
-          {/* Modal Body */}
           <ModalBody px={0}>
             <VStack spacing={6}>
-              {/* Community Name */}
               <VStack width={'100%'} align='flex-start' mb={3}>
                 <CreateCommunityModalName
                   charsRemain={charsRemain}
                   communityName={communityName}
                   handleCommunityName={handleCommunityName}
                 />
-                {/* Community Error */}
                 {error && <CreateCommunityModalError error={error} />}
               </VStack>
-              {/* Community Type */}
               <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
-              {/* Adult Content */}
               <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
             </VStack>
           </ModalBody>
-          <CreateCommunityModalFooter loading={loading} submitCommunity={submitCommunity} handleClose={handleClose} />
+          <CreateCommunityModalFooter loading={loading} submitCommunity={submitCommunity} />
         </ModalContent>
       </Modal>
     </>
