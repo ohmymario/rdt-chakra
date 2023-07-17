@@ -8,6 +8,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+// Utils/Helpers
+import { validateCommunityName } from '@/utils/validateCommunityName';
+
 // Components
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
 import CreateCommunityModalError from './CreateCommunityModalError';
@@ -42,29 +45,12 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const closeModalandMenu = () => {
+    console.log(directoryState);
     if (directoryState.isOpen === true) {
+      console.log('closeModalandMenu');
       closeModal();
       toggleMenuOpen();
     }
-  };
-
-  const validateCommunityName = () => {
-    // https://stackoverflow.com/a/32311188
-    var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
-
-    if (format.test(communityName)) {
-      return 'Community names can only contain letters and numbers';
-    }
-
-    if (communityName.length < 3) {
-      return 'Community names must be at least 3 characters long';
-    }
-
-    if (communityName.length > 21) {
-      return 'Community names must be less than 21 characters long';
-    }
-
-    return null;
   };
 
   const firestoreOperation = async () => {
@@ -98,7 +84,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   };
 
   const submitCommunity = async () => {
-    const validationError = validateCommunityName();
+    const validationError = validateCommunityName(communityName);
     if (validationError) {
       setError(validationError);
       return;
@@ -110,6 +96,8 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
     try {
       await firestoreOperation();
       resetForm();
+
+      // form is reset but the modal is still open
       closeModalandMenu();
       router.push(`/r/${communityName}`);
     } catch (error: any) {
