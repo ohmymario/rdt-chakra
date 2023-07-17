@@ -45,12 +45,8 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const closeModalandMenu = () => {
-    console.log(directoryState);
-    if (directoryState.isOpen === true) {
-      console.log('closeModalandMenu');
-      closeModal();
-      toggleMenuOpen();
-    }
+    if (directoryState.isOpen === true) toggleMenuOpen();
+    if (modalState.isModalOpen === true) closeModal();
   };
 
   const firestoreOperation = async () => {
@@ -96,8 +92,6 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
     try {
       await firestoreOperation();
       resetForm();
-
-      // form is reset but the modal is still open
       closeModalandMenu();
       router.push(`/r/${communityName}`);
     } catch (error: any) {
