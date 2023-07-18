@@ -55,7 +55,11 @@ const useCreateCommunity = () => {
     }
   };
 
-  return { createCommunity, loading, error };
+  const resetCommunityError = () => {
+    setError('');
+  };
+
+  return { createCommunity, loading, error, resetCommunityError };
 };
 
 export default useCreateCommunity;
