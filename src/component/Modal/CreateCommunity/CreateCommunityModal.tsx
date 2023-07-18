@@ -17,6 +17,7 @@ import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 import CreateCommunityModalHeader from './CreateCommunityModalHeader';
 import CreateCommunityModalName from './CreateCommunityModalName';
 import CreateCommunityModalTypes from './CreateCommunityModalTypes';
+import { useState } from 'react';
 
 interface CreateCommunityModalProps {}
 
@@ -27,7 +28,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   const router = useRouter();
   const { toggleMenuOpen, directoryState } = useDirectory();
   const { modalState, closeModal } = useCreateCommunityModalState();
-  const { createCommunity, loading, error } = useCreateCommunity();
+  const { createCommunity, loading, error, resetCommunityError } = useCreateCommunity();
   const {
     communityName,
     charsRemain,
@@ -39,22 +40,25 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
     resetForm,
   } = useCreateCommunityFormState();
 
+  //STATE
+  const [validationError, setValidationError] = useState<string | null>('');
+
   const closeModalandMenu = () => {
     if (directoryState.isOpen === true) toggleMenuOpen();
     if (modalState.isModalOpen === true) closeModal();
   };
 
+  const closeModalandResetForm = () => {
+    closeModal();
+    resetForm();
+    resetCommunityError();
+    setValidationError('');
+  };
+
   const submitCommunity = async () => {
-    const validationError = validateCommunityName(communityName);
-    if (validationError) {
-      alert(validationError);
-      // TODO: Add a ERROR STATE for validation errors
-      // setError(validationError);
-      return;
-    }
-
-    console.log('No validation errors');
-
+    setValidationError(null);
+    const validationCheck = validateCommunityName(communityName);
+    if (validationCheck) return setValidationError(validationCheck);
     try {
       const success = await createCommunity(communityName, communityType, isAdult);
       if (success) {
@@ -64,12 +68,14 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
       }
     } catch (error: any) {
       console.error(error);
+    } finally {
+      setValidationError(null);
     }
   };
 
   return (
     <>
-      <Modal isOpen={modalState.isModalOpen} onClose={closeModal}>
+      <Modal isOpen={modalState.isModalOpen} onClose={closeModalandResetForm}>
         <ModalOverlay />
         <ModalContent maxW={'lg'} p={4}>
           <CreateCommunityModalHeader />
@@ -83,13 +89,17 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
                   communityName={communityName}
                   handleCommunityName={handleCommunityName}
                 />
-                {error && <CreateCommunityModalError error={error} />}
+                {(validationError || error) && <CreateCommunityModalError error={validationError || error} />}
               </VStack>
               <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
               <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
             </VStack>
           </ModalBody>
-          <CreateCommunityModalFooter loading={loading} submitCommunity={submitCommunity} />
+          <CreateCommunityModalFooter
+            loading={loading}
+            submitCommunity={submitCommunity}
+            closeModalandResetForm={closeModalandResetForm}
+          />
         </ModalContent>
       </Modal>
     </>
