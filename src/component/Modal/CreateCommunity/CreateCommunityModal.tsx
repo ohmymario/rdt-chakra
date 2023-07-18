@@ -1,15 +1,14 @@
-import { auth, firestore } from '@/firebase/clientApp';
 import useCreateCommunityFormState from '@/hooks/useCreateCommunityFormState';
 import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
 import useDirectory from '@/hooks/useDirectory';
 import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, VStack } from '@chakra-ui/react';
-import { doc, runTransaction, serverTimestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 // Utils/Helpers
 import { validateCommunityName } from '@/utils/validateCommunityName';
+
+// Hooks
+import useCreateCommunity from '@/hooks/useCreateCommunity';
 
 // Components
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
@@ -28,6 +27,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   const router = useRouter();
   const { toggleMenuOpen, directoryState } = useDirectory();
   const { modalState, closeModal } = useCreateCommunityModalState();
+  const { createCommunity, loading, error } = useCreateCommunity();
   const {
     communityName,
     charsRemain,
@@ -39,66 +39,31 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
     resetForm,
   } = useCreateCommunityFormState();
 
-  // STATE
-  const [user] = useAuthState(auth);
-  const [error, setError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-
   const closeModalandMenu = () => {
     if (directoryState.isOpen === true) toggleMenuOpen();
     if (modalState.isModalOpen === true) closeModal();
   };
 
-  const firestoreOperation = async () => {
-    try {
-      await runTransaction(firestore, async (transaction) => {
-        const communityDocRef = doc(firestore, 'communities', communityName);
-        const communityDoc = await transaction.get(communityDocRef);
-        if (communityDoc.exists()) {
-          throw new Error(`Sorry r/${communityName} is taken. Try another.`);
-        }
-
-        transaction.set(communityDocRef, {
-          name: communityName,
-          type: communityType,
-          creatorId: user?.uid,
-          createdAt: serverTimestamp(),
-          numberOfMembers: 1,
-          nsfw: isAdult,
-        });
-
-        const communitySnippets = `users/${user?.uid}/communitySnippets`;
-        const userDocRef = doc(firestore, communitySnippets, communityName);
-        transaction.set(userDocRef, {
-          communityId: communityName,
-          isModerator: true,
-        });
-      });
-    } catch (error) {
-      throw error;
-    }
-  };
-
   const submitCommunity = async () => {
     const validationError = validateCommunityName(communityName);
     if (validationError) {
-      setError(validationError);
+      alert(validationError);
+      // TODO: Add a ERROR STATE for validation errors
+      // setError(validationError);
       return;
     }
 
-    setError('');
-    setLoading(true);
+    console.log('No validation errors');
 
     try {
-      await firestoreOperation();
-      resetForm();
-      closeModalandMenu();
-      router.push(`/r/${communityName}`);
+      const success = await createCommunity(communityName, communityType, isAdult);
+      if (success) {
+        resetForm();
+        closeModalandMenu();
+        router.push(`/r/${communityName}`);
+      }
     } catch (error: any) {
       console.error(error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
     }
   };
 
