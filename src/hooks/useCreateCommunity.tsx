@@ -14,6 +14,7 @@ type CreateCommunityFnType = (communityName: string, communityType: AccessLevel,
 
 const useCreateCommunity = () => {
   const [user] = useAuthState(auth);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
 
@@ -47,8 +48,12 @@ const useCreateCommunity = () => {
       });
 
       return true;
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred while creating the community.');
+      }
       return false;
     } finally {
       setLoading(false);
