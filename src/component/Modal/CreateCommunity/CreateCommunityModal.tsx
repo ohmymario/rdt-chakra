@@ -1,14 +1,15 @@
-import useCreateCommunityFormState from '@/hooks/useCreateCommunityFormState';
-import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
-import useDirectory from '@/hooks/useDirectory';
 import { Divider, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, VStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 // Utils/Helpers
 import { validateCommunityName } from '@/utils/validateCommunityName';
 
 // Hooks
 import useCreateCommunity from '@/hooks/useCreateCommunity';
+import useCreateCommunityFormState from '@/hooks/useCreateCommunityFormState';
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
+import useDirectory from '@/hooks/useDirectory';
 
 // Components
 import CreateCommunityModalAdult from './CreateCommunityModalAdult';
@@ -17,7 +18,6 @@ import CreateCommunityModalFooter from './CreateCommunityModalFooter';
 import CreateCommunityModalHeader from './CreateCommunityModalHeader';
 import CreateCommunityModalName from './CreateCommunityModalName';
 import CreateCommunityModalTypes from './CreateCommunityModalTypes';
-import { useState } from 'react';
 
 interface CreateCommunityModalProps {}
 
@@ -43,12 +43,12 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   //STATE
   const [validationError, setValidationError] = useState<string | null>('');
 
-  const closeModalandMenu = () => {
+  const closeModalAndToggleMenu = () => {
     if (directoryState.isOpen === true) toggleMenuOpen();
     if (modalState.isModalOpen === true) closeModal();
   };
 
-  const closeModalandResetForm = () => {
+  const closeModalAndResetForm = () => {
     closeModal();
     resetForm();
     resetCommunityError();
@@ -57,16 +57,16 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
 
   const submitCommunity = async () => {
     setValidationError(null);
-    const validationCheck = validateCommunityName(communityName);
-    if (validationCheck) return setValidationError(validationCheck);
+    const validationCheckResult = validateCommunityName(communityName);
+    if (validationCheckResult) return setValidationError(validationCheckResult);
     try {
-      const success = await createCommunity(communityName, communityType, isAdult);
-      if (success) {
+      const operationResult = await createCommunity(communityName, communityType, isAdult);
+      if (operationResult) {
         resetForm();
-        closeModalandMenu();
+        closeModalAndToggleMenu();
         router.push(`/r/${communityName}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(error);
     } finally {
       setValidationError(null);
@@ -74,35 +74,33 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   };
 
   return (
-    <>
-      <Modal isOpen={modalState.isModalOpen} onClose={closeModalandResetForm}>
-        <ModalOverlay />
-        <ModalContent maxW={'lg'} p={4}>
-          <CreateCommunityModalHeader />
-          <ModalCloseButton />
-          <Divider mt={3} mb={2} />
-          <ModalBody px={0}>
-            <VStack spacing={6}>
-              <VStack width={'100%'} align='flex-start' mb={3}>
-                <CreateCommunityModalName
-                  charsRemain={charsRemain}
-                  communityName={communityName}
-                  handleCommunityName={handleCommunityName}
-                />
-                {(validationError || error) && <CreateCommunityModalError error={validationError || error} />}
-              </VStack>
-              <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
-              <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
+    <Modal isOpen={modalState.isModalOpen} onClose={closeModalAndResetForm}>
+      <ModalOverlay />
+      <ModalContent maxW={'lg'} p={4}>
+        <CreateCommunityModalHeader />
+        <ModalCloseButton />
+        <Divider mt={3} mb={2} />
+        <ModalBody px={0}>
+          <VStack spacing={6}>
+            <VStack width={'100%'} align='flex-start' mb={3}>
+              <CreateCommunityModalName
+                charsRemain={charsRemain}
+                communityName={communityName}
+                handleCommunityName={handleCommunityName}
+              />
+              {(validationError || error) && <CreateCommunityModalError error={validationError || error} />}
             </VStack>
-          </ModalBody>
-          <CreateCommunityModalFooter
-            loading={loading}
-            submitCommunity={submitCommunity}
-            closeModalandResetForm={closeModalandResetForm}
-          />
-        </ModalContent>
-      </Modal>
-    </>
+            <CreateCommunityModalTypes communityType={communityType} handleCommunityType={handleCommunityType} />
+            <CreateCommunityModalAdult handleNSFW={handleNSFW} isAdult={isAdult} />
+          </VStack>
+        </ModalBody>
+        <CreateCommunityModalFooter
+          loading={loading}
+          submitCommunity={submitCommunity}
+          closeModalAndResetForm={closeModalAndResetForm}
+        />
+      </ModalContent>
+    </Modal>
   );
 };
 
