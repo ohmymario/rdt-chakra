@@ -3,7 +3,7 @@ import { Button, ModalFooter, ModalFooterProps } from '@chakra-ui/react';
 
 interface CreateCommunityModalFooterProps {
   submitCommunity: () => Promise<void>;
-  closeModalandResetForm: () => void;
+  closeModalAndResetForm: () => void;
   loading: boolean;
 }
 
@@ -18,11 +18,11 @@ const modalFooterStyles: ModalFooterProps = {
 };
 
 const CreateCommunityModalFooter = (props: CreateCommunityModalFooterProps) => {
-  const { submitCommunity, loading, closeModalandResetForm } = props;
+  const { submitCommunity, loading, closeModalAndResetForm } = props;
 
   return (
     <ModalFooter {...modalFooterStyles}>
-      <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={closeModalandResetForm}>
+      <Button colorScheme='blue' variant={'outline'} height='32px' mr={3} onClick={closeModalAndResetForm}>
         Cancel
       </Button>
       <Button height='32px' onClick={submitCommunity} isLoading={loading}>
