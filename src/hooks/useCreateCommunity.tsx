@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 
 // Firebase
 import { auth, firestore } from '@/firebase/clientApp';
@@ -12,15 +12,42 @@ import { AccessLevel } from '@/component/Modal/CreateCommunity/CreateCommunityMo
 
 type CreateCommunityFnType = (communityName: string, communityType: AccessLevel, isAdult: boolean) => Promise<boolean>;
 
+type StateTypes = {
+  loading: boolean;
+  error: string | null;
+};
+
+type ActionTypes =
+  | { type: 'START' }
+  | { type: 'SUCCESS' }
+  | { type: 'ERROR'; payload: string }
+  | { type: 'RESET_ERROR' };
+
+function reducer(state: StateTypes, action: ActionTypes): StateTypes {
+  switch (action.type) {
+    case 'START':
+      return { ...state, loading: true, error: null };
+    case 'SUCCESS':
+      return { ...state, loading: false, error: null };
+    case 'ERROR':
+      return { ...state, loading: false, error: action.payload };
+    case 'RESET_ERROR':
+      return { ...state, loading: false, error: null };
+    default:
+      throw new Error('Unhandled action type');
+  }
+}
+
 const useCreateCommunity = () => {
   const [user] = useAuthState(auth);
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
+  const [state, dispatch] = useReducer(reducer, {
+    loading: false,
+    error: null,
+  });
 
   const createCommunity: CreateCommunityFnType = async (communityName, communityType, isAdult) => {
-    setLoading(true);
-    setError('');
+    dispatch({ type: 'START' });
 
     try {
       await runTransaction(firestore, async (transaction) => {
@@ -47,24 +74,23 @@ const useCreateCommunity = () => {
         });
       });
 
+      dispatch({ type: 'SUCCESS' });
       return true;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setError(error.message);
+        dispatch({ type: 'ERROR', payload: error.message });
       } else {
-        setError('An unknown error occurred while creating the community.');
+        dispatch({ type: 'ERROR', payload: 'An unknown error occurred while creating the community.' });
       }
       return false;
-    } finally {
-      setLoading(false);
     }
   };
 
   const resetCommunityError = () => {
-    setError('');
+    dispatch({ type: 'RESET_ERROR' });
   };
 
-  return { createCommunity, loading, error, resetCommunityError };
+  return { createCommunity, loading: state.loading, error: state.error, resetCommunityError };
 };
 
 export default useCreateCommunity;
