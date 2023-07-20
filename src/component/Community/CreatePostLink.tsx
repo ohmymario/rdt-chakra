@@ -1,5 +1,7 @@
 import { Flex, Icon, Input } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import { FunctionComponent } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 // Icons
 import { BsLink45Deg } from 'react-icons/bs';
@@ -10,10 +12,11 @@ import { IoImageOutline } from 'react-icons/io5';
 import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+// Atoms
 import { authModalState } from '@/atoms/authModalAtom';
+
+// Hooks
 import useDirectory from '@/hooks/useDirectory';
-import { useRouter } from 'next/router';
-import { useSetRecoilState } from 'recoil';
 
 const CreatePostLink: FunctionComponent = () => {
   const router = useRouter();
@@ -27,7 +30,10 @@ const CreatePostLink: FunctionComponent = () => {
     const { communityId } = query;
 
     if (!user) {
-      setAuthModalState({ isOpen: true, view: 'login' });
+      setAuthModalState({
+        isOpen: true,
+        view: 'login',
+      });
       return;
     }
 
@@ -75,6 +81,7 @@ const CreatePostLink: FunctionComponent = () => {
 
   return (
     <Flex {...flexContainerStyles}>
+      {/* Reddit Icon */}
       <Icon as={FaReddit} fontSize={36} color='gray.300' mr={4} />
       <Input {...inputStyles} onClick={() => clickHandler()} />
       <Icon as={IoImageOutline} fontSize={24} mr={4} color='gray.400' cursor='pointer' />
