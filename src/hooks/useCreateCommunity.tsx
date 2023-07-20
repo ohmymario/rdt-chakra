@@ -1,4 +1,4 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 
 // Firebase
 import { auth, firestore } from '@/firebase/clientApp';
