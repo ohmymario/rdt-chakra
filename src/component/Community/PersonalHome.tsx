@@ -2,12 +2,11 @@ import { auth } from '@/firebase/clientApp';
 import { Button, Flex, FlexProps, Icon, Stack, Text } from '@chakra-ui/react';
 
 import { authModalState } from '@/atoms/authModalAtom';
+import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
+import useDirectory from '@/hooks/useDirectory';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { FaReddit } from 'react-icons/fa';
 import { useSetRecoilState } from 'recoil';
-import UseDirectory from '@/hooks/useDirectory';
-import useCreateCommunityModalState from '@/hooks/useCreateCommunityModalState';
-import useDirectory from '@/hooks/useDirectory';
 
 interface PersonalHomeProps {}
 
@@ -36,7 +35,11 @@ const flexInnerStyles: FlexProps = {
 
 const PersonalHome = (props: PersonalHomeProps) => {
   const [user] = useAuthState(auth);
+
+  // Global State
   const setAuthModalState = useSetRecoilState(authModalState);
+
+  // Hooks
   const { openModal } = useCreateCommunityModalState();
   const { toggleMenuOpen } = useDirectory();
 
@@ -73,13 +76,11 @@ const PersonalHome = (props: PersonalHomeProps) => {
         <Stack spacing={3}>
           <Text fontSize='9pt'>Your personal Reddit frontpage, built for you.</Text>
 
-          {user ? <Text fontSize='9pt'>USER FOUND</Text> : <Text fontSize='9pt'>NO USER FOUND</Text>}
-
           <Button height='30px' onClick={handleCreatePost}>
             Create Post
           </Button>
 
-          <Button variant='outline' height='30px' onClick={handleCreateCommunity}>
+          <Button height='30px' variant='outline' onClick={handleCreateCommunity}>
             Create Community
           </Button>
         </Stack>
