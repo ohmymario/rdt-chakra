@@ -41,7 +41,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
   } = useCreateCommunityFormState();
 
   //STATE
-  const [validationError, setValidationError] = useState<string | null>('');
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const closeModalAndToggleMenu = () => {
     if (directoryState.isOpen === true) toggleMenuOpen();
@@ -60,7 +60,7 @@ const CreateCommunityModal = (props: CreateCommunityModalProps) => {
     const validationCheckResult = validateCommunityName(communityName);
     if (validationCheckResult) return setValidationError(validationCheckResult);
     try {
-      const operationResult = await createCommunity(communityName, communityType, isAdult);
+      const operationResult = await createCommunity({ communityName, communityType, isAdult });
       if (operationResult) {
         resetForm();
         closeModalAndToggleMenu();

@@ -10,20 +10,31 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 // Types
 import { AccessLevel } from '@/component/Modal/CreateCommunity/CreateCommunityModal';
 
-type CreateCommunityFnType = (communityName: string, communityType: AccessLevel, isAdult: boolean) => Promise<boolean>;
-
-type StateTypes = {
+interface UseCreateCommunityReturnType {
+  createCommunity: (input: CreateCommunityInput) => Promise<boolean>;
   loading: boolean;
   error: string | null;
-};
+  resetCommunityError: () => void;
+}
 
-type ActionTypes =
+interface CreateCommunityInput {
+  communityName: string;
+  communityType: AccessLevel;
+  isAdult: boolean;
+}
+
+interface StateInterface {
+  loading: boolean;
+  error: string | null;
+}
+
+type CommunityActionType =
   | { type: 'START' }
   | { type: 'SUCCESS' }
   | { type: 'ERROR'; payload: string }
   | { type: 'RESET_ERROR' };
 
-function reducer(state: StateTypes, action: ActionTypes): StateTypes {
+function reducer(state: StateInterface, action: CommunityActionType): StateInterface {
   switch (action.type) {
     case 'START':
       return { ...state, loading: true, error: null };
@@ -38,24 +49,22 @@ function reducer(state: StateTypes, action: ActionTypes): StateTypes {
   }
 }
 
-const useCreateCommunity = () => {
+const useCreateCommunity = (): UseCreateCommunityReturnType => {
   const [user] = useAuthState(auth);
-
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     error: null,
   });
 
-  const createCommunity: CreateCommunityFnType = async (communityName, communityType, isAdult) => {
+  const createCommunity = async ({ communityName, communityType, isAdult }: CreateCommunityInput): Promise<boolean> => {
     dispatch({ type: 'START' });
 
     try {
       await runTransaction(firestore, async (transaction) => {
         const communityDocRef = doc(firestore, 'communities', communityName);
         const communityDoc = await transaction.get(communityDocRef);
-        if (communityDoc.exists()) {
-          throw new Error(`Sorry r/${communityName} is taken. Try another name.`);
-        }
+
+        if (communityDoc.exists()) throw new Error(`Sorry r/${communityName} is taken. Try another name.`);
 
         transaction.set(communityDocRef, {
           name: communityName,

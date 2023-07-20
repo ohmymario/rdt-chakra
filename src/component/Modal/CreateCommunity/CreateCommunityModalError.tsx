@@ -1,7 +1,7 @@
 import { Alert, AlertIcon } from '@chakra-ui/react';
 
 interface CreateCommunityModalErrorProps {
-  error: string;
+  error: string | null;
 }
 
 const CreateCommunityModalError = (props: CreateCommunityModalErrorProps) => {
