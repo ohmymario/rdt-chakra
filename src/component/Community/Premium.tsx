@@ -22,10 +22,10 @@ const Premium = (props: PremiumProps) => {
           <Text fontWeight={600}>Reddit Promise</Text>
           <Text>The best Reddit experience, with monthly Coins</Text>
         </Stack>
-        <Button height='30px' bg='brand.100'>
-          Try Now
-        </Button>
       </Flex>
+      <Button height='30px' bg='brand.100'>
+        Try Now
+      </Button>
     </Flex>
   );
 };
