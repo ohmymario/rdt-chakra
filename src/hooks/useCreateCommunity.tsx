@@ -10,31 +10,31 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 // Types
 import { AccessLevel } from '@/component/Modal/CreateCommunity/CreateCommunityModal';
 
-interface UseCreateCommunityReturnType {
-  createCommunity: (input: CreateCommunityInput) => Promise<boolean>;
+interface UseCreateCommunityReturn {
+  createCommunity: (input: CreateCommunityParams) => Promise<boolean>;
   loading: boolean;
   error: string | null;
   resetCommunityError: () => void;
 }
 
-interface CreateCommunityInput {
+interface CreateCommunityParams {
   communityName: string;
   communityType: AccessLevel;
   isAdult: boolean;
 }
 
-interface StateInterface {
+interface CommunityCreationState {
   loading: boolean;
   error: string | null;
 }
 
-type CommunityActionType =
+type CommunityCreationAction =
   | { type: 'START' }
   | { type: 'SUCCESS' }
   | { type: 'ERROR'; payload: string }
   | { type: 'RESET_ERROR' };
 
-function reducer(state: StateInterface, action: CommunityActionType): StateInterface {
+function reducer(state: CommunityCreationState, action: CommunityCreationAction): CommunityCreationState {
   switch (action.type) {
     case 'START':
       return { ...state, loading: true, error: null };
@@ -49,14 +49,18 @@ function reducer(state: StateInterface, action: CommunityActionType): StateInter
   }
 }
 
-const useCreateCommunity = (): UseCreateCommunityReturnType => {
+const useCreateCommunity = (): UseCreateCommunityReturn => {
   const [user] = useAuthState(auth);
   const [state, dispatch] = useReducer(reducer, {
     loading: false,
     error: null,
   });
 
-  const createCommunity = async ({ communityName, communityType, isAdult }: CreateCommunityInput): Promise<boolean> => {
+  const createCommunity = async ({
+    communityName,
+    communityType,
+    isAdult,
+  }: CreateCommunityParams): Promise<boolean> => {
     dispatch({ type: 'START' });
 
     try {
