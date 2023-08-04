@@ -15,28 +15,33 @@ import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
-  const [user, loadingUser] = useAuthState(auth);
   const [loading, setLoading] = useState(false);
 
-  const { communityStateValue } = useCommunityData();
+  // Global state
+  const [user, loadingUser] = useAuthState(auth);
 
+  // Hooks
+  const { communityStateValue } = useCommunityData();
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
+
+  // Methods
   const methods = { onVote, onSelectPost, onDeletePost };
 
   const authUserFeed = async () => {
     setLoading(true);
 
     try {
+      // if the use has not joined any communities, show the public feed
       if (!communityStateValue.mySnippets.length) {
         publicUserFeed();
         return;
       }
 
+      // FirebaseError: Invalid Query. \'in\' filters support a maximum of 10 elements in the value array.
       const userCommunityIDs = communityStateValue.mySnippets.map((snippet) => snippet.communityId);
       const postsCollection = collection(firestore, 'posts');
       const postVotesFilter = where('communityId', 'in', userCommunityIDs);
       const postsQuery = query(postsCollection, postVotesFilter);
-
       const postDocs = await getDocs(postsQuery);
 
       const posts = postDocs.docs.map((doc) => {
