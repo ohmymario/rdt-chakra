@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
-import { communitiesState, CommunityState, Community, CommunitySnippet } from '@/atoms/communitiesAtom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { authModalState } from '@/atoms/authModalAtom';
+import { communitiesState, Community, CommunitySnippet, CommunityState } from '@/atoms/communitiesAtom';
 import { auth, firestore } from '@/firebase/clientApp';
 import { collection, doc, getDoc, getDocs, increment, writeBatch } from 'firebase/firestore';
-import { authModalState } from '@/atoms/authModalAtom';
 import { useRouter } from 'next/router';
-import { get } from 'http';
+import { useCallback, useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 type UseCommunityDataReturnType = {
   communityStateValue: CommunityState;

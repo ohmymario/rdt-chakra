@@ -6,87 +6,26 @@ import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
 import { auth, firestore } from '@/firebase/clientApp';
+import UseAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
 import useCommunityData from '@/hooks/useCommunityData';
 import usePostsData from '@/hooks/usePostData';
+import UseUnAuthCommunityPosts from '@/hooks/useUnauthCommunityPosts';
 import { Stack } from '@chakra-ui/react';
-import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import type { NextPage } from 'next';
 import { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
-  const [loading, setLoading] = useState(false);
-
-  // Global state
+  const [loading, setLoading] = useState(true);
   const [user, loadingUser] = useAuthState(auth);
-
-  // Hooks
   const { communityStateValue } = useCommunityData();
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
 
-  // Methods
+  const { authPosts, loading: loadingAuthPosts, error: authError } = UseAuthCommunityPosts();
+  const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = UseUnAuthCommunityPosts();
+
   const methods = { onVote, onSelectPost, onDeletePost };
-
-  const authUserFeed = async () => {
-    setLoading(true);
-
-    try {
-      // if the use has not joined any communities, show the public feed
-      if (!communityStateValue.mySnippets.length) {
-        publicUserFeed();
-        return;
-      }
-
-      // FirebaseError: Invalid Query. \'in\' filters support a maximum of 10 elements in the value array.
-      const userCommunityIDs = communityStateValue.mySnippets.map((snippet) => snippet.communityId);
-      const postsCollection = collection(firestore, 'posts');
-      const postVotesFilter = where('communityId', 'in', userCommunityIDs);
-      const postsQuery = query(postsCollection, postVotesFilter);
-      const postDocs = await getDocs(postsQuery);
-
-      const posts = postDocs.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
-
-      setPostStateValue((prev) => {
-        return {
-          ...prev,
-          posts: posts as Post[],
-        };
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
-    setLoading(false);
-  };
-
-  const publicUserFeed = async () => {
-    setLoading(true);
-
-    try {
-      const postsCollection = collection(firestore, 'posts');
-      const postVotesSort = orderBy('voteStatus', 'desc');
-      const postsLimit = limit(10);
-      const postsQuery = query(postsCollection, postVotesSort, postsLimit);
-
-      const postDocs = await getDocs(postsQuery);
-      const posts = postDocs.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
-
-      setPostStateValue((prev) => {
-        return {
-          ...prev,
-          posts: posts as Post[],
-        };
-      });
-    } catch (error) {
-      console.log(error);
-    }
-
-    setLoading(false);
-  };
 
   const getUserPostVotes = async () => {
     try {
@@ -117,15 +56,44 @@ const Home: NextPage = () => {
     }
   };
 
-  // Authenticated user feed
   useEffect(() => {
-    if (communityStateValue.snippetsFetched) authUserFeed();
-  }, [communityStateValue.snippetsFetched]);
+    const handleSetPosts = (posts: Post[]) => {
+      setPostStateValue((prev) => {
+        return {
+          ...prev,
+          posts: posts,
+        };
+      });
+    };
 
-  // Public user feed
-  useEffect(() => {
-    if (!user && !loadingUser) publicUserFeed();
-  }, [user, loadingUser]);
+    if (user && !loadingUser) {
+      const { snippetsFetched, mySnippets } = communityStateValue;
+
+      if (snippetsFetched && mySnippets.length > 0) {
+        if (!loadingAuthPosts && !authError) setLoading(false);
+        handleSetPosts(authPosts);
+      } else if (snippetsFetched && mySnippets.length === 0) {
+        if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
+        handleSetPosts(unAuthPosts);
+      }
+    }
+
+    if (!user && !loadingUser) {
+      if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
+      handleSetPosts(unAuthPosts);
+    }
+  }, [
+    user,
+    loadingUser,
+    communityStateValue,
+    authPosts,
+    unAuthPosts,
+    setPostStateValue,
+    loadingAuthPosts,
+    loadingUnAuthPosts,
+    authError,
+    unAuthError,
+  ]);
 
   // Get user post votes
   useEffect(() => {
