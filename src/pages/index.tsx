@@ -1,4 +1,4 @@
-import { Post, PostState, PostVote } from '@/atoms/postsAtoms';
+import { PostState } from '@/atoms/postsAtoms';
 import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
@@ -41,18 +41,15 @@ const Home: NextPage = () => {
 
   // Get Community Posts
   useEffect(() => {
-    if (authError || unAuthError) {
-      const errorMessage = authError || unAuthError;
-      if (errorMessage) {
-        setError(new Error(errorMessage));
-      }
-      return;
-    }
-
     if (user && !loadingUser) {
       const { snippetsFetched, mySnippets } = communityStateValue;
 
       if (snippetsFetched && mySnippets.length > 0) {
+        if (authError) {
+          setError(new Error(authError));
+          return;
+        }
+
         if (!loadingAuthPosts) setLoading(false);
         updateStateValue('posts', authPosts);
       } else if (snippetsFetched && mySnippets.length === 0) {
@@ -62,11 +59,13 @@ const Home: NextPage = () => {
     }
 
     if (!user && !loadingUser) {
-      if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
+      if (unAuthError) {
+        setError(new Error(unAuthError));
+        return;
+      }
+      if (!loadingUnAuthPosts) setLoading(false);
       updateStateValue('posts', unAuthPosts);
     }
-
-    setError(null);
   }, [
     user,
     loadingUser,
@@ -84,13 +83,17 @@ const Home: NextPage = () => {
   // Get User Post Votes
   useEffect(() => {
     if (user && postStateValue.posts) {
+      if (postVotesError) {
+        setError(new Error(postVotesError));
+        return;
+      }
       updateStateValue('postVotes', postVotes);
     }
 
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postVotes, postStateValue.posts, updateStateValue]);
+  }, [user, postVotes, postStateValue.posts, updateStateValue, postVotesError]);
 
   return (
     <PageContent>
@@ -98,7 +101,9 @@ const Home: NextPage = () => {
         {loading ? (
           <PostLoaderSkeleton count={4} />
         ) : error ? (
-          <p>{error.message}</p>
+          <>
+            <p>{error.message}</p>
+          </>
         ) : (
           <Stack>
             {postStateValue.posts.map((post) => (
