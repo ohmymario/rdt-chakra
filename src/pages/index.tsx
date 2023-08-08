@@ -1,19 +1,19 @@
-import { Post, PostVote } from '@/atoms/postsAtoms';
+import { Post, PostState, PostVote } from '@/atoms/postsAtoms';
 import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
-import { auth, firestore } from '@/firebase/clientApp';
+import { auth } from '@/firebase/clientApp';
 import UseAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
 import useCommunityData from '@/hooks/useCommunityData';
 import usePostsData from '@/hooks/usePostData';
 import UseUnAuthCommunityPosts from '@/hooks/useUnauthCommunityPosts';
+import useUserPostVotes from '@/hooks/useUserPostVotes';
 import { Stack } from '@chakra-ui/react';
-import { collection, getDocs, query, where } from 'firebase/firestore';
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
@@ -24,90 +24,62 @@ const Home: NextPage = () => {
 
   const { authPosts, loading: loadingAuthPosts, error: authError } = UseAuthCommunityPosts();
   const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = UseUnAuthCommunityPosts();
+  const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes(user, postStateValue);
 
   const methods = { onVote, onSelectPost, onDeletePost };
 
-  const getUserPostVotes = async () => {
-    try {
-      const postIDs = postStateValue.posts.map((post) => post.id);
+  const updateStateValue = useCallback(
+    <K extends keyof PostState>(key: K, value: PostState[K]) => {
+      setPostStateValue((prev) => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [setPostStateValue]
+  );
 
-      if (postIDs.length === 0) {
-        return;
-      }
-
-      const postVotesCollection = collection(firestore, `users/${user?.uid}/postVotes`);
-      const postVotesFilter = where('postId', 'in', postIDs);
-      const postVotesQuery = query(postVotesCollection, postVotesFilter);
-
-      const postVotesDocs = await getDocs(postVotesQuery);
-
-      const postVotes = postVotesDocs.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
-
-      setPostStateValue((prev) => {
-        return {
-          ...prev,
-          postVotes: postVotes as PostVote[],
-        };
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  // Get Community Posts
   useEffect(() => {
-    const handleSetPosts = (posts: Post[]) => {
-      setPostStateValue((prev) => {
-        return {
-          ...prev,
-          posts: posts,
-        };
-      });
-    };
-
     if (user && !loadingUser) {
       const { snippetsFetched, mySnippets } = communityStateValue;
 
       if (snippetsFetched && mySnippets.length > 0) {
         if (!loadingAuthPosts && !authError) setLoading(false);
-        handleSetPosts(authPosts);
+        updateStateValue('posts', authPosts);
       } else if (snippetsFetched && mySnippets.length === 0) {
         if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
-        handleSetPosts(unAuthPosts);
+        updateStateValue('posts', unAuthPosts);
       }
     }
 
     if (!user && !loadingUser) {
       if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
-      handleSetPosts(unAuthPosts);
+      updateStateValue('posts', unAuthPosts);
     }
   }, [
     user,
     loadingUser,
     communityStateValue,
     authPosts,
-    unAuthPosts,
-    setPostStateValue,
     loadingAuthPosts,
-    loadingUnAuthPosts,
     authError,
+    unAuthPosts,
+    loadingUnAuthPosts,
     unAuthError,
+    setPostStateValue,
+    updateStateValue,
   ]);
 
-  // Get user post votes
+  // Get User Post Votes
   useEffect(() => {
-    if (user && postStateValue.posts) getUserPostVotes();
+    if (user && postStateValue.posts) {
+      updateStateValue('postVotes', postVotes);
+    }
 
     return () => {
-      setPostStateValue((prev) => {
-        return {
-          ...prev,
-          postVotes: [],
-        };
-      });
+      updateStateValue('postVotes', []);
     };
-  }, [user, postStateValue.posts]);
+  }, [user, postStateValue.posts, postVotes, updateStateValue]);
 
   return (
     <PageContent>
