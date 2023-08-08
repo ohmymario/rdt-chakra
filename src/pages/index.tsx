@@ -17,7 +17,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
+  // Local State
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
   const [user, loadingUser] = useAuthState(auth);
   const { communityStateValue } = useCommunityData();
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
@@ -25,8 +28,6 @@ const Home: NextPage = () => {
   const { authPosts, loading: loadingAuthPosts, error: authError } = UseAuthCommunityPosts();
   const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = UseUnAuthCommunityPosts();
   const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes(user, postStateValue);
-
-  const methods = { onVote, onSelectPost, onDeletePost };
 
   const updateStateValue = useCallback(
     <K extends keyof PostState>(key: K, value: PostState[K]) => {
@@ -40,14 +41,22 @@ const Home: NextPage = () => {
 
   // Get Community Posts
   useEffect(() => {
+    if (authError || unAuthError) {
+      const errorMessage = authError || unAuthError;
+      if (errorMessage) {
+        setError(new Error(errorMessage));
+      }
+      return;
+    }
+
     if (user && !loadingUser) {
       const { snippetsFetched, mySnippets } = communityStateValue;
 
       if (snippetsFetched && mySnippets.length > 0) {
-        if (!loadingAuthPosts && !authError) setLoading(false);
+        if (!loadingAuthPosts) setLoading(false);
         updateStateValue('posts', authPosts);
       } else if (snippetsFetched && mySnippets.length === 0) {
-        if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
+        if (!loadingUnAuthPosts) setLoading(false);
         updateStateValue('posts', unAuthPosts);
       }
     }
@@ -56,6 +65,8 @@ const Home: NextPage = () => {
       if (!loadingUnAuthPosts && !unAuthError) setLoading(false);
       updateStateValue('posts', unAuthPosts);
     }
+
+    setError(null);
   }, [
     user,
     loadingUser,
@@ -79,13 +90,15 @@ const Home: NextPage = () => {
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postStateValue.posts, postVotes, updateStateValue]);
+  }, [user, postVotes, postStateValue.posts, updateStateValue]);
 
   return (
     <PageContent>
       <>
         {loading ? (
           <PostLoaderSkeleton count={4} />
+        ) : error ? (
+          <p>{error.message}</p>
         ) : (
           <Stack>
             {postStateValue.posts.map((post) => (
@@ -94,7 +107,9 @@ const Home: NextPage = () => {
                 key={post.id}
                 userIsCreator={user?.uid === post.creatorId}
                 userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue}
-                {...methods}
+                onDeletePost={onDeletePost}
+                onSelectPost={onSelectPost}
+                onVote={onVote}
                 homePage
               />
             ))}
