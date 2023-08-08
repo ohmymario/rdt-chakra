@@ -43,8 +43,10 @@ const Home: NextPage = () => {
   useEffect(() => {
     if (user && !loadingUser) {
       const { snippetsFetched, mySnippets } = communityStateValue;
+      const snippetsFound = snippetsFetched && mySnippets.length > 0;
+      const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
 
-      if (snippetsFetched && mySnippets.length > 0) {
+      if (snippetsFound) {
         if (authError) {
           setError(new Error(authError));
           return;
@@ -52,7 +54,13 @@ const Home: NextPage = () => {
 
         if (!loadingAuthPosts) setLoading(false);
         updateStateValue('posts', authPosts);
-      } else if (snippetsFetched && mySnippets.length === 0) {
+      }
+
+      if (snippetsNotFound) {
+        if (unAuthError) {
+          setError(new Error(unAuthError));
+          return;
+        }
         if (!loadingUnAuthPosts) setLoading(false);
         updateStateValue('posts', unAuthPosts);
       }
@@ -63,6 +71,7 @@ const Home: NextPage = () => {
         setError(new Error(unAuthError));
         return;
       }
+
       if (!loadingUnAuthPosts) setLoading(false);
       updateStateValue('posts', unAuthPosts);
     }
@@ -87,13 +96,14 @@ const Home: NextPage = () => {
         setError(new Error(postVotesError));
         return;
       }
+      if (!loadingPostVotes) setLoading(false);
       updateStateValue('postVotes', postVotes);
     }
 
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postVotes, postStateValue.posts, updateStateValue, postVotesError]);
+  }, [user, postVotes, postStateValue.posts, updateStateValue, postVotesError, loadingPostVotes]);
 
   return (
     <PageContent>

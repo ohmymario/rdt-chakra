@@ -16,6 +16,10 @@ const UseAuthCommunityPosts = () => {
       setLoading(true);
       setError(null);
 
+      if (communityStateValue.mySnippets.length === 0) {
+        return;
+      }
+
       try {
         const userCommunityIDs = communityStateValue.mySnippets.map((snippet) => snippet.communityId);
         const postsCollection = collection(firestore, 'posts');
