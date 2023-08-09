@@ -1,4 +1,4 @@
-import { PostState } from '@/atoms/postsAtoms';
+import { Post, PostState, PostVote } from '@/atoms/postsAtoms';
 import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
@@ -39,6 +39,18 @@ const Home: NextPage = () => {
     [setPostStateValue]
   );
 
+  const processPostData = useCallback(
+    (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
+      if (error) {
+        setError(new Error(error));
+        return;
+      }
+      if (!loading) setLoading(false);
+      updateStateValue(key, data);
+    },
+    [updateStateValue]
+  );
+
   // Get Community Posts
   useEffect(() => {
     if (user && !loadingUser) {
@@ -47,63 +59,41 @@ const Home: NextPage = () => {
       const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
 
       if (snippetsFound) {
-        if (authError) {
-          setError(new Error(authError));
-          return;
-        }
-
-        if (!loadingAuthPosts) setLoading(false);
-        updateStateValue('posts', authPosts);
+        processPostData(loadingAuthPosts, authError, authPosts, 'posts');
       }
 
       if (snippetsNotFound) {
-        if (unAuthError) {
-          setError(new Error(unAuthError));
-          return;
-        }
-        if (!loadingUnAuthPosts) setLoading(false);
-        updateStateValue('posts', unAuthPosts);
+        processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
       }
     }
 
     if (!user && !loadingUser) {
-      if (unAuthError) {
-        setError(new Error(unAuthError));
-        return;
-      }
-
-      if (!loadingUnAuthPosts) setLoading(false);
-      updateStateValue('posts', unAuthPosts);
+      processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
     }
   }, [
     user,
+    authPosts,
     loadingUser,
     communityStateValue,
-    authPosts,
     loadingAuthPosts,
     authError,
     unAuthPosts,
     loadingUnAuthPosts,
     unAuthError,
-    setPostStateValue,
     updateStateValue,
+    processPostData,
   ]);
 
   // Get User Post Votes
   useEffect(() => {
     if (user && postStateValue.posts) {
-      if (postVotesError) {
-        setError(new Error(postVotesError));
-        return;
-      }
-      if (!loadingPostVotes) setLoading(false);
-      updateStateValue('postVotes', postVotes);
+      processPostData(loadingPostVotes, postVotesError, postVotes, 'postVotes');
     }
 
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postVotes, postStateValue.posts, updateStateValue, postVotesError, loadingPostVotes]);
+  }, [user, postStateValue.posts, loadingPostVotes, postVotesError, postVotes, processPostData, updateStateValue]);
 
   return (
     <PageContent>
