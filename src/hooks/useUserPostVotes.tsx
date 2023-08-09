@@ -1,7 +1,7 @@
-import { PostState, PostVote } from '@/atoms/postsAtoms';
+import { PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore } from '@/firebase/clientApp';
-import { collection, where, query, getDocs } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import usePostsData from './usePostData';
 
@@ -20,18 +20,14 @@ const useUserPostVotes = () => {
   const [user, loadingUser] = useAuthState(auth);
   const { postStateValue } = usePostsData();
 
-  const postIDs = postStateValue.posts.map((post) => post.id).slice(0, 10);
+  const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id).slice(0, 10), [postStateValue.posts]);
 
   useEffect(() => {
     const fetchUserPostVotes = async () => {
       setLoading(true);
       setError(null);
 
-      if (!user || loadingUser) {
-        return;
-      }
-
-      if (postIDs.length === 0) {
+      if (!user || loadingUser || postIDs.length === 0) {
         return;
       }
       try {
@@ -55,8 +51,6 @@ const useUserPostVotes = () => {
     };
     fetchUserPostVotes();
   }, [user, postIDs, loadingUser]);
-
-  console.log(postVotes);
 
   return { postVotes, loading, error };
 };
