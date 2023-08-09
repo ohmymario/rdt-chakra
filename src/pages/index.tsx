@@ -5,6 +5,7 @@ import Recommendations from '@/component/Community/Recommendations/Recommendatio
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
+import PostsError from '@/component/Posts/PostsError';
 import { auth } from '@/firebase/clientApp';
 import UseAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
 import useCommunityData from '@/hooks/useCommunityData';
@@ -101,9 +102,7 @@ const Home: NextPage = () => {
         {loading ? (
           <PostLoaderSkeleton count={4} />
         ) : error ? (
-          <>
-            <p>{error.message}</p>
-          </>
+          <PostsError error={error} />
         ) : (
           <Stack>
             {postStateValue.posts.map((post) => (
