@@ -14,7 +14,7 @@ import UseUnAuthCommunityPosts from '@/hooks/useUnauthCommunityPosts';
 import useUserPostVotes from '@/hooks/useUserPostVotes';
 import { Stack } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
@@ -28,73 +28,83 @@ const Home: NextPage = () => {
 
   const { authPosts, loading: loadingAuthPosts, error: authError } = UseAuthCommunityPosts();
   const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = UseUnAuthCommunityPosts();
-  const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes(user, postStateValue);
+  const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes();
 
-  const updateStateValue = useCallback(
-    <K extends keyof PostState>(key: K, value: PostState[K]) => {
-      setPostStateValue((prev) => ({
-        ...prev,
-        [key]: value,
-      }));
-    },
-    [setPostStateValue]
-  );
+  // const updateStateValue = useCallback(
+  //   <K extends keyof PostState>(key: K, value: PostState[K]) => {
+  //     setPostStateValue((prev) => ({
+  //       ...prev,
+  //       [key]: value,
+  //     }));
+  //   },
+  //   [setPostStateValue]
+  // );
 
-  const processPostData = useCallback(
-    (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
-      if (error) {
-        setError(new Error(error));
-        return;
-      }
-      if (!loading) setLoading(false);
-      updateStateValue(key, data);
-    },
-    [updateStateValue]
-  );
+  // const processPostData = useCallback(
+  //   (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
+  //     if (error) {
+  //       setError(new Error(error));
+  //       return;
+  //     }
+  //     if (!loading) setLoading(false);
+  //     updateStateValue(key, data);
+  //   },
+  //   [updateStateValue]
+  // );
 
   // Get Community Posts
-  useEffect(() => {
-    if (user && !loadingUser) {
-      const { snippetsFetched, mySnippets } = communityStateValue;
-      const snippetsFound = snippetsFetched && mySnippets.length > 0;
-      const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
+  // useEffect(() => {
+  //   if (user && !loadingUser) {
+  //     const { snippetsFetched, mySnippets } = communityStateValue;
+  //     const snippetsFound = snippetsFetched && mySnippets.length > 0;
+  //     const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
 
-      if (snippetsFound) {
-        processPostData(loadingAuthPosts, authError, authPosts, 'posts');
-      }
+  //     if (snippetsFound) {
+  //       processPostData(loadingAuthPosts, authError, authPosts, 'posts');
+  //     }
 
-      if (snippetsNotFound) {
-        processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
-      }
-    }
+  //     if (snippetsNotFound) {
+  //       processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
+  //     }
+  //   }
 
-    if (!user && !loadingUser) {
-      processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
-    }
-  }, [
-    user,
-    authPosts,
-    loadingUser,
-    communityStateValue,
-    loadingAuthPosts,
-    authError,
-    unAuthPosts,
-    loadingUnAuthPosts,
-    unAuthError,
-    updateStateValue,
-    processPostData,
-  ]);
+  //   if (!user && !loadingUser) {
+  //     processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
+  //   }
+  // }, [
+  //   user,
+  //   authPosts,
+  //   loadingUser,
+  //   communityStateValue,
+  //   loadingAuthPosts,
+  //   authError,
+  //   unAuthPosts,
+  //   loadingUnAuthPosts,
+  //   unAuthError,
+  //   updateStateValue,
+  //   processPostData,
+  // ]);
 
   // Get User Post Votes
-  useEffect(() => {
-    if (user && postStateValue.posts) {
-      processPostData(loadingPostVotes, postVotesError, postVotes, 'postVotes');
-    }
+  // useEffect(() => {
+  //   if (user && postStateValue.posts) {
+  //     processPostData(loadingPostVotes, postVotesError, postVotes, 'postVotes');
+  //   }
 
-    return () => {
-      updateStateValue('postVotes', []);
-    };
-  }, [user, postStateValue.posts, loadingPostVotes, postVotesError, postVotes, processPostData, updateStateValue]);
+  //   return () => {
+  //     updateStateValue('postVotes', []);
+  //   };
+  // }, [user, postStateValue.posts, loadingPostVotes, postVotesError, postVotes, processPostData, updateStateValue]);
+
+  console.log(postStateValue);
+
+  // const userVoteValues = useMemo(() => {
+  //   return postStateValue.posts.map(
+  //     (post) => postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue
+  //   );
+  // }, [postStateValue.posts, postStateValue.postVotes]);
+
+  // console.log(userVoteValues);
 
   return (
     <PageContent>
@@ -110,7 +120,8 @@ const Home: NextPage = () => {
                 post={post}
                 key={post.id}
                 userIsCreator={user?.uid === post.creatorId}
-                userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue}
+                userVoteValue={-1}
+                // userVoteValue={postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue}
                 onDeletePost={onDeletePost}
                 onSelectPost={onSelectPost}
                 onVote={onVote}

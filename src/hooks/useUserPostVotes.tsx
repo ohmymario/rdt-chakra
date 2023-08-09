@@ -1,8 +1,9 @@
-import { PostVote, PostState } from '@/atoms/postsAtoms';
-import { firestore } from '@/firebase/clientApp';
-import { User } from 'firebase/auth';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { PostState, PostVote } from '@/atoms/postsAtoms';
+import { auth, firestore } from '@/firebase/clientApp';
+import { collection, where, query, getDocs } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import usePostsData from './usePostData';
 
 // This hook handles only the first 10 post IDs due to query constraints.
 // Future Enhancement:
@@ -11,12 +12,14 @@ import { useEffect, useState } from 'react';
 // 3. Combine all results into one array.
 // Use Promise.all for async handling, and consider performance and loading times.
 
-const useUserPostVotes = (user: User | null | undefined, postStateValue: PostState) => {
+const useUserPostVotes = () => {
   const [postVotes, setPostVotes] = useState<PostVote[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userUid = user?.uid;
+  const [user, loadingUser] = useAuthState(auth);
+  const { postStateValue } = usePostsData();
+
   const postIDs = postStateValue.posts.map((post) => post.id).slice(0, 10);
 
   useEffect(() => {
@@ -24,21 +27,21 @@ const useUserPostVotes = (user: User | null | undefined, postStateValue: PostSta
       setLoading(true);
       setError(null);
 
-      if (postIDs.length === 0 || !userUid) {
+      if (!user || loadingUser) {
         return;
       }
 
+      if (postIDs.length === 0) {
+        return;
+      }
       try {
-        const postVotesCollection = collection(firestore, `users/${userUid}/postVotes`);
+        const postVotesCollection = collection(firestore, `users/${user.uid}/postVotes`);
         const postVotesFilter = where('postId', 'in', postIDs);
         const postVotesQuery = query(postVotesCollection, postVotesFilter);
-
         const postVotesDocs = await getDocs(postVotesQuery);
-
         const fetchedPostVotes = postVotesDocs.docs.map((doc) => {
           return { id: doc.id, ...doc.data() };
         });
-
         setPostVotes(fetchedPostVotes as PostVote[]);
       } catch (error: unknown) {
         if (error instanceof Error) {
@@ -50,9 +53,10 @@ const useUserPostVotes = (user: User | null | undefined, postStateValue: PostSta
         setLoading(false);
       }
     };
-
     fetchUserPostVotes();
-  }, [userUid, postIDs]);
+  }, [user, postIDs, loadingUser]);
+
+  console.log(postVotes);
 
   return { postVotes, loading, error };
 };
