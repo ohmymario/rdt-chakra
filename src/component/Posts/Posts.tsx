@@ -3,7 +3,7 @@ import { auth } from '@/firebase/clientApp';
 import usePostsData from '@/hooks/usePostData';
 import usePostLoader from '@/hooks/usePostLoader';
 import { Stack, Text } from '@chakra-ui/react';
-import { FunctionComponent, useEffect } from 'react';
+import { FunctionComponent, useEffect, useMemo } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import PostItem from './PostItem';
 import PostLoaderSkeleton from './PostLoaderSkeleton';
@@ -15,11 +15,8 @@ interface PostsProps {
 const Posts: FunctionComponent<PostsProps> = (props) => {
   const { communityData } = props;
   const [user] = useAuthState(auth);
-
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
   const { loading, error, posts } = usePostLoader(communityData.id);
-
-  const methods = { onVote, onSelectPost, onDeletePost };
 
   useEffect(() => {
     setPostStateValue((prev) => ({
@@ -28,14 +25,20 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
     }));
   }, [posts, setPostStateValue]);
 
+  const userVoteValues = useMemo(() => {
+    return postStateValue.posts.map(
+      (post) => postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue
+    );
+  }, [postStateValue.posts, postStateValue.postVotes]);
+
   return (
     <>
       {loading && <PostLoaderSkeleton count={4} />}
       {!loading && !error && (
         <Stack>
-          {postStateValue.posts.map((post) => {
+          {postStateValue.posts.map((post, index) => {
             const userIsCreator = user?.uid === post.creatorId;
-            const userVoteValue = postStateValue.postVotes.find((vote) => vote.postId === post.id)?.voteValue;
+            const userVoteValue = userVoteValues[index];
 
             return (
               <PostItem
@@ -43,7 +46,9 @@ const Posts: FunctionComponent<PostsProps> = (props) => {
                 key={post.id}
                 userIsCreator={userIsCreator}
                 userVoteValue={userVoteValue}
-                {...methods}
+                onVote={onVote}
+                onSelectPost={onSelectPost}
+                onDeletePost={onDeletePost}
               />
             );
           })}
