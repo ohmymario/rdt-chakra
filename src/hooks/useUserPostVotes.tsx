@@ -21,24 +21,30 @@ const useUserPostVotes = () => {
 
   const [user, loadingUser] = useAuthState(auth);
   const { postStateValue } = usePostsData();
+
   const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id).slice(0, 10), [postStateValue.posts]);
 
   useEffect(() => {
     const fetchUserPostVotes = async () => {
-      setLoading(true);
-      setError(null);
-
+      // early return if not all necessary data is ready
       if (!user || loadingUser || postIDs.length === 0) {
         return;
       }
+
+      setLoading(true);
+      setError(null);
+
       try {
         const postVotesCollection = collection(firestore, `users/${user.uid}/postVotes`);
         const postVotesFilter = where('postId', 'in', postIDs);
         const postVotesQuery = query(postVotesCollection, postVotesFilter);
         const postVotesDocs = await getDocs(postVotesQuery);
+
+        // TODO: use convertToPost function to convert fetched data to Post type
         const fetchedPostVotes = postVotesDocs.docs.map((doc) => {
           return { id: doc.id, ...doc.data() };
         });
+
         setPostVotes(fetchedPostVotes as PostVote[]);
       } catch (error: unknown) {
         setError(handleFetchError(error));
@@ -47,7 +53,7 @@ const useUserPostVotes = () => {
       }
     };
     fetchUserPostVotes();
-  }, [user, postIDs, loadingUser]);
+  }, [user, loadingUser, postIDs]);
 
   return { postVotes, loading, error };
 };
