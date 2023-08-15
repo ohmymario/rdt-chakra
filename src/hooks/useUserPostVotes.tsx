@@ -6,6 +6,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import usePostsData from './usePostData';
 
 import { handleFetchError } from '@/utils/handleFetchError';
+import { User } from 'firebase/auth';
+import { toPostVote } from '@/utils/convertToPostVote';
 
 // This hook handles only the first 10 post IDs due to query constraints.
 // Future Enhancement:
@@ -13,6 +15,15 @@ import { handleFetchError } from '@/utils/handleFetchError';
 // 2. Query each batch to fetch post votes.
 // 3. Combine all results into one array.
 // Use Promise.all for async handling, and consider performance and loading times.
+
+// abstracts the fetch query and necessary data
+const fetchUserPostVotesFromFirestore = async (user: User, postIDs: (string | undefined)[]): Promise<PostVote[]> => {
+  const postVotesCollection = collection(firestore, `users/${user.uid}/postVotes`);
+  const postVotesFilter = where('postId', 'in', postIDs);
+  const postVotesQuery = query(postVotesCollection, postVotesFilter);
+  const postVotesDocs = await getDocs(postVotesQuery);
+  return postVotesDocs.docs.map(toPostVote);
+};
 
 const useUserPostVotes = () => {
   const [postVotes, setPostVotes] = useState<PostVote[]>([]);
@@ -35,17 +46,8 @@ const useUserPostVotes = () => {
       setError(null);
 
       try {
-        const postVotesCollection = collection(firestore, `users/${user.uid}/postVotes`);
-        const postVotesFilter = where('postId', 'in', postIDs);
-        const postVotesQuery = query(postVotesCollection, postVotesFilter);
-        const postVotesDocs = await getDocs(postVotesQuery);
-
-        // TODO: use convertToPost function to convert fetched data to Post type
-        const fetchedPostVotes = postVotesDocs.docs.map((doc) => {
-          return { id: doc.id, ...doc.data() };
-        });
-
-        setPostVotes(fetchedPostVotes as PostVote[]);
+        const fetchedPostVotes = await fetchUserPostVotesFromFirestore(user, postIDs);
+        setPostVotes(fetchedPostVotes);
       } catch (error: unknown) {
         setError(handleFetchError(error));
       } finally {
