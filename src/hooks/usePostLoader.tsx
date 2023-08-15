@@ -15,28 +15,28 @@ const usePostLoader = (communityId: string): PostLoaderResult => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   const loadPosts = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      const fetchedPosts = (await fetchPosts()) as Post[];
+    try {
+      const postsCollection = collection(firestore, 'posts');
+      const postFilter = where('communityId', '==', communityId);
+      const postOrder = orderBy('createdAt', 'desc');
+      const postQuery = query(postsCollection, postFilter, postOrder);
+      const postDocs = await getDocs(postQuery);
+      const fetchedPosts = postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Post[];
+
       setPosts(fetchedPosts);
-    } catch (fetchError: any) {
-      console.error(fetchError);
-      setError(fetchError.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred.');
+      }
     } finally {
       setLoading(false);
     }
   }, [communityId]);
-
-  const fetchPosts = async () => {
-    const postsCollection = collection(firestore, 'posts');
-    const postFilter = where('communityId', '==', communityId);
-    const postOrder = orderBy('createdAt', 'desc');
-    const postQuery = query(postsCollection, postFilter, postOrder);
-    const postDocs = await getDocs(postQuery);
-    return postDocs.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-  };
 
   useEffect(() => {
     loadPosts();
