@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import usePostsData from './usePostData';
 
+import { handleFetchError } from '@/utils/handleFetchError';
+
 // This hook handles only the first 10 post IDs due to query constraints.
 // Future Enhancement:
 // 1. Divide post IDs into batches of 10.
@@ -19,7 +21,6 @@ const useUserPostVotes = () => {
 
   const [user, loadingUser] = useAuthState(auth);
   const { postStateValue } = usePostsData();
-
   const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id).slice(0, 10), [postStateValue.posts]);
 
   useEffect(() => {
@@ -40,11 +41,7 @@ const useUserPostVotes = () => {
         });
         setPostVotes(fetchedPostVotes as PostVote[]);
       } catch (error: unknown) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError('An unknown error occurred.');
-        }
+        setError(handleFetchError(error));
       } finally {
         setLoading(false);
       }
