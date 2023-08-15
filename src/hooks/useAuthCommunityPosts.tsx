@@ -4,6 +4,8 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 import useCommunityData from './useCommunityData';
 
+import { handleFetchError } from '@/utils/handleFetchError';
+
 import { toPost } from '@/utils/convertToPost';
 
 interface useAuthPostResult {
@@ -19,14 +21,6 @@ const fetchCommunityPostsFromFirestore = async (communityIds: string[]): Promise
   const postsQuery = query(postsCollection, postVotesFilter);
   const postDocs = await getDocs(postsQuery);
   return postDocs.docs.map(toPost);
-};
-
-// Handles errors during the fetch operation, returning a user-friendly error message
-const handleFetchError = (error: unknown): string => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return 'An unknown error occurred.';
 };
 
 const useAuthCommunityPosts = (): useAuthPostResult => {
