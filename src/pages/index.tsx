@@ -7,14 +7,14 @@ import PostItem from '@/component/Posts/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
 import PostsError from '@/component/Posts/PostsError';
 import { auth } from '@/firebase/clientApp';
-import UseAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
+import useAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
 import useCommunityData from '@/hooks/useCommunityData';
 import usePostsData from '@/hooks/usePostData';
-import UseUnAuthCommunityPosts from '@/hooks/useUnauthCommunityPosts';
+import useUnAuthCommunityPosts from '@/hooks/useUnauthCommunityPosts';
 import useUserPostVotes from '@/hooks/useUserPostVotes';
 import { Stack } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 const Home: NextPage = () => {
@@ -26,8 +26,8 @@ const Home: NextPage = () => {
   const { communityStateValue } = useCommunityData();
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
 
-  const { authPosts, loading: loadingAuthPosts, error: authError } = UseAuthCommunityPosts();
-  const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = UseUnAuthCommunityPosts();
+  const { authPosts, loading: loadingAuthPosts, error: authError } = useAuthCommunityPosts();
+  const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = useUnAuthCommunityPosts();
   const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes();
 
   const updateStateValue = useCallback(
@@ -105,24 +105,27 @@ const Home: NextPage = () => {
   return (
     <PageContent>
       <>
-        {loading ? (
-          <PostLoaderSkeleton count={4} />
-        ) : error ? (
-          <PostsError error={error} />
-        ) : (
+        {loading && <PostLoaderSkeleton count={4} />}
+        {error && <PostsError error={error} />}
+        {!loading && !error && (
           <Stack>
-            {postStateValue.posts.map((post, index) => (
-              <PostItem
-                post={post}
-                key={post.id}
-                userIsCreator={user?.uid === post.creatorId}
-                userVoteValue={userVoteValues[index]}
-                onDeletePost={onDeletePost}
-                onSelectPost={onSelectPost}
-                onVote={onVote}
-                homePage
-              />
-            ))}
+            {postStateValue.posts.map((post, index) => {
+              const userIsCreator = user?.uid === post.creatorId;
+              const userVoteValue = userVoteValues[index];
+
+              return (
+                <PostItem
+                  post={post}
+                  key={post.id}
+                  userIsCreator={userIsCreator}
+                  userVoteValue={userVoteValue}
+                  onDeletePost={onDeletePost}
+                  onSelectPost={onSelectPost}
+                  onVote={onVote}
+                  homePage
+                />
+              );
+            })}
           </Stack>
         )}
       </>
