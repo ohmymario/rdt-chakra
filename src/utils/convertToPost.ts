@@ -16,6 +16,21 @@ export const toPost = (doc: QueryDocumentSnapshot): Post => {
     createdAt,
   } = doc.data();
 
+  if (
+    typeof communityId !== 'string' ||
+    typeof creatorId !== 'string' ||
+    typeof creatorDisplayName !== 'string' ||
+    typeof title !== 'string' ||
+    typeof body !== 'string' ||
+    typeof numberOfComments !== 'number' ||
+    typeof voteStatus !== 'number' ||
+    (imageURL && typeof imageURL !== 'string') ||
+    (communityImageURL && typeof communityImageURL !== 'string') ||
+    !(createdAt instanceof Timestamp)
+  ) {
+    throw new Error(`Malformed Post document: ${JSON.stringify(doc.data())}`);
+  }
+
   return {
     id,
     communityId,
