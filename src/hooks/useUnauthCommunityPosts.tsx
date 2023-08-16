@@ -9,6 +9,20 @@ interface useUnAuthPostResult {
   error: string | null;
 }
 
+const fetchUnAuthCommunityPosts = async (): Promise<Post[]> => {
+  const postsCollection = collection(firestore, 'posts');
+  const postVotesSort = orderBy('voteStatus', 'desc');
+  const postsLimit = limit(10);
+  const postsQuery = query(postsCollection, postVotesSort, postsLimit);
+
+  const postDocs = await getDocs(postsQuery);
+  const fetchedPosts = postDocs.docs.map((doc) => {
+    return { id: doc.id, ...doc.data() };
+  });
+
+  return fetchedPosts as Post[];
+};
+
 const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
   const [unAuthPosts, setUnAuthPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
@@ -19,17 +33,8 @@ const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
     setError(null);
 
     try {
-      const postsCollection = collection(firestore, 'posts');
-      const postVotesSort = orderBy('voteStatus', 'desc');
-      const postsLimit = limit(10);
-      const postsQuery = query(postsCollection, postVotesSort, postsLimit);
-
-      const postDocs = await getDocs(postsQuery);
-      const fetchedPosts = postDocs.docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
-
-      setUnAuthPosts(fetchedPosts as Post[]);
+      const fetchedPosts = await fetchUnAuthCommunityPosts();
+      setUnAuthPosts(fetchedPosts);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setError(error.message);
