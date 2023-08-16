@@ -1,7 +1,7 @@
 import { PostVote } from '@/atoms/postsAtoms';
 import { auth, firestore } from '@/firebase/clientApp';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import usePostsData from './usePostData';
 
@@ -35,27 +35,28 @@ const useUserPostVotes = () => {
 
   const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id).slice(0, 10), [postStateValue.posts]);
 
-  useEffect(() => {
-    const fetchUserPostVotes = async () => {
-      // early return if not all necessary data is ready
-      if (!user || loadingUser || postIDs.length === 0) {
-        return;
-      }
+  const fetchUserPostVotes = useCallback(async () => {
+    // early return if not all necessary data is ready
+    if (!user || loadingUser || postIDs.length === 0) {
+      return;
+    }
 
-      setLoading(true);
-      setError(null);
+    setLoading(true);
+    setError(null);
 
-      try {
-        const fetchedPostVotes = await fetchUserPostVotesFromFirestore(user, postIDs);
-        setPostVotes(fetchedPostVotes);
-      } catch (error: unknown) {
-        setError(handleFetchError(error));
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUserPostVotes();
+    try {
+      const fetchedPostVotes = await fetchUserPostVotesFromFirestore(user, postIDs);
+      setPostVotes(fetchedPostVotes);
+    } catch (error: unknown) {
+      setError(handleFetchError(error));
+    } finally {
+      setLoading(false);
+    }
   }, [user, loadingUser, postIDs]);
+
+  useEffect(() => {
+    fetchUserPostVotes();
+  }, [fetchUserPostVotes]);
 
   return { postVotes, loading, error };
 };
