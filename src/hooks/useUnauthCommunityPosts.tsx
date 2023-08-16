@@ -1,6 +1,7 @@
 import { Post } from '@/atoms/postsAtoms';
 import { firestore } from '@/firebase/clientApp';
 import { toPost } from '@/utils/convertToPost';
+import { handleFetchError } from '@/utils/handleFetchError';
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -32,11 +33,7 @@ const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
       const fetchedPosts = await fetchUnAuthCommunityPosts();
       setUnAuthPosts(fetchedPosts);
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        setError(error.message);
-      } else {
-        setError('An unknown error occurred.');
-      }
+      setError(handleFetchError(error));
     } finally {
       setLoading(false);
     }
