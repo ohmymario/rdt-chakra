@@ -9,12 +9,11 @@ import { handleFetchError } from '@/utils/handleFetchError';
 import { User } from 'firebase/auth';
 import { toPostVote } from '@/utils/convertToPostVote';
 
-// This hook handles only the first 10 post IDs due to query constraints.
-// Future Enhancement:
-// 1. Divide post IDs into batches of 10.
-// 2. Query each batch to fetch post votes.
-// 3. Combine all results into one array.
-// Use Promise.all for async handling, and consider performance and loading times.
+interface UserPostVotesResult {
+  postVotes: PostVote[];
+  loading: boolean;
+  error: string | null;
+}
 
 // abstracts the fetch query and necessary data
 const fetchUserPostVotesFromFirestore = async (user: User, postIDs: (string | undefined)[]): Promise<PostVote[]> => {
@@ -25,7 +24,23 @@ const fetchUserPostVotesFromFirestore = async (user: User, postIDs: (string | un
   return postVotesDocs.docs.map(toPostVote);
 };
 
-const useUserPostVotes = () => {
+const fetchUserPostVotesInBatches = async (user: User, postIDs: (string | undefined)[]): Promise<PostVote[]> => {
+  // 10 posts per batch for firestore query
+  const batchSize = 10;
+  const batchQueries: Promise<PostVote[]>[] = [];
+
+  for (let i = 0; i < postIDs.length; i += batchSize) {
+    // Divide post IDs into batches of 10.
+    const batchPostIDs = postIDs.slice(i, i + batchSize);
+    const batchQuery = fetchUserPostVotesFromFirestore(user, batchPostIDs);
+    batchQueries.push(batchQuery);
+  }
+
+  const allPostVotesBatches = await Promise.all(batchQueries);
+  return allPostVotesBatches.flat();
+};
+
+const useUserPostVotes = (): UserPostVotesResult => {
   const [postVotes, setPostVotes] = useState<PostVote[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +48,7 @@ const useUserPostVotes = () => {
   const [user, loadingUser] = useAuthState(auth);
   const { postStateValue } = usePostsData();
 
-  const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id).slice(0, 10), [postStateValue.posts]);
+  const postIDs = useMemo(() => postStateValue.posts.map((post) => post.id), [postStateValue.posts]);
 
   const fetchUserPostVotes = useCallback(async () => {
     // early return if not all necessary data is ready
@@ -45,7 +60,7 @@ const useUserPostVotes = () => {
     setError(null);
 
     try {
-      const fetchedPostVotes = await fetchUserPostVotesFromFirestore(user, postIDs);
+      const fetchedPostVotes = await fetchUserPostVotesInBatches(user, postIDs);
       setPostVotes(fetchedPostVotes);
     } catch (error: unknown) {
       setError(handleFetchError(error));
