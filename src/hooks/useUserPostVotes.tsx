@@ -27,14 +27,14 @@ const fetchUserPostVotesFromFirestore = async (user: User, postIDs: (string | un
 const fetchUserPostVotesInBatches = async (user: User, postIDs: (string | undefined)[]): Promise<PostVote[]> => {
   // 10 posts per batch for firestore query
   const batchSize = 10;
-  const batchQueries: Promise<PostVote[]>[] = [];
+  // calculate number of batches needed
+  const numberOfBatches = { length: Math.ceil(postIDs.length / batchSize) };
 
-  for (let i = 0; i < postIDs.length; i += batchSize) {
-    // Divide post IDs into batches of 10.
-    const batchPostIDs = postIDs.slice(i, i + batchSize);
-    const batchQuery = fetchUserPostVotesFromFirestore(user, batchPostIDs);
-    batchQueries.push(batchQuery);
-  }
+  // Put all batched queries/promises into an array
+  const batchQueries = Array.from(numberOfBatches, (_, i) => {
+    const batchPostIDs = postIDs.slice(i * batchSize, i * batchSize + batchSize);
+    return fetchUserPostVotesFromFirestore(user, batchPostIDs);
+  });
 
   const allPostVotesBatches = await Promise.all(batchQueries);
   return allPostVotesBatches.flat();
