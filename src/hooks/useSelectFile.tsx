@@ -4,39 +4,62 @@ interface UseSelectFileResult {
   selectedFile: string | null;
   onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
   setSelectedFile: Dispatch<SetStateAction<string | null>>;
+
+  errorMessage: string | null;
 }
+
+// TODO: create method to remove selected file
+// TODO: check if file is an image
 
 const useSelectFile = (): UseSelectFileResult => {
   const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const reader = new FileReader();
-    const files = e.target.files;
-    const checkForFile = files && files.length > 0;
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const validateFileSize = (file: File): boolean => {
     const oneMB = 1000000;
-    if (checkForFile) {
-      if (files[0].size > oneMB) {
-        alert(`
-            File size is too big!
-            Please select an image less than 1MB.
-            `);
-        return;
-      }
-      reader.readAsDataURL(files[0]);
+    if (file.size > oneMB) {
+      setErrorMessage(`File size is too big! Please select an image less than 1MB.`);
+      return false;
     }
-
-    reader.onload = () => {
-      const base64 = reader.result;
-      if (base64 && typeof base64 === 'string') {
-        setSelectedFile(base64);
-      }
-    };
-
-    reader.onerror = (error) => {
-      console.log('error', error);
-    };
+    return true;
   };
 
-  return { selectedFile, onSelectFile, setSelectedFile };
+  const validateFileType = (file: File): boolean => {
+    const validTypes = ['image/jpeg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      setErrorMessage(`File type is not supported! Please select an image of type jpeg or png`);
+      return false;
+    }
+    return true;
+  };
+
+  const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    const file = files && files.length > 0 ? files[0] : null;
+
+    // check if exists
+    if (file) {
+      setErrorMessage(null);
+
+      // check if file valid
+      if (validateFileSize(file) && validateFileType(file)) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          const base64 = reader.result;
+          if (base64 && typeof base64 === 'string') {
+            setSelectedFile(base64);
+          }
+        };
+
+        reader.onerror = (error) => {
+          console.log('error', error);
+        };
+      }
+    }
+  };
+
+  return { selectedFile, onSelectFile, setSelectedFile, errorMessage };
 };
 
 export default useSelectFile;
