@@ -6,6 +6,8 @@ interface UseSelectFileResult {
   setSelectedFile: Dispatch<SetStateAction<string | null>>;
 
   errorMessage: string | null;
+
+  removeSelecetedFile: () => void;
 }
 
 // TODO: create method to remove selected file
@@ -31,6 +33,11 @@ const useSelectFile = (): UseSelectFileResult => {
       return false;
     }
     return true;
+  };
+
+  const removeSelecetedFile = () => {
+    setSelectedFile(null);
+    setErrorMessage(null);
   };
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +66,7 @@ const useSelectFile = (): UseSelectFileResult => {
     }
   };
 
-  return { selectedFile, onSelectFile, setSelectedFile, errorMessage };
+  return { selectedFile, onSelectFile, setSelectedFile, removeSelecetedFile, errorMessage };
 };
 
 export default useSelectFile;
