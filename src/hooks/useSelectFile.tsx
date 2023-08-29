@@ -1,14 +1,10 @@
-import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 interface UseSelectFileResult {
   selectedFile: string | null;
   errorMessage: string | null;
-
   onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
-
-  // TODO: remove ability for components to set selected file directly
-  setSelectedFile: Dispatch<SetStateAction<string | null>>;
-  removeSelecetedFile: () => void;
+  removeSelectedFile: () => void;
 }
 
 const useSelectFile = (): UseSelectFileResult => {
@@ -33,7 +29,7 @@ const useSelectFile = (): UseSelectFileResult => {
     return true;
   };
 
-  const removeSelecetedFile = () => {
+  const removeSelectedFile = () => {
     setSelectedFile(null);
     setErrorMessage(null);
   };
@@ -69,7 +65,7 @@ const useSelectFile = (): UseSelectFileResult => {
     }
   };
 
-  return { selectedFile, errorMessage, onSelectFile, setSelectedFile, removeSelecetedFile };
+  return { selectedFile, errorMessage, onSelectFile, removeSelectedFile };
 };
 
 export default useSelectFile;
