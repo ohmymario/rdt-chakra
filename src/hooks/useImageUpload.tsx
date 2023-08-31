@@ -6,13 +6,20 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRef, useState } from 'react';
 
 export const useImageUpload = (communityData: Community) => {
-  // Image Upload / Input Ref
+  // Image Upload / Input Reference
   const selectedFileRef = useRef<HTMLInputElement>(null);
-  const { selectedFile, onSelectFile, errorMessage, removeSelectedFile } = useSelectFile();
+
+  // success/error/uploading states
+  const [error, setError] = useState<string | null>(null);
+  const [isUploadSuccessful, setIsUploadSuccessful] = useState<boolean>(false);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+
+  // handle file selection / where file is held in state
+  const { selectedFile, onSelectFile, resetSelectedFile } = useSelectFile();
 
   const { id } = communityData;
 
+  // going to cloud ☁️
   const uploadImageToStorage = async (selectedFile: string) => {
     const imageLocation = `communities/${id}/image`;
     const imageRef = ref(storage, imageLocation);
@@ -23,25 +30,39 @@ export const useImageUpload = (communityData: Community) => {
     });
   };
 
+  // handle errors
+  // TODO: refactor this to handle firebase errors
+  const handleCatchError = (error: unknown) => {
+    if (error instanceof Error) {
+      setError(error.message);
+    } else {
+      setError('An unknown error occurred. Please try again later.');
+    }
+  };
+
+  // initiate upload
   const onUpdateImage = async () => {
     if (!selectedFile) return;
     setUploadingImage(true);
+    setError(null);
 
     try {
       await uploadImageToStorage(selectedFile);
+      resetSelectedFile();
+    } catch (error: unknown) {
+      handleCatchError(error);
+    } finally {
       setUploadingImage(false);
-      removeSelectedFile();
-    } catch (error) {
-      setUploadingImage(false);
-      console.error(error);
     }
   };
 
   return {
+    onSelectFile,
+    onUpdateImage,
     selectedFileRef,
     selectedFile,
-    onSelectFile,
     uploadingImage,
-    onUpdateImage,
+    isUploadSuccessful,
+    error,
   };
 };
