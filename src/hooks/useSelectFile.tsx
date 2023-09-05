@@ -4,7 +4,7 @@ interface UseSelectFileResult {
   selectedFile: string | null;
   errorMessage: string | null;
   onSelectFile: (e: ChangeEvent<HTMLInputElement>) => void;
-  removeSelectedFile: () => void;
+  resetSelectedFile: () => void;
 }
 
 const useSelectFile = (): UseSelectFileResult => {
@@ -29,7 +29,7 @@ const useSelectFile = (): UseSelectFileResult => {
     return true;
   };
 
-  const removeSelectedFile = () => {
+  const resetSelectedFile = () => {
     setSelectedFile(null);
     setErrorMessage(null);
   };
@@ -65,7 +65,7 @@ const useSelectFile = (): UseSelectFileResult => {
     }
   };
 
-  return { selectedFile, errorMessage, onSelectFile, removeSelectedFile };
+  return { selectedFile, errorMessage, onSelectFile, resetSelectedFile };
 };
 
 export default useSelectFile;
