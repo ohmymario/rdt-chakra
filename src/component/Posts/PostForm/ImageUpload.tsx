@@ -1,46 +1,50 @@
-import { Button, Flex, Image, Stack } from '@chakra-ui/react';
-import { FunctionComponent, useRef } from 'react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Button, Flex, Image, Spacer, Stack } from '@chakra-ui/react';
+import { useRef } from 'react';
 import { tabLabels } from '../NewPostForm';
 
 interface ImageUploadProps {
   selectedFile: string | null;
-  setSelectedFile: (file: string | null) => void;
-  onSelectImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  resetSelectedFile: () => void;
   setActiveTab: (tab: tabLabels) => void;
+  errorMessage: string | null;
 }
 
-const ImageUpload: FunctionComponent<ImageUploadProps> = (props) => {
-  const { onSelectImage, setActiveTab, selectedFile, setSelectedFile } = props;
+const inputContainerStyles = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+  border: '1px solid',
+  borderColor: 'gray.200',
+  width: '100%',
+  borderRadius: 4,
+};
+
+const inputStyles = {
+  display: 'none',
+  visibility: 'hidden',
+  opacity: 0,
+  height: 0,
+  width: 0,
+};
+
+const ImageUpload = (props: ImageUploadProps) => {
+  const { onSelectFile, selectedFile, resetSelectedFile, setActiveTab, errorMessage } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Listen for Button Click
-  const handleInputClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const ActiveTabPost = () => setActiveTab('Post');
-  const removeSelectedFile = () => setSelectedFile(null);
-
-  const inputContainerStyles = {
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    border: '1px solid',
-    borderColor: 'gray.200',
-    width: '100%',
-    borderRadius: 4,
-  };
+  const handleUploadInput = () => fileInputRef.current?.click();
 
   return (
     <Flex direction='column' justify='center' align='center' width='100%'>
       {selectedFile ? (
         <>
-          <Image src={selectedFile} alt='selected' style={{ maxWidth: '400', maxHeight: '400px' }} />
-          <Stack direction='row' spacing={4} mt={4}>
-            <Button height='28px' onClick={() => ActiveTabPost()}>
+          <Image src={selectedFile} alt='User selected image for upload' maxW='400px' maxH='400px' />
+          <Spacer />
+          <Stack direction='row' spacing={4} mt={6}>
+            <Button height='28px' aria-label='Go back to post editing' onClick={() => setActiveTab('Post')}>
               Back to Post
             </Button>
-            <Button variant='outline' height='28px' onClick={() => removeSelectedFile()}>
+            <Button height='28px' variant='outline' aria-label='Remove selected image' onClick={resetSelectedFile}>
               Remove
             </Button>
           </Stack>
@@ -50,13 +54,14 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = (props) => {
           <Flex {...inputContainerStyles}>
             <input
               ref={fileInputRef}
+              aria-label='Select an image file to upload'
               type='file'
               accept='image/jpeg, image/png'
-              onChange={(e) => onSelectImage(e)}
+              onChange={onSelectFile}
               hidden
-              style={{ display: 'none', visibility: 'hidden', opacity: 0, height: 0, width: 0 }}
+              {...inputStyles}
             />
-            <Button variant='outline' height='28px' onClick={() => handleInputClick()}>
+            <Button height='28px' variant='outline' aria-label='Upload an image' onClick={handleUploadInput}>
               Upload
             </Button>
           </Flex>
@@ -67,3 +72,13 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = (props) => {
 };
 
 export default ImageUpload;
+
+// {
+//   errorMessage && (
+//     <Alert status='error' mb={4} justifyContent='center'>
+//       <AlertIcon />
+//       <AlertTitle>Error!</AlertTitle>
+//       <AlertDescription>{errorMessage}</AlertDescription>
+//     </Alert>
+//   );
+// }
