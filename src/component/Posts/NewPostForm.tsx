@@ -65,7 +65,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const { selectedFile, onSelectFile, setSelectedFile } = useSelectFile();
+  const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
 
   // Submit Post to Firebase
   const handleCreatePost = async () => {
@@ -132,12 +132,15 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         )}
 
         {activeTab === 'Image & Video' && (
-          <ImageUpload
-            onSelectImage={onSelectFile}
-            selectedFile={selectedFile}
-            setActiveTab={setActiveTab}
-            setSelectedFile={setSelectedFile}
-          />
+          <>
+            <ImageUpload
+              selectedFile={selectedFile}
+              onSelectFile={onSelectFile}
+              resetSelectedFile={resetSelectedFile}
+              setActiveTab={setActiveTab}
+              errorMessage={errorMessage}
+            />
+          </>
         )}
         {activeTab === 'Link' && <Text>Link Tab</Text>}
       </Flex>

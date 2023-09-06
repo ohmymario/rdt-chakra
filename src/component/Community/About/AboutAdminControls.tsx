@@ -56,7 +56,7 @@ const AboutAdminControls = (props: AboutAdminControlsProps) => {
           ref={selectedFileRef}
           type='file'
           accept='image/jpeg, image/png'
-          onChange={(e) => onSelectFile(e)}
+          onChange={onSelectFile}
           hidden
         />
       </Stack>
