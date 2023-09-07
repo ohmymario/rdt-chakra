@@ -1,17 +1,8 @@
-import {
-  Alert,
-  AlertDescription,
-  AlertIcon,
-  AlertTitle,
-  Button,
-  Flex,
-  Image,
-  Spacer,
-  Spinner,
-  Stack,
-} from '@chakra-ui/react';
+import { Button, Flex, Image, Spacer, Stack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import { tabLabels } from '../NewPostForm';
+import ImageUploadAlert from './ImageUploadAlert';
+import ImageUploadLoading from './ImageUploadLoading';
 
 interface ImageUploadProps {
   selectedFile: string | null;
@@ -62,18 +53,10 @@ const ImageUpload = (props: ImageUploadProps) => {
 
   return (
     <Flex direction='column' justify='center' align='center' width='100%'>
-      {errorMessage && (
-        <Alert status='error' mb={4} justifyContent='center'>
-          <AlertIcon />
-          <AlertTitle>Error!</AlertTitle>
-          <AlertDescription>{errorMessage}</AlertDescription>
-        </Alert>
-      )}
+      {errorMessage && <ImageUploadAlert errorMessage={errorMessage} />}
 
       {isLoading ? (
-        <Flex justifyContent='center' alignItems='center' height='400px'>
-          <Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />
-        </Flex>
+        <ImageUploadLoading />
       ) : selectedFile ? (
         <>
           <Image src={selectedFile} alt='User selected image for upload' maxW='400px' maxH='400px' />
