@@ -1,8 +1,14 @@
-import { Button, Flex, Image, Spacer, Stack } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
+import { Flex } from '@chakra-ui/react';
+
+// Types
 import { tabLabels } from '../NewPostForm';
+
+// Components
 import ImageUploadAlert from './ImageUploadAlert';
+import ImageUploadInput from './ImageUploadInput';
 import ImageUploadLoading from './ImageUploadLoading';
+import ImageUploadPreview from './ImageUploadPreview';
 
 interface ImageUploadProps {
   selectedFile: string | null;
@@ -12,33 +18,10 @@ interface ImageUploadProps {
   errorMessage: string | null;
 }
 
-const inputContainerStyles = {
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: 20,
-  border: '1px solid',
-  borderColor: 'gray.200',
-  width: '100%',
-  borderRadius: 4,
-};
-
-const inputStyles = {
-  display: 'none',
-  visibility: 'hidden',
-  opacity: 0,
-  height: 0,
-  width: 0,
-};
-
 const ImageUpload = (props: ImageUploadProps) => {
   const { onSelectFile, selectedFile, resetSelectedFile, setActiveTab, errorMessage } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const clickFileInput = () => {
-    fileInputRef.current?.click();
-  };
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsLoading(true);
@@ -51,43 +34,34 @@ const ImageUpload = (props: ImageUploadProps) => {
     }
   }, [selectedFile]);
 
+  const renderContent = () => {
+    if (isLoading) {
+      return <ImageUploadLoading />;
+    }
+
+    if (selectedFile) {
+      return (
+        <ImageUploadPreview
+          selectedFile={selectedFile}
+          resetSelectedFile={resetSelectedFile}
+          setActiveTab={setActiveTab}
+        />
+      );
+    }
+
+    return (
+      <ImageUploadInput
+        fileInputRef={fileInputRef}
+        handleFileSelection={handleFileSelection}
+        clickFileInput={() => fileInputRef.current?.click()}
+      />
+    );
+  };
+
   return (
     <Flex direction='column' justify='center' align='center' width='100%'>
       {errorMessage && <ImageUploadAlert errorMessage={errorMessage} />}
-
-      {isLoading ? (
-        <ImageUploadLoading />
-      ) : selectedFile ? (
-        <>
-          <Image src={selectedFile} alt='User selected image for upload' maxW='400px' maxH='400px' />
-          <Spacer />
-          <Stack direction='row' spacing={4} mt={6}>
-            <Button height='28px' aria-label='Go back to post editing' onClick={() => setActiveTab('Post')}>
-              Back to Post
-            </Button>
-            <Button height='28px' variant='outline' aria-label='Remove selected image' onClick={resetSelectedFile}>
-              Remove
-            </Button>
-          </Stack>
-        </>
-      ) : (
-        <>
-          <Flex {...inputContainerStyles}>
-            <input
-              ref={fileInputRef}
-              aria-label='Select an image file to upload'
-              type='file'
-              accept='image/jpeg, image/png'
-              onChange={handleFileSelection}
-              hidden
-              {...inputStyles}
-            />
-            <Button height='28px' variant='outline' aria-label='Upload an image' onClick={clickFileInput}>
-              Upload
-            </Button>
-          </Flex>
-        </>
-      )}
+      {renderContent()}
     </Flex>
   );
 };
