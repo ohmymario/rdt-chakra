@@ -1,5 +1,5 @@
 import { Button, Image, Spacer, Stack } from '@chakra-ui/react';
-import { tabLabels } from '../NewPostForm';
+import { tabLabels } from '@/component/Posts/NewPostForm';
 
 interface ImageUploadPreviewProps {
   selectedFile: string;
