@@ -2,7 +2,7 @@ import { Alert, AlertIcon, Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
-import ImageUpload from './PostForm/ImageUpload';
+import ImageUpload from './PostForm/ImageUpload/ImageUpload';
 import TextInputs from './PostForm/TextInputs';
 import TabItem from './TabItem';
 
