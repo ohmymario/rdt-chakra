@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
 
 // Types
-import { tabLabels } from '../NewPostForm';
+import { tabLabels } from '../../NewPostForm';
 
 // Components
 import ImageUploadAlert from './ImageUploadAlert';
