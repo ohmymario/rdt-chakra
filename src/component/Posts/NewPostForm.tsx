@@ -3,7 +3,7 @@ import { FunctionComponent, useState } from 'react';
 
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
-import TextInputs from './PostForm/TextInputs';
+import TextInputs from './PostForm/TextInputs/TextInputs';
 import TabItem from './TabItem';
 
 //Icons
@@ -67,8 +67,13 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [error, setError] = useState<boolean>(false);
   const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
 
+  const resetError = () => setError(false);
+
   // Submit Post to Firebase
   const handleCreatePost = async () => {
+    resetError();
+    setLoading(true);
+
     const { communityId } = router.query;
     const { title, body } = textInput;
     const { uid, email } = user;
@@ -84,8 +89,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       voteStatus: 1,
       createdAt: serverTimestamp() as Timestamp,
     };
-
-    setLoading(true);
 
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
@@ -114,6 +117,35 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
 
+  const renderTabSelector = () => {
+    if (activeTab === 'Post') {
+      return (
+        <TextInputs
+          textInput={textInput}
+          handleCreatePost={handleCreatePost}
+          onTextChange={onTextChange}
+          loading={loading}
+        />
+      );
+    }
+
+    if (activeTab === 'Image & Video') {
+      return (
+        <ImageUpload
+          selectedFile={selectedFile}
+          onSelectFile={onSelectFile}
+          resetSelectedFile={resetSelectedFile}
+          setActiveTab={setActiveTab}
+          errorMessage={errorMessage}
+        />
+      );
+    }
+
+    if (activeTab === 'Link') {
+      return <Text>Link Tab</Text>;
+    }
+  };
+
   return (
     <Flex direction='column' bg='white' borderRadius={4} w='100%'>
       <Flex>
@@ -121,29 +153,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           <TabItem tab={tab} key={index} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
         ))}
       </Flex>
-      <Flex p={4}>
-        {activeTab === 'Post' && (
-          <TextInputs
-            textInput={textInput}
-            handleCreatePost={handleCreatePost}
-            onTextChange={onTextChange}
-            loading={loading}
-          />
-        )}
-
-        {activeTab === 'Image & Video' && (
-          <>
-            <ImageUpload
-              selectedFile={selectedFile}
-              onSelectFile={onSelectFile}
-              resetSelectedFile={resetSelectedFile}
-              setActiveTab={setActiveTab}
-              errorMessage={errorMessage}
-            />
-          </>
-        )}
-        {activeTab === 'Link' && <Text>Link Tab</Text>}
-      </Flex>
+      <Flex p={4}>{renderTabSelector()}</Flex>
       {error && (
         <Alert status='error' display='flex' justifyContent='center'>
           <AlertIcon />
