@@ -93,7 +93,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   // Submit Post to Firebase
   const handleCreatePost = async () => {
     resetError();
-    setLoading(true);
+    setLoadingState('Post', true);
 
     const { communityId } = router.query;
     const { title, body } = textInput;
@@ -120,7 +120,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       setError(true);
     }
 
-    setLoading(false);
+    setLoadingState('Post', false);
   };
 
   // ActiveTab Post
@@ -136,7 +136,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           textInput={textInput}
           handleCreatePost={handleCreatePost}
           onTextChange={onTextChange}
-          loading={loading}
+          loading={loadingStates.Post}
         />
       );
     }
