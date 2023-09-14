@@ -63,9 +63,21 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
-  const [loading, setLoading] = useState<boolean>(false);
+  // const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
+
+  const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
+    Post: false,
+    'Image & Video': false,
+    Link: false,
+    Poll: false,
+    Talk: false,
+  });
+
+  const setLoadingState = (tab: tabLabels, state: boolean) => {
+    setLoadingStates((prev) => ({ ...prev, [tab]: state }));
+  };
 
   const resetError = () => setError(false);
 
