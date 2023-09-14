@@ -81,6 +81,15 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   const resetError = () => setError(false);
 
+  const handleUploadImage = async (docRef: DocumentReference<DocumentData>) => {
+    if (!selectedFile) return new Error('No file selected');
+
+    const imageRef = ref(storage, `posts/${docRef.id}/image`);
+    await uploadString(imageRef, selectedFile, 'data_url');
+    const downloadURL = await getDownloadURL(imageRef);
+    await updateDoc(docRef, { imageURL: downloadURL });
+  };
+
   // Submit Post to Firebase
   const handleCreatePost = async () => {
     resetError();
@@ -104,16 +113,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
-
-      if (selectedFile) {
-        const imageRef = ref(storage, `posts/${postDocRef.id}/image`);
-        await uploadString(imageRef, selectedFile, 'data_url');
-        const downloadURL = await getDownloadURL(imageRef);
-
-        await updateDoc(postDocRef, {
-          imageURL: downloadURL,
-        });
-      }
+      if (selectedFile) await handleUploadImage(postDocRef);
       router.back();
     } catch (error) {
       console.error('Error adding Post: ', error);
