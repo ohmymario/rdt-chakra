@@ -6,6 +6,9 @@ const flexContainerStyles = {
   justifyContent: 'center',
   alignItems: 'center',
   height: '400px',
+  border: '1px solid',
+  borderColor: 'gray.200',
+  width: '100%',
 };
 
 const spinnerStyles = {
