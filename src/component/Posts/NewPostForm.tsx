@@ -72,7 +72,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
-  const [error, setError] = useState<string | null>(null); // Updated to store error message
+  const [error, setError] = useState<string | null>(null);
   const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
 
   const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
@@ -112,7 +112,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const handleUploadImage = async (docRef: DocumentReference<DocumentData>) => {
     setLoadingState('Image & Video', true);
 
-    // Check if file is selected
     if (!selectedFile) {
       const errorMessage = 'No file selected';
       setError(errorMessage);
@@ -138,7 +137,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     }
   };
 
-  // Submit Post to Firebase
   const handleCreatePost = async () => {
     resetError();
     setLoadingState('Post', true);
@@ -174,7 +172,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           textInput={textInput}
           handleCreatePost={handleCreatePost}
           onTextChange={onTextChange}
-          loading={loadingStates.Post}
+          loading={loadingStates['Post']}
         />
       );
     }
@@ -187,13 +185,13 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
           errorMessage={errorMessage}
-          // loading={loadingStates['Image & Video']}
+          loading={loadingStates['Image & Video']}
         />
       );
     }
 
     if (activeTab === 'Link') {
-      return <Text>Link Tab</Text>;
+      return <Text>Link Tab Coming Soon</Text>;
     }
   };
 
