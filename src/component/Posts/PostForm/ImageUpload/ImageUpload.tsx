@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
 import { Flex } from '@chakra-ui/react';
+import { useRef } from 'react';
 
 // Types
 import { tabLabels } from '../../NewPostForm';
@@ -16,26 +16,19 @@ interface ImageUploadProps {
   resetSelectedFile: () => void;
   setActiveTab: (tab: tabLabels) => void;
   errorMessage: string | null;
+  loading: boolean;
 }
 
 const ImageUpload = (props: ImageUploadProps) => {
-  const { onSelectFile, selectedFile, resetSelectedFile, setActiveTab, errorMessage } = props;
+  const { selectedFile, onSelectFile, resetSelectedFile, setActiveTab, errorMessage, loading } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsLoading(true);
     onSelectFile(e);
   };
 
-  useEffect(() => {
-    if (selectedFile) {
-      setIsLoading(false);
-    }
-  }, [selectedFile]);
-
   const renderContent = () => {
-    if (isLoading) {
+    if (loading) {
       return <ImageUploadLoading />;
     }
 
