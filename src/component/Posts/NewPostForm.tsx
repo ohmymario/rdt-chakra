@@ -15,10 +15,19 @@ import { IconType } from 'react-icons/lib';
 
 import { firestore, storage } from '@/firebase/clientApp';
 import { User as FirebaseUser } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp, Timestamp, updateDoc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  DocumentData,
+  DocumentReference,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRouter } from 'next/router';
 import useSelectFile from '@/hooks/useSelectFile';
+import NewPostFormError from './NewPostFormError';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -63,8 +72,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
-  // const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null); // Updated to store error message
   const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
 
   const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
@@ -79,22 +87,9 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoadingStates((prev) => ({ ...prev, [tab]: state }));
   };
 
-  const resetError = () => setError(false);
+  const resetError = () => setError(null);
 
-  const handleUploadImage = async (docRef: DocumentReference<DocumentData>) => {
-    if (!selectedFile) return new Error('No file selected');
-
-    const imageRef = ref(storage, `posts/${docRef.id}/image`);
-    await uploadString(imageRef, selectedFile, 'data_url');
-    const downloadURL = await getDownloadURL(imageRef);
-    await updateDoc(docRef, { imageURL: downloadURL });
-  };
-
-  // Submit Post to Firebase
-  const handleCreatePost = async () => {
-    resetError();
-    setLoadingState('Post', true);
-
+  const createPostObject = () => {
     const { communityId } = router.query;
     const { title, body } = textInput;
     const { uid, email } = user;
@@ -111,13 +106,56 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       createdAt: serverTimestamp() as Timestamp,
     };
 
+    return newPost;
+  };
+
+  const handleUploadImage = async (docRef: DocumentReference<DocumentData>) => {
+    setLoadingState('Image & Video', true);
+
+    // Check if file is selected
+    if (!selectedFile) {
+      const errorMessage = 'No file selected';
+      setError(errorMessage);
+      setLoadingState('Image & Video', false);
+      return;
+    }
+
+    try {
+      const imageRef = ref(storage, `posts/${docRef.id}/image`);
+      await uploadString(imageRef, selectedFile, 'data_url');
+      const downloadURL = await getDownloadURL(imageRef);
+      await updateDoc(docRef, { imageURL: downloadURL });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const errorMessage = `Error uploading image: ${error.message}`;
+        setError(errorMessage);
+      } else {
+        const errorMessage = 'An error occurred while uploading the image.';
+        setError(errorMessage);
+      }
+    } finally {
+      setLoadingState('Image & Video', false);
+    }
+  };
+
+  // Submit Post to Firebase
+  const handleCreatePost = async () => {
+    resetError();
+    setLoadingState('Post', true);
+
+    const newPost = createPostObject();
+
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
       if (selectedFile) await handleUploadImage(postDocRef);
       router.back();
-    } catch (error) {
-      console.error('Error adding Post: ', error);
-      setError(true);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        const errorMessage = `Error creating post: ${error.message}`;
+        setError(errorMessage);
+      } else {
+        console.error('Error adding Post: ', error);
+      }
     }
 
     setLoadingState('Post', false);
@@ -149,6 +187,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
           errorMessage={errorMessage}
+          // loading={loadingStates['Image & Video']}
         />
       );
     }
@@ -166,12 +205,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         ))}
       </Flex>
       <Flex p={4}>{renderTabSelector()}</Flex>
-      {error && (
-        <Alert status='error' display='flex' justifyContent='center'>
-          <AlertIcon />
-          <Text>Error creating post</Text>
-        </Alert>
-      )}
+      {error && <NewPostFormError error={error} />}
     </Flex>
   );
 };
