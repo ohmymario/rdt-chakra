@@ -16,7 +16,7 @@ import { Post } from '@/atoms/postsAtoms';
 import About from '@/component/Community/About/About';
 import PageContent from '@/component/Layout/PageContent';
 import Comments from '@/component/Posts/Comments/Comments';
-import PostItem from '@/component/Posts/PostItem';
+import PostItem from '@/component/Posts/PostItem/PostItem';
 interface PostPageProps {}
 
 const PostPage: FunctionComponent<PostPageProps> = (props) => {

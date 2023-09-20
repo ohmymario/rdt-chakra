@@ -3,7 +3,7 @@ import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
-import PostItem from '@/component/Posts/PostItem';
+import PostItem from '@/component/Posts/PostItem/PostItem';
 import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
 import PostsError from '@/component/Posts/PostsError';
 import { auth } from '@/firebase/clientApp';

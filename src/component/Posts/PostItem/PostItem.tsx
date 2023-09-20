@@ -31,6 +31,7 @@ import {
   IoBookmarkOutline,
 } from 'react-icons/io5';
 import { FaReddit } from 'react-icons/fa';
+import PostItemVoting from './PostItemVoting';
 
 interface PostItemProps {
   post: Post;
@@ -128,15 +129,6 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     cursor: singlePostPage ? 'unset' : 'pointer',
   };
 
-  const votingStyles = {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    w: '40px',
-    p: 2,
-    bg: singlePostPage ? 'none' : 'gray.100',
-    borderRadius: singlePostPage ? '0' : '3px 0px 0px 3px',
-  };
-
   const actionStyles = {
     align: 'center',
     gap: 1.5,
@@ -154,24 +146,14 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         </Alert>
       )}
       {/* VOTING COLUMN */}
-      <Flex {...votingStyles} direction='column'>
-        <Icon
-          as={userVoteValue === 1 ? IoArrowUpCircleSharp : IoArrowUpCircleOutline}
-          color={userVoteValue === 1 ? 'brand.100' : 'gray.400'}
-          fontSize={22}
-          onClick={(event) => onVote(event, post, 1, communityId)}
-          cursor='pointer'
-        />
-        <Text>{voteStatus}</Text>
-        <Icon
-          as={userVoteValue === -1 ? IoArrowDownCircleSharp : IoArrowDownCircleOutline}
-          color={userVoteValue === -1 ? '#4379ff' : 'gray.400'}
-          fontSize={22}
-          onClick={(event) => onVote(event, post, -1, communityId)}
-          cursor='pointer'
-        />
-      </Flex>
-
+      <PostItemVoting
+        post={post}
+        userVoteValue={userVoteValue}
+        onVote={onVote}
+        communityId={communityId}
+        singlePostPage={singlePostPage}
+        voteStatus={voteStatus}
+      />
       {/* POST TEXT */}
       <VStack align='flex-start' flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
         <VStack align='flex-start' spacing={2} ml='4px'>

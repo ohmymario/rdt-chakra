@@ -5,7 +5,7 @@ import usePostLoader from '@/hooks/usePostLoader';
 import { Stack, Text } from '@chakra-ui/react';
 import { FunctionComponent, useEffect, useMemo } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import PostItem from './PostItem';
+import PostItem from './PostItem/PostItem';
 import PostLoaderSkeleton from './PostLoaderSkeleton';
 
 interface PostsProps {
