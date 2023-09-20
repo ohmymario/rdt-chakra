@@ -14,23 +14,17 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
-import Link from 'next/link';
 
 // Icons
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BsChat, BsDot } from 'react-icons/bs';
-import { SlPresent } from 'react-icons/sl';
-import {
-  IoArrowDownCircleOutline,
-  IoArrowDownCircleSharp,
-  IoArrowRedoOutline,
-  IoArrowUpCircleOutline,
-  IoArrowUpCircleSharp,
-  IoBookmarkOutline,
-} from 'react-icons/io5';
 import { FaReddit } from 'react-icons/fa';
+import { IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
+import { SlPresent } from 'react-icons/sl';
+import PostItemError from './PostItemError';
 import PostItemVoting from './PostItemVoting';
 
 interface PostItemProps {
@@ -93,7 +87,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
   const singlePostPage = !onSelectPost;
   const [loadingImage, setLoadingImage] = useState<boolean>(true);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleDelete = async (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // only one delete request at a time
@@ -111,8 +105,12 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
       if (singlePostPage) {
         router.push(`/r/${communityId}`);
       }
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Failed to delete post');
+      }
     }
 
     setLoadingDelete(false);
@@ -139,12 +137,8 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
   return (
     <Flex {...containerStyles} onClick={() => onSelectPost && onSelectPost(post)}>
-      {error && (
-        <Alert status='error' display='flex' justifyContent='center'>
-          <AlertIcon />
-          <Text>{error}</Text>
-        </Alert>
-      )}
+      {/* ERROR */}
+      {error && <PostItemError error={error} />}
       {/* VOTING COLUMN */}
       <PostItemVoting
         post={post}
