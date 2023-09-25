@@ -2,6 +2,7 @@ import { Post } from '@/atoms/postsAtoms';
 import {
   Alert,
   AlertIcon,
+  Box,
   Flex,
   Grid,
   Heading,
@@ -25,6 +26,7 @@ import { FaReddit } from 'react-icons/fa';
 import { IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
 import { SlPresent } from 'react-icons/sl';
 import PostItemError from './PostItemError';
+import PostItemImage from './PostItemImage';
 import PostItemVoting from './PostItemVoting';
 
 interface PostItemProps {
@@ -183,19 +185,12 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
 
         {/* POST IMAGE */}
         {imageURL && (
-          <Grid justifyContent='center' alignItems='center' w='100%' pl='4px'>
-            <Skeleton isLoaded={!loadingImage}>
-              <Image
-                boxSize='100%'
-                objectFit='contain'
-                src={imageURL}
-                alt={`image of ${title}`}
-                onLoad={() => {
-                  setLoadingImage(false);
-                }}
-              />
-            </Skeleton>
-          </Grid>
+          <PostItemImage
+            imageURL={imageURL}
+            title={title}
+            loadingImage={loadingImage}
+            setLoadingImage={setLoadingImage}
+          />
         )}
 
         {/* POST ACTIONS */}
