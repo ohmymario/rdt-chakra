@@ -183,7 +183,6 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
           </Text>
         </VStack>
 
-        {/* POST IMAGE */}
         {imageURL && (
           <PostItemImage
             imageURL={imageURL}

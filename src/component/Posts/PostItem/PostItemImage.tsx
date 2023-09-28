@@ -1,5 +1,5 @@
 import { Flex, Grid, Image, Skeleton } from '@chakra-ui/react';
-import { SetStateAction } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
 
 interface PostItemImageProps {
   imageURL: string | undefined;
@@ -10,17 +10,28 @@ interface PostItemImageProps {
 
 const PostItemImage = (props: PostItemImageProps) => {
   const { imageURL, title, loadingImage, setLoadingImage } = props;
+  const [imageError, setImageError] = useState<boolean>(false);
+
+  // Reset image error state when imageURL changes
+  // so if there is an error on a previous image, it won't show up on the next image
+  useEffect(() => {
+    setImageError(false);
+  }, [imageURL]);
 
   return (
     <Flex justifyContent='center' alignItems='center' w='100%' pl='4px'>
       <Skeleton isLoaded={!loadingImage} width='100%'>
-        {imageURL ? (
+        {imageURL && !imageError ? (
           <Image
             boxSize='100%'
             objectFit='contain'
             src={imageURL}
             alt={`image of ${title}`}
             onLoad={() => {
+              setLoadingImage(false);
+            }}
+            onError={() => {
+              setImageError(true);
               setLoadingImage(false);
             }}
           />
