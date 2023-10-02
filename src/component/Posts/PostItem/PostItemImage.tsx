@@ -18,7 +18,7 @@ const PostItemImage = (props: PostItemImageProps) => {
 
   return (
     <Flex justifyContent='center' alignItems='center' w='100%' pl='4px'>
-      <Skeleton isLoaded={!loadingImage} width='100%'>
+      <Skeleton isLoaded={!loadingImage} width='100%' fadeDuration={1}>
         {imageURL && !imageError ? (
           <Image
             boxSize='100%'
