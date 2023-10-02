@@ -22,6 +22,7 @@ const PostItemImage = (props: PostItemImageProps) => {
         {imageURL && !imageError ? (
           <Image
             boxSize='100%'
+            minH={250}
             objectFit='contain'
             src={imageURL}
             alt={`image of ${title}`}
