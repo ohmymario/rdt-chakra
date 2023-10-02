@@ -26,6 +26,7 @@ import { FaReddit } from 'react-icons/fa';
 import { IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
 import { SlPresent } from 'react-icons/sl';
 import PostItemError from './PostItemError';
+import PostItemHeader from './PostItemHeader';
 import PostItemImage from './PostItemImage';
 import PostItemVoting from './PostItemVoting';
 
@@ -152,36 +153,16 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
       />
       {/* POST TEXT */}
       <VStack align='flex-start' flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
-        <VStack align='flex-start' spacing={2} ml='4px'>
-          <HStack fontSize={'xs'} spacing={0.6} align='center'>
-            {homePage && (
-              <>
-                {communityImageURL ? (
-                  <Image boxSize='18px' borderRadius='full' src={communityImageURL} alt={title} mr={2} />
-                ) : (
-                  <Icon as={FaReddit} fontSize='18pt' mr={1} color='blue.500' />
-                )}
-                <Link href={`/r/${communityId}`}>
-                  <Text
-                    fontWeight={'600'}
-                    _hover={{ textDecoration: 'underline' }}
-                    onClick={(e) => e.stopPropagation()}
-                  >{`r/${communityId}`}</Text>
-                </Link>
-                <Icon as={BsDot} color='gray.500' fontSize={8} />
-              </>
-            )}
-            <Text>Posted by u/{creatorDisplayName}</Text>
-            <Text>{timestampToRelativeString(createdAt)}</Text>
-          </HStack>
-
-          <Heading fontSize='lg' as={'h3'} fontWeight={'600'}>
-            {title}
-          </Heading>
-          <Text fontSize={'s'} noOfLines={[4]} maxH='376px'>
-            {body}
-          </Text>
-        </VStack>
+        <PostItemHeader
+          communityId={communityId}
+          communityImageURL={communityImageURL}
+          creatorDisplayName={creatorDisplayName}
+          title={title}
+          body={body}
+          homePage={homePage}
+          createdAt={createdAt}
+          timestampToRelativeString={timestampToRelativeString}
+        />
 
         {imageURL && (
           <PostItemImage
