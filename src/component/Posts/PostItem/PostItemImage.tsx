@@ -10,12 +10,10 @@ interface PostItemImageProps {
 
 const PostItemImage = (props: PostItemImageProps) => {
   const { imageURL, title, loadingImage, setLoadingImage } = props;
-  const [imageError, setImageError] = useState<boolean>(false);
+  const [imageError, setImageError] = useState<string | null>(null);
 
-  // Reset image error state when imageURL changes
-  // so if there is an error on a previous image, it won't show up on the next image
   useEffect(() => {
-    setImageError(false);
+    setImageError(null);
   }, [imageURL]);
 
   return (
@@ -27,11 +25,9 @@ const PostItemImage = (props: PostItemImageProps) => {
             objectFit='contain'
             src={imageURL}
             alt={`image of ${title}`}
-            onLoad={() => {
-              setLoadingImage(false);
-            }}
+            onLoad={() => setLoadingImage(false)}
             onError={() => {
-              setImageError(true);
+              setImageError("We couldn't load this image, please try again later.");
               setLoadingImage(false);
             }}
           />
@@ -46,7 +42,7 @@ const PostItemImage = (props: PostItemImageProps) => {
             borderColor='gray.500'
             borderRadius={4}
           >
-            No Image Found
+            {imageError || 'No Image Found'}
           </Grid>
         )}
       </Skeleton>
