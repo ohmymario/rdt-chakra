@@ -25,6 +25,7 @@ import { BsChat, BsDot } from 'react-icons/bs';
 import { FaReddit } from 'react-icons/fa';
 import { IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
 import { SlPresent } from 'react-icons/sl';
+import PostItemActions from './PostItemActions';
 import PostItemError from './PostItemError';
 import PostItemHeader from './PostItemHeader';
 import PostItemImage from './PostItemImage';
@@ -172,6 +173,14 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
             setLoadingImage={setLoadingImage}
           />
         )}
+
+        {/* POST ACTIONS COMPONENT */}
+        <PostItemActions
+          numberOfComments={numberOfComments}
+          loadingDelete={loadingDelete}
+          userIsCreator={userIsCreator}
+          handleDelete={handleDelete}
+        />
 
         {/* POST ACTIONS */}
         <HStack fontSize='xs' spacing={1} fontWeight={600} color='gray.500'>
