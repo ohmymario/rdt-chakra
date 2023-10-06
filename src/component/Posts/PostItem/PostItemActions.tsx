@@ -19,12 +19,21 @@ interface ActionItemProps {
   action?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => Promise<void>;
 }
 
+interface DeleteActionProps {
+  loadingDelete: boolean;
+  userIsCreator: boolean;
+  handleDelete: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => Promise<void>;
+}
+
 const actionStyles = {
   align: 'center',
   gap: 1.5,
   px: 1.5,
   py: 2,
   _hover: { bg: 'gray.200' },
+  cursor: 'pointer',
+};
+
 const ActionItem = (props: ActionItemProps) => {
   const { icon, text, action } = props;
   return (
@@ -35,10 +44,24 @@ const ActionItem = (props: ActionItemProps) => {
   );
 };
 
+const DeleteAction = (props: DeleteActionProps) => {
+  const { loadingDelete, userIsCreator, handleDelete } = props;
+
+  if (!userIsCreator) return null;
+
+  if (loadingDelete) {
+    return (
+      <Flex {...actionStyles} width='70px' justifyContent='center'>
+        <Spinner size='sm' color='gray.500' />
+      </Flex>
+    );
+  }
+
+  return <ActionItem icon={AiOutlineDelete} text='Delete' action={handleDelete} />;
 };
 
 const PostItemActions = (props: PostItemActionsProps) => {
-  const { numberOfComments, handleDelete, userIsCreator, loadingDelete } = props;
+  const { numberOfComments, loadingDelete, userIsCreator, handleDelete } = props;
 
   return (
     <HStack fontSize='xs' spacing={1} fontWeight={600} color='gray.500'>
@@ -46,36 +69,7 @@ const PostItemActions = (props: PostItemActionsProps) => {
       <ActionItem icon={SlPresent} text='Award' />
       <ActionItem icon={IoArrowRedoOutline} text='Share' />
       <ActionItem icon={IoBookmarkOutline} text='Save' />
-      <Flex {...actionStyles}>
-        <Icon as={BsChat} fontSize={20} />
-        <Text>{numberOfComments} Comments</Text>
-      </Flex>
-      <Flex {...actionStyles}>
-        <Icon as={SlPresent} fontSize={20} />
-        <Text>Award</Text>
-      </Flex>
-      <Flex {...actionStyles}>
-        <Icon as={IoArrowRedoOutline} fontSize={20} />
-        <Text>Share</Text>
-      </Flex>
-      <Flex {...actionStyles}>
-        <Icon as={IoBookmarkOutline} fontSize={20} />
-        <Text>Save</Text>
-      </Flex>
-      <Flex {...actionStyles} onClick={(e) => handleDelete(e)}>
-        {userIsCreator && (
-          <>
-            {loadingDelete ? (
-              <Spinner size='sm' color='gray.500' />
-            ) : (
-              <>
-                <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
-                <Text>Delete</Text>
-              </>
-            )}
-          </>
-        )}
-      </Flex>
+      <DeleteAction loadingDelete={loadingDelete} userIsCreator={userIsCreator} handleDelete={handleDelete} />
     </HStack>
   );
 };
