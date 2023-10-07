@@ -165,6 +165,7 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
           timestampToRelativeString={timestampToRelativeString}
         />
 
+        {/* POST IMAGE */}
         {imageURL && (
           <PostItemImage
             imageURL={imageURL}
@@ -174,47 +175,13 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
           />
         )}
 
-        {/* POST ACTIONS COMPONENT */}
+        {/* ACTIONS  */}
         <PostItemActions
           numberOfComments={numberOfComments}
           loadingDelete={loadingDelete}
           userIsCreator={userIsCreator}
           handleDelete={handleDelete}
         />
-
-        {/* POST ACTIONS */}
-        <HStack fontSize='xs' spacing={1} fontWeight={600} color='gray.500'>
-          <Flex {...actionStyles}>
-            <Icon as={BsChat} fontSize={20} />
-            <Text>{numberOfComments} Comments</Text>
-          </Flex>
-          <Flex {...actionStyles}>
-            <Icon as={SlPresent} fontSize={20} />
-            <Text>Award</Text>
-          </Flex>
-          <Flex {...actionStyles}>
-            <Icon as={IoArrowRedoOutline} fontSize={20} />
-            <Text>Share</Text>
-          </Flex>
-          <Flex {...actionStyles}>
-            <Icon as={IoBookmarkOutline} fontSize={20} />
-            <Text>Save</Text>
-          </Flex>
-          <Flex {...actionStyles} onClick={(e) => handleDelete(e)}>
-            {userIsCreator && (
-              <>
-                {loadingDelete ? (
-                  <Spinner size='sm' color='gray.500' />
-                ) : (
-                  <>
-                    <Icon as={AiOutlineDelete} fontSize={20} cursor='pointer' />
-                    <Text>Delete</Text>
-                  </>
-                )}
-              </>
-            )}
-          </Flex>
-        </HStack>
       </VStack>
     </Flex>
   );
