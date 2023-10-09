@@ -30,20 +30,25 @@ const actionStyles = {
   gap: 1.5,
   px: 1.5,
   py: 2,
-  _hover: { bg: 'gray.200' },
   cursor: 'pointer',
+  _hover: { bg: 'gray.200' },
 };
 
+// Generic Component for any action item
 const ActionItem = (props: ActionItemProps) => {
   const { icon, text, action } = props;
+
+  const conditionalProps = action ? { onClick: action } : {};
+
   return (
-    <Flex {...actionStyles} onClick={action}>
+    <Flex {...actionStyles} {...conditionalProps}>
       <Icon as={icon} fontSize={20} />
       <Text>{text}</Text>
     </Flex>
   );
 };
 
+// Delete Logic w/ loading state
 const DeleteAction = (props: DeleteActionProps) => {
   const { loadingDelete, userIsCreator, handleDelete } = props;
 
