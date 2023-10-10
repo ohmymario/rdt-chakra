@@ -1,30 +1,12 @@
-import { Post } from '@/atoms/postsAtoms';
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Flex,
-  Grid,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  Skeleton,
-  Spinner,
-  Text,
-  VStack,
-} from '@chakra-ui/react';
-import { Timestamp } from 'firebase/firestore';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FunctionComponent, useState } from 'react';
+import { Post } from '@/atoms/postsAtoms';
+import { Flex, FlexProps, StackProps, VStack } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+
+// Utils
+import timestampToRelativeString from '@/utils/timestampToRelativeString';
 
 // Icons
-import { AiOutlineDelete } from 'react-icons/ai';
-import { BsChat, BsDot } from 'react-icons/bs';
-import { FaReddit } from 'react-icons/fa';
-import { IoArrowRedoOutline, IoBookmarkOutline } from 'react-icons/io5';
-import { SlPresent } from 'react-icons/sl';
 import PostItemActions from './PostItemActions';
 import PostItemError from './PostItemError';
 import PostItemHeader from './PostItemHeader';
@@ -39,36 +21,6 @@ interface PostItemProps {
   onDeletePost: (post: Post) => Promise<boolean>;
   onSelectPost?: (post: Post) => void;
   homePage?: boolean;
-}
-
-// ChatGPT method to convert firebase timestamp to relative string
-function timestampToRelativeString(timestamp: Timestamp) {
-  const now = new Date();
-  const timeDifference = now.getTime() - timestamp.toDate().getTime();
-
-  const secondsInMs = 1000;
-  const minutesInMs = secondsInMs * 60;
-  const hoursInMs = minutesInMs * 60;
-  const daysInMs = hoursInMs * 24;
-  const weeksInMs = daysInMs * 7;
-  const monthsInMs = daysInMs * 30.44; // Using the average number of days in a month (365.25 / 12)
-
-  if (timeDifference < hoursInMs) {
-    const minutes = Math.round(timeDifference / minutesInMs);
-    return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
-  } else if (timeDifference < daysInMs) {
-    const hours = Math.round(timeDifference / hoursInMs);
-    return `${hours} hour${hours === 1 ? '' : 's'} ago`;
-  } else if (timeDifference < weeksInMs) {
-    const days = Math.round(timeDifference / daysInMs);
-    return `${days} day${days === 1 ? '' : 's'} ago`;
-  } else if (timeDifference < monthsInMs) {
-    const weeks = Math.round(timeDifference / weeksInMs);
-    return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
-  } else {
-    const months = Math.round(timeDifference / monthsInMs);
-    return `${months} month${months === 1 ? '' : 's'} ago`;
-  }
 }
 
 const PostItem: FunctionComponent<PostItemProps> = (props) => {
@@ -120,23 +72,23 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
     setLoadingDelete(false);
   };
 
-  const containerStyles = {
+  const containerStyles: FlexProps = {
     border: '1px solid',
     bg: 'white',
     borderColor: singlePostPage ? 'white' : 'gray.300',
     borderRadius: singlePostPage ? '4px 4px 0px 0px' : '4px',
+    cursor: singlePostPage ? 'unset' : 'pointer',
     _hover: {
       borderColor: singlePostPage ? 'none' : 'gray.500',
     },
-    cursor: singlePostPage ? 'unset' : 'pointer',
   };
 
-  const actionStyles = {
-    align: 'center',
-    gap: 1.5,
-    px: 1.5,
-    py: 2,
-    _hover: { bg: 'gray.200' },
+  const postContentStyles: StackProps = {
+    align: 'flex-start',
+    flexDir: 'column',
+    flexGrow: 1,
+    m: '8px 8px 2px 4px',
+    spacing: 2,
   };
 
   return (
@@ -153,7 +105,8 @@ const PostItem: FunctionComponent<PostItemProps> = (props) => {
         voteStatus={voteStatus}
       />
       {/* POST TEXT */}
-      <VStack align='flex-start' flexDir='column' flexGrow={1} m='8px 8px 2px 4px' spacing={2}>
+      <VStack {...postContentStyles}>
+        {/* POST HEADER */}
         <PostItemHeader
           communityId={communityId}
           communityImageURL={communityImageURL}
