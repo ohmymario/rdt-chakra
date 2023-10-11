@@ -11,7 +11,7 @@ export interface DirectoryMenuItem {
   ImageURL?: string;
 }
 
-interface DirectoryMenuState {
+export interface DirectoryMenuState {
   isOpen: boolean;
   selectedMenuItem: DirectoryMenuItem;
 }
