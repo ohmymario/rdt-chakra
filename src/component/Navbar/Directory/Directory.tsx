@@ -10,6 +10,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 import useDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
 import DirectoryImage from './DirectoryImage';
+import DirectoryIcon from './DirectoryIcon';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -50,23 +51,19 @@ const menuButtonStyle = {
 const Directory = (props: DirectoryProps) => {
   const { directoryState, toggleMenuOpen } = useDirectory();
 
+  const {
+    selectedMenuItem: { ImageURL, icon, iconColor, displayText, link },
+  } = directoryState;
+
   return (
     <Menu isOpen={directoryState.isOpen}>
       <MenuButton as={Button} {...menuButtonStyle} onClick={toggleMenuOpen}>
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
-            {directoryState.selectedMenuItem.ImageURL ? (
+            {ImageURL ? (
               <DirectoryImage directoryState={directoryState} />
             ) : (
-              <Icon
-                as={directoryState.selectedMenuItem.icon}
-                color={directoryState.selectedMenuItem.iconColor}
-                fontSize={24}
-                mr={{
-                  base: 1,
-                  md: 2,
-                }}
-              />
+              <DirectoryIcon directoryState={directoryState} />
             )}
 
             <Text
