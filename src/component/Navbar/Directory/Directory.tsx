@@ -9,6 +9,7 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 // set modal state
 import useDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
+import DirectoryImage from './DirectoryImage';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -55,16 +56,7 @@ const Directory = (props: DirectoryProps) => {
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
             {directoryState.selectedMenuItem.ImageURL ? (
-              <Image
-                src={directoryState.selectedMenuItem.ImageURL}
-                alt={`${directoryState.selectedMenuItem.displayText}`}
-                boxSize='24px'
-                borderRadius='full'
-                mr={{
-                  base: 1,
-                  md: 2,
-                }}
-              />
+              <DirectoryImage directoryState={directoryState} />
             ) : (
               <Icon
                 as={directoryState.selectedMenuItem.icon}
