@@ -1,16 +1,13 @@
 import { Icon } from '@chakra-ui/react';
-import { DirectoryMenuState } from '@/atoms/directoryMenuAtom';
+import { IconType } from 'react-icons/lib';
 
 interface DirectoryIconProps {
-  directoryState: DirectoryMenuState;
+  icon: IconType;
+  iconColor: string;
 }
 
 const DirectoryIcon = (props: DirectoryIconProps) => {
-  const { directoryState } = props;
-
-  const {
-    selectedMenuItem: { icon, iconColor },
-  } = directoryState;
+  const { icon, iconColor } = props;
 
   return (
     <Icon

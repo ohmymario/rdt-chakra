@@ -66,7 +66,7 @@ const Directory = (props: DirectoryProps) => {
             {ImageURL ? (
               <DirectoryImage ImageURL={ImageURL} displayText={displayText} />
             ) : (
-              <DirectoryIcon directoryState={directoryState} />
+              <DirectoryIcon icon={icon} iconColor={iconColor} />
             )}
 
             <DirectoryText displayText={displayText} />
