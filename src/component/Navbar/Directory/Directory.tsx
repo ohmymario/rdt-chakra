@@ -1,23 +1,19 @@
+// React & Next.js core
 import { Button, Flex, HStack, Menu, MenuButton, MenuList } from '@chakra-ui/react';
 
-// firebase
-import { User as FirebaseUser } from 'firebase/auth';
-
-// icons
+// Icons
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
-// set modal state
+// Custom Hooks
 import useDirectory from '@/hooks/useDirectory';
-import Communities from './Communities/Communities';
 
-// components
+// Sub-components
+import Communities from './Communities/Communities';
 import DirectoryIcon from './DirectoryIcon';
 import DirectoryImage from './DirectoryImage';
 import DirectoryText from './DirectoryText';
 
-interface DirectoryProps {
-  user: FirebaseUser | null | undefined;
-}
+interface DirectoryProps {}
 
 const menuButtonStyle = {
   bg: 'none',
