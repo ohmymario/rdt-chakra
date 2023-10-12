@@ -11,6 +11,7 @@ import useDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
 import DirectoryImage from './DirectoryImage';
 import DirectoryIcon from './DirectoryIcon';
+import DirectoryText from './DirectoryText';
 
 interface DirectoryProps {
   user: FirebaseUser | null | undefined;
@@ -66,18 +67,7 @@ const Directory = (props: DirectoryProps) => {
               <DirectoryIcon directoryState={directoryState} />
             )}
 
-            <Text
-              pt={1}
-              display={{
-                base: 'none',
-                md: 'none',
-                lg: 'block',
-              }}
-              fontWeight={600}
-              fontSize='10pt'
-            >
-              {directoryState.selectedMenuItem.displayText}
-            </Text>
+            <DirectoryText displayText={displayText} />
           </Flex>
           <ChevronDownIcon boxSize={5} color='gray.400' />
         </HStack>
