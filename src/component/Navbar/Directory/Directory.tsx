@@ -1,4 +1,4 @@
-import { Button, Flex, HStack, Icon, Image, Menu, MenuButton, MenuList, Text } from '@chakra-ui/react';
+import { Button, Flex, HStack, Menu, MenuButton, MenuList } from '@chakra-ui/react';
 
 // firebase
 import { User as FirebaseUser } from 'firebase/auth';
@@ -9,8 +9,10 @@ import { ChevronDownIcon } from '@chakra-ui/icons';
 // set modal state
 import useDirectory from '@/hooks/useDirectory';
 import Communities from './Communities/Communities';
-import DirectoryImage from './DirectoryImage';
+
+// components
 import DirectoryIcon from './DirectoryIcon';
+import DirectoryImage from './DirectoryImage';
 import DirectoryText from './DirectoryText';
 
 interface DirectoryProps {
@@ -62,7 +64,7 @@ const Directory = (props: DirectoryProps) => {
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
             {ImageURL ? (
-              <DirectoryImage directoryState={directoryState} />
+              <DirectoryImage ImageURL={ImageURL} displayText={displayText} />
             ) : (
               <DirectoryIcon directoryState={directoryState} />
             )}

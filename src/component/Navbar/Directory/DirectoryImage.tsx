@@ -2,7 +2,8 @@ import { Image } from '@chakra-ui/react';
 import { DirectoryMenuState } from '@/atoms/directoryMenuAtom';
 
 interface DirectoryImageProps {
-  directoryState: DirectoryMenuState;
+  ImageURL: string;
+  displayText: string;
 }
 
 const imageStyle = {
@@ -15,15 +16,11 @@ const imageStyle = {
 };
 
 const DirectoryImage = (props: DirectoryImageProps) => {
-  const { directoryState } = props;
-
-  const {
-    selectedMenuItem: { ImageURL, displayText },
-  } = directoryState;
+  const { ImageURL, displayText } = props;
 
   return (
     <>
-      <Image {...imageStyle} src={ImageURL} alt={`${displayText}`} />
+      <Image {...imageStyle} src={ImageURL} alt={displayText} />
     </>
   );
 };
