@@ -1,22 +1,27 @@
 import { Text } from '@chakra-ui/react';
 
-interface DirectoryTextProps {}
+interface DirectoryTextProps {
+  displayText: string;
+}
+
+const directoryStyle = {
+  pt: 1,
+  fontWeight: 600,
+  fontSize: '10pt',
+  display: {
+    base: 'none',
+    md: 'none',
+    lg: 'block',
+  },
+};
 
 const DirectoryText = (props: DirectoryTextProps) => {
+  const { displayText } = props;
+
   return (
-    <Text
-      pt={1}
-      display={{
-        base: 'none',
-        md: 'none',
-        lg: 'block',
-      }}
-      fontWeight={600}
-      fontSize='10pt'
-    >
-      {/* {directoryState.selectedMenuItem.displayText} */}
-      Display Text Here
-    </Text>
+    <>
+      <Text {...directoryStyle}>{displayText}</Text>
+    </>
   );
 };
 
