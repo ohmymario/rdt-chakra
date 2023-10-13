@@ -2,6 +2,7 @@ import { communitiesState } from '@/atoms/communitiesAtom';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FaReddit } from 'react-icons/fa';
+import { TiHome } from 'react-icons/ti';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DirectoryMenuItem, directoryMenuState } from '../atoms/directoryMenuAtom';
 
@@ -26,6 +27,19 @@ const useDirectory = () => {
   };
 
   useEffect(() => {
+    if (router.pathname === '/') {
+      setDirectoryState((prev) => ({
+        ...prev,
+        selectedMenuItem: {
+          displayText: 'Home',
+          link: '/',
+          icon: TiHome,
+          iconColor: 'black',
+        },
+      }));
+      return;
+    }
+
     if (currentCommunity) {
       const packagedMenuItem = {
         displayText: `r/${currentCommunity.id}`,
