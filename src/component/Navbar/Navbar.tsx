@@ -18,19 +18,20 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
     onSelectMenuItem(defaultMenuItem);
   };
 
+  const navbarContainerStyle = {
+    bg: 'white',
+    height: '48px',
+    padding: '6px 20px 6px 20px',
+    gap: 2,
+    justify: {
+      md: 'space-between',
+    },
+  };
+
   return (
-    <Flex
-      as='header'
-      bg='white'
-      height='48px'
-      padding='6px 20px 6px 20px'
-      gap={2}
-      justify={{
-        md: 'space-between',
-      }}
-    >
+    <Flex as='header' {...navbarContainerStyle}>
       {/* Needs to be a link */}
-      <Flex align='center' onClick={handleHomeClick} cursor='pointer'>
+      <Flex align='center' cursor='pointer' onClick={handleHomeClick}>
         <Image src='/images/redditFace.svg' alt='logo' height='30px' />
         <Image
           src='/images/redditText.svg'
