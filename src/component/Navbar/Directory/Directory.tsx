@@ -59,12 +59,8 @@ const Directory = (props: DirectoryProps) => {
       <MenuButton as={Button} {...menuButtonStyle} onClick={toggleMenuOpen}>
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
-            {ImageURL ? (
-              <DirectoryImage ImageURL={ImageURL} displayText={displayText} />
-            ) : (
-              <DirectoryIcon icon={icon} iconColor={iconColor} />
-            )}
-
+            {ImageURL && <DirectoryImage ImageURL={ImageURL} displayText={displayText} />}
+            {!ImageURL && <DirectoryIcon icon={icon} iconColor={iconColor} />}
             <DirectoryText displayText={displayText} />
           </Flex>
           <ChevronDownIcon boxSize={5} color='gray.400' />
