@@ -43,7 +43,7 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
           }}
         />
       </Flex>
-      {user && <Directory user={user} />}
+      {user && <Directory />}
       <SearchInput user={user} />
       <RightContent user={user} />
     </Flex>
