@@ -6,11 +6,18 @@ import Directory from './Directory/Directory';
 import Logo from './Logo';
 import RightContent from './RightContent/RightContent';
 import SearchInput from './SearchInput';
+import NavbarError from './NavbarError';
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
-  const [user, loading, error] = useAuthState(auth);
+  const [
+    user,
+    loading,
+    // error
+  ] = useAuthState(auth);
+
+  const error = new Error('There was an error loading your communities');
 
   const navbarHeaderStyle = {
     bg: 'white',
@@ -21,6 +28,9 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
       md: 'space-between',
     },
   };
+
+  // later to be set using error from useAuthState
+  if (error) return <NavbarError error={error} />;
 
   return (
     <Flex as='header' {...navbarHeaderStyle}>
