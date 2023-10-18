@@ -25,9 +25,12 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
 
   return (
     <Flex as='header' {...navbarHeaderStyle}>
+      {/* ERROR */}
       {error && <NavbarError error={error} />}
+
       <Logo />
-      {user && <Directory />}
+
+      <Directory user={user} />
       <SearchInput user={user} />
       <RightContent user={user} />
     </Flex>

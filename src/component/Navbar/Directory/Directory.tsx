@@ -13,7 +13,12 @@ import DirectoryIcon from './DirectoryIcon';
 import DirectoryImage from './DirectoryImage';
 import DirectoryText from './DirectoryText';
 
-interface DirectoryProps {}
+// User/Auth
+import { User as FirebaseUser } from 'firebase/auth';
+
+interface DirectoryProps {
+  user: FirebaseUser | null | undefined;
+}
 
 const menuButtonStyle = {
   bg: 'none',
@@ -49,13 +54,17 @@ const menuButtonStyle = {
 
 const Directory = (props: DirectoryProps) => {
   const { directoryState, toggleMenuOpen } = useDirectory();
+  const { user } = props;
 
   const {
     selectedMenuItem: { ImageURL, icon, iconColor, displayText, link },
   } = directoryState;
 
+  if (!user) return null;
+
   return (
     <Menu isOpen={directoryState.isOpen}>
+      {/* BUTTON AND CURRENT COMMUNITY */}
       <MenuButton as={Button} {...menuButtonStyle} onClick={toggleMenuOpen}>
         <HStack spacing={0.5} align='center' justify={'space-between'}>
           <Flex align='center'>
@@ -66,6 +75,8 @@ const Directory = (props: DirectoryProps) => {
           <ChevronDownIcon boxSize={5} color='gray.400' />
         </HStack>
       </MenuButton>
+
+      {/* DROPDOWN */}
       <MenuList fontSize='10pt'>
         <Communities />
       </MenuList>
