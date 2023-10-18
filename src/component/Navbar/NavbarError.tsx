@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Button,
   Modal,
@@ -7,37 +8,52 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  useDisclosure,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
 interface NavbarErrorProps {
   error: Error;
 }
 
-const onClose = () => {
-  // close the modal
-};
-
 const NavbarError = (props: NavbarErrorProps) => {
   const { error } = props;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (error) {
+      onOpen();
+    }
+  }, [error, onOpen]);
+
+  const handleRefresh = () => {
+    router.reload();
+  };
 
   if (!error) return null;
-  // might need to use a effect to check if that error is still there
-  // if it is then show the modal
-  // if not then close the modal
 
   return (
-    <Modal isOpen={true} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Error</ModalHeader>
+      <ModalContent justifyContent='center' alignItems='center' mt={44}>
+        {/* CLOSE BUTTON */}
         <ModalCloseButton />
-        <ModalBody>{error.message}</ModalBody>
 
-        <ModalFooter>
+        {/* HEADER & MESSAGE */}
+        <ModalHeader>Error</ModalHeader>
+        <ModalBody pt={6} pb={6}>
+          {error.message}
+        </ModalBody>
+
+        {/* BUTTONS */}
+        <ModalFooter alignSelf='flex-end'>
           <Button colorScheme='blue' mr={3} onClick={onClose}>
             Close
           </Button>
-          <Button variant='ghost'>Refresh</Button>
+          <Button variant='outline' onClick={handleRefresh}>
+            Refresh
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -11,13 +11,7 @@ import NavbarError from './NavbarError';
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
-  const [
-    user,
-    loading,
-    // error
-  ] = useAuthState(auth);
-
-  const error = new Error('There was an error loading your communities');
+  const [user, loading, error] = useAuthState(auth);
 
   const navbarHeaderStyle = {
     bg: 'white',
@@ -29,11 +23,9 @@ const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
     },
   };
 
-  // later to be set using error from useAuthState
-  if (error) return <NavbarError error={error} />;
-
   return (
     <Flex as='header' {...navbarHeaderStyle}>
+      {error && <NavbarError error={error} />}
       <Logo />
       {user && <Directory />}
       <SearchInput user={user} />
