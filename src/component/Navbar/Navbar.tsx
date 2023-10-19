@@ -3,9 +3,9 @@ import { Flex } from '@chakra-ui/react';
 import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Directory from './Directory/Directory';
-import Logo from './Logo';
+import Logo from './Logo/Logo';
 import RightContent from './RightContent/RightContent';
-import SearchInput from './SearchInput';
+import SearchInput from './SearchInput/SearchInput';
 import NavbarError from './NavbarError';
 
 interface NavbarProps {}
