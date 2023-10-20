@@ -1,5 +1,8 @@
-import { SearchIcon } from '@chakra-ui/icons';
+// React & Next.js core
 import { InputLeftElement } from '@chakra-ui/react';
+
+// Icons
+import { SearchIcon } from '@chakra-ui/icons';
 
 interface SearchInputIconProps {}
 

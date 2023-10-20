@@ -1,16 +1,20 @@
-import { FunctionComponent } from 'react';
+// Chakra UI
 import { Flex } from '@chakra-ui/react';
+
+// Auth
 import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Directory from './Directory/Directory';
+
+// Sub-Components
 import Logo from './Logo/Logo';
-import RightContent from './RightContent/RightContent';
-import SearchInput from './SearchInput/SearchInput';
 import NavbarError from './NavbarError';
+import Directory from './Directory/Directory';
+import SearchInput from './SearchInput/SearchInput';
+import RightContent from './RightContent/RightContent';
 
 interface NavbarProps {}
 
-const Navbar: FunctionComponent<NavbarProps> = (props: NavbarProps) => {
+const Navbar = (props: NavbarProps) => {
   const [user, loading, error] = useAuthState(auth);
 
   const navbarHeaderStyle = {
