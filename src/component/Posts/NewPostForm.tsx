@@ -83,10 +83,18 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     Talk: false,
   });
 
+  // Generic Loading State Setter
   const setLoadingState = (tab: tabLabels, state: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [tab]: state }));
   };
 
+  // Generic Text Input Handler
+  const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setTextInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Generic Error Resetter
   const resetError = () => setError(null);
 
   const createPostObject = () => {
@@ -159,12 +167,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoadingState('Post', false);
   };
 
-  // ActiveTab Post
-  const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setTextInput((prev) => ({ ...prev, [name]: value }));
-  };
-
   const renderTabSelector = () => {
     if (activeTab === 'Post') {
       return (
@@ -203,7 +205,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         ))}
       </Flex>
       <Flex p={4}>{renderTabSelector()}</Flex>
-      {error && <NewPostFormError error={error} />}
+
+      {/* ERROR */}
+      <>
+        <NewPostFormError error={error} />
+      </>
     </Flex>
   );
 };
