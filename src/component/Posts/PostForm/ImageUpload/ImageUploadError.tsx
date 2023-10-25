@@ -1,11 +1,13 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
 
-interface ImageUploadAlertProps {
+interface ImageUploadErrorProps {
   errorMessage: string | null;
 }
 
-const ImageUploadAlert = (props: ImageUploadAlertProps) => {
+const ImageUploadError = (props: ImageUploadErrorProps) => {
   const { errorMessage } = props;
+
+  if (errorMessage === null) return null;
 
   return (
     <Alert status='error' mb={4} justifyContent='center'>
@@ -16,4 +18,4 @@ const ImageUploadAlert = (props: ImageUploadAlertProps) => {
   );
 };
 
-export default ImageUploadAlert;
+export default ImageUploadError;
