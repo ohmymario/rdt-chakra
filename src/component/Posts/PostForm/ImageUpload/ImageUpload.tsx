@@ -28,10 +28,10 @@ const ImageUpload = (props: ImageUploadProps) => {
   };
 
   const renderContent = () => {
-    if (loading) {
-      return <ImageUploadLoading />;
-    }
+    // Loading
+    if (loading) return <ImageUploadLoading />;
 
+    // Selected
     if (selectedFile) {
       return (
         <ImageUploadPreview
@@ -42,6 +42,7 @@ const ImageUpload = (props: ImageUploadProps) => {
       );
     }
 
+    // Default
     return (
       <ImageUploadInput
         fileInputRef={fileInputRef}
