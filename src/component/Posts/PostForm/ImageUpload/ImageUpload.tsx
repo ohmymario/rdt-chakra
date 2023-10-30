@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { tabLabels } from '../../NewPostForm';
 
 // Components
-import ImageUploadAlert from './ImageUploadAlert';
+import ImageUploadError from './ImageUploadError';
 import ImageUploadInput from './ImageUploadInput';
 import ImageUploadLoading from './ImageUploadLoading';
 import ImageUploadPreview from './ImageUploadPreview';
@@ -54,7 +54,9 @@ const ImageUpload = (props: ImageUploadProps) => {
 
   return (
     <Flex direction='column' justify='center' align='center' width='100%'>
-      {errorMessage && <ImageUploadAlert errorMessage={errorMessage} />}
+      {/* Error */}
+      <ImageUploadError errorMessage={errorMessage} />
+
       {renderContent()}
     </Flex>
   );
