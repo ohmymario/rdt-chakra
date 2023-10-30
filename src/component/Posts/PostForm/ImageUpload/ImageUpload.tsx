@@ -12,15 +12,15 @@ import ImageUploadPreview from './ImageUploadPreview';
 
 interface ImageUploadProps {
   selectedFile: string | null;
+  errorMessage: string | null;
+  loading: boolean;
   onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectedFile: () => void;
   setActiveTab: (tab: tabLabels) => void;
-  errorMessage: string | null;
-  loading: boolean;
 }
 
 const ImageUpload = (props: ImageUploadProps) => {
-  const { selectedFile, onSelectFile, resetSelectedFile, setActiveTab, errorMessage, loading } = props;
+  const { selectedFile, errorMessage, loading, onSelectFile, resetSelectedFile, setActiveTab } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
