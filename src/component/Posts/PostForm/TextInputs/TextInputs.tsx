@@ -1,5 +1,6 @@
-import { Stack, Input, Flex, Textarea, Button } from '@chakra-ui/react';
+import { Input, Stack, Textarea } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
+import TextSubmit from './TextSubmit';
 
 interface TextInputsProps {
   textInput: {
@@ -13,7 +14,6 @@ interface TextInputsProps {
 
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
   const { textInput, onTextChange, handleCreatePost, loading } = props;
-  const { title, body } = textInput;
 
   const inputStyles = {
     fontSize: '10pt',
@@ -33,26 +33,26 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
 
   return (
     <Stack spacing={3} width='100%'>
-      <Input name='title' placeholder='Title' value={title} onChange={(e) => onTextChange(e)} {...inputStyles} />
+      <Input
+        name='title'
+        placeholder='Title'
+        value={textInput.title}
+        onChange={(e) => onTextChange(e)}
+        {...inputStyles}
+      />
+
+      {/* OPTIONAL TEXT */}
       <Textarea
         name='body'
         placeholder='Text (optional)'
-        value={body}
+        value={textInput.body}
         onChange={(e) => onTextChange(e)}
         height='100px'
         {...inputStyles}
       />
-      <Flex justify={'flex-end'}>
-        <Button
-          height='34px'
-          padding='0px 30px'
-          isDisabled={title === '' || body === ''}
-          isLoading={loading}
-          onClick={() => handleCreatePost()}
-        >
-          Post
-        </Button>
-      </Flex>
+
+      {/* SUBMIT BUTTON */}
+      <TextSubmit isDisabled={isDisabled} handleCreatePost={handleCreatePost} loading={loading} />
     </Stack>
   );
 };
