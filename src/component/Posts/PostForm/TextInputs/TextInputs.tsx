@@ -29,6 +29,8 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
     },
   };
 
+  const isDisabled = textInput.title === '' || textInput.body === '';
+
   return (
     <Stack spacing={3} width='100%'>
       <Input name='title' placeholder='Title' value={title} onChange={(e) => onTextChange(e)} {...inputStyles} />
