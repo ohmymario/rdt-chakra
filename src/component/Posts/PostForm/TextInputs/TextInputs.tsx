@@ -7,13 +7,13 @@ interface TextInputsProps {
     title: string;
     body: string;
   };
+  loading: boolean;
   onTextChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleCreatePost: () => void;
-  loading: boolean;
 }
 
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
-  const { textInput, onTextChange, handleCreatePost, loading } = props;
+  const { textInput, loading, onTextChange, handleCreatePost } = props;
 
   const inputStyles = {
     fontSize: '10pt',
@@ -33,6 +33,7 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
 
   return (
     <Stack spacing={3} width='100%'>
+      {/* Title */}
       <Input
         name='title'
         placeholder='Title'
