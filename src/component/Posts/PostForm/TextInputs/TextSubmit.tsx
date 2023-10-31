@@ -1,18 +1,13 @@
 import { Button, Flex } from '@chakra-ui/react';
 
 interface TextSubmitProps {
-  textInput: {
-    title: string;
-    body: string;
-  };
+  isDisabled: boolean;
   handleCreatePost: () => void;
   loading: boolean;
 }
 
 const TextSubmit = (props: TextSubmitProps) => {
-  const { textInput, handleCreatePost, loading } = props;
-
-  const isDisabled = textInput.title === '' || textInput.body === '';
+  const { isDisabled, handleCreatePost, loading } = props;
 
   const buttonStyles = {
     height: '34px',
