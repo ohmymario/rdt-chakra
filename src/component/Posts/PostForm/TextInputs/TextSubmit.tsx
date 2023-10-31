@@ -1,12 +1,31 @@
-import { FunctionComponent } from 'react'
+import { Button, Flex } from '@chakra-ui/react';
 
-interface TextSubmitProps {}
-
-const TextSubmit = (props: TextSubmitProps) => {
-  return (
-    <div>TextSubmit</div>
-  )
+interface TextSubmitProps {
+  textInput: {
+    title: string;
+    body: string;
+  };
+  handleCreatePost: () => void;
+  loading: boolean;
 }
 
-export default TextSubmit
+const TextSubmit = (props: TextSubmitProps) => {
+  const { textInput, handleCreatePost, loading } = props;
 
+  const isDisabled = textInput.title === '' || textInput.body === '';
+
+  const buttonStyles = {
+    height: '34px',
+    padding: '0px 30px',
+  };
+
+  return (
+    <Flex justify={'flex-end'}>
+      <Button {...buttonStyles} isDisabled={isDisabled} isLoading={loading} onClick={handleCreatePost}>
+        Post
+      </Button>
+    </Flex>
+  );
+};
+
+export default TextSubmit;
