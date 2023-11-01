@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import PostLoader from './PostLoader';
 
 interface PostLoaderSkeletonProps {
