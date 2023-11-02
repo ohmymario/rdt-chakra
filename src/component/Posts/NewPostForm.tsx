@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Flex, Text } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
@@ -9,11 +9,12 @@ import TabItem from './TabItem';
 //Icons
 import { Post } from '@/atoms/postsAtoms';
 import { BiPoll } from 'react-icons/bi';
-import { BsLink45Deg, BsMic } from 'react-icons/bs';
+import { BsLink45Deg } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
 
 import { firestore, storage } from '@/firebase/clientApp';
+import useSelectFile from '@/hooks/useSelectFile';
 import { User as FirebaseUser } from 'firebase/auth';
 import {
   addDoc,
@@ -26,7 +27,6 @@ import {
 } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRouter } from 'next/router';
-import useSelectFile from '@/hooks/useSelectFile';
 import NewPostFormError from './NewPostFormError';
 
 interface NewPostFormProps {
@@ -52,11 +52,11 @@ const formTabs: tabType[] = [
     icon: BiPoll,
     disabled: true,
   },
-  {
-    label: 'Talk',
-    icon: BsMic,
-    disabled: true,
-  },
+  // {
+  //   label: 'Talk',
+  //   icon: BsMic,
+  //   disabled: true,
+  // },
 ];
 
 export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
@@ -199,17 +199,21 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   return (
     <Flex direction='column' bg='white' borderRadius={4} w='100%'>
+      {/* TOP TABS SELECTOR */}
       <Flex>
-        {formTabs.map((tab: tabType, index) => (
-          <TabItem tab={tab} key={index} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
+        {formTabs.map((tab: tabType, i) => (
+          <TabItem tab={tab} key={i} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
         ))}
       </Flex>
+
+      {/* TODO: KEEP TITLE ON ALL PAGES */}
+
+      {/* Input */}
+      {/* TODO: Update name */}
       <Flex p={4}>{renderTabSelector()}</Flex>
 
       {/* ERROR */}
-      <>
-        <NewPostFormError error={error} />
-      </>
+      <NewPostFormError error={error} />
     </Flex>
   );
 };
