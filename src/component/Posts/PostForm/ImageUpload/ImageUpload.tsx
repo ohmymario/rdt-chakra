@@ -53,11 +53,11 @@ const ImageUpload = (props: ImageUploadProps) => {
   };
 
   return (
-    <Flex direction='column' justify='center' align='center' width='100%'>
+    <>
       {/* Error */}
       <ImageUploadError errorMessage={errorMessage} />
       {renderContent()}
-    </Flex>
+    </>
   );
 };
 
