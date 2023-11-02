@@ -1,4 +1,4 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Input, InputProps, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
@@ -167,10 +167,25 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoadingState('Post', false);
   };
 
+  const inputStyles: InputProps = {
+    fontSize: '10pt',
+    borderRadius: 4,
+    _placeholder: {
+      color: 'gray.500',
+    },
+    _focus: {
+      outline: 'none',
+      bg: 'white',
+      border: '1px solid',
+      borderColor: 'black',
+    },
+  };
+
   const renderTabSelector = () => {
     if (activeTab === 'Post') {
       return (
         <TextInputs
+          inputStyles={inputStyles}
           textInput={textInput}
           handleCreatePost={handleCreatePost}
           onTextChange={onTextChange}
@@ -206,12 +221,21 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         ))}
       </Flex>
 
-      {/* TODO: KEEP TITLE ON ALL PAGES */}
+      <Flex direction={'column'} gap={3} width='100%' p={4}>
+        {/* Title */}
+        {/* TODO: KEEP TITLE ON ALL PAGES */}
+        <Input
+          name='title'
+          placeholder='Title'
+          value={textInput.title}
+          onChange={(e) => onTextChange(e)}
+          {...inputStyles}
+        />
 
-      {/* Input */}
-      {/* TODO: Update name */}
-      <Flex p={4}>{renderTabSelector()}</Flex>
-
+        {/* Input */}
+        {/* TODO: Update name */}
+        {renderTabSelector()}
+      </Flex>
       {/* ERROR */}
       <NewPostFormError error={error} />
     </Flex>
