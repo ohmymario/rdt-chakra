@@ -1,4 +1,4 @@
-import { Flex, Input, InputProps, Text } from '@chakra-ui/react';
+import { Flex, Input, InputGroup, InputProps, InputRightElement, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
@@ -181,6 +181,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     },
   };
 
+  const titleInputStyles: InputProps = {
+    pr: '4.5rem',
+  };
+
   const renderTabSelector = () => {
     if (activeTab === 'Post') {
       return (
@@ -224,13 +228,21 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       <Flex direction={'column'} gap={3} width='100%' p={4}>
         {/* Title */}
         {/* TODO: KEEP TITLE ON ALL PAGES */}
-        <Input
-          name='title'
-          placeholder='Title'
-          value={textInput.title}
-          onChange={(e) => onTextChange(e)}
-          {...inputStyles}
-        />
+        <InputGroup>
+          <Input
+            name='title'
+            placeholder='Title'
+            value={textInput.title}
+            onChange={onTextChange}
+            {...inputStyles}
+            {...titleInputStyles}
+          />
+          <InputRightElement width='4.5rem'>
+            <Text fontSize='sm' color='gray.500'>
+              {`${textInput.title.length}/${300}`}
+            </Text>
+          </InputRightElement>
+        </InputGroup>
 
         {/* Input */}
         {/* TODO: Update name */}
