@@ -91,6 +91,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   // Generic Text Input Handler
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+
+    if (name === 'title' && value.length > 300) {
+      return;
+    }
+
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
 
