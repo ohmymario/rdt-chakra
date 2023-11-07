@@ -54,7 +54,7 @@ const formTabs: tabType[] = [
   },
   // {
   //   label: 'Talk',
-  //   icon: BsMic,
+  //   icon: Bsic,
   //   disabled: true,
   // },
 ];
@@ -190,7 +190,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     pr: '4.5rem',
   };
 
-  const renderTabSelector = () => {
+  const renderSelectedTabInput = () => {
+    // POST BODY
     if (activeTab === 'Post') {
       return (
         <TextInputs
@@ -203,6 +204,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       );
     }
 
+    // IMAGE UPLOAD
     if (activeTab === 'Image & Video') {
       return (
         <ImageUpload
@@ -216,6 +218,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       );
     }
 
+    // LINK
     if (activeTab === 'Link') {
       return <Text>Link Tab Coming Soon</Text>;
     }
@@ -232,7 +235,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
         {/* Title */}
-        {/* TODO: KEEP TITLE ON ALL PAGES */}
         <InputGroup>
           <Input
             name='title'
@@ -249,9 +251,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           </InputRightElement>
         </InputGroup>
 
-        {/* Input */}
-        {/* TODO: Update name */}
-        {renderTabSelector()}
+        {/* Selected Input */}
+        {renderSelectedTabInput()}
       </Flex>
       {/* ERROR */}
       <NewPostFormError error={error} />
