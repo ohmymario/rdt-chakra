@@ -172,20 +172,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoadingState('Post', false);
   };
 
-  const inputStyles: InputProps = {
-    fontSize: '10pt',
-    borderRadius: 4,
-    _placeholder: {
-      color: 'gray.500',
-    },
-    _focus: {
-      outline: 'none',
-      bg: 'white',
-      border: '1px solid',
-      borderColor: 'black',
-    },
-  };
-
   const titleInputStyles: InputProps = {
     pr: '4.5rem',
   };
@@ -195,7 +181,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     if (activeTab === 'Post') {
       return (
         <TextInputs
-          inputStyles={inputStyles}
           textInput={textInput}
           handleCreatePost={handleCreatePost}
           onTextChange={onTextChange}
@@ -236,14 +221,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       <Flex direction={'column'} gap={3} width='100%' p={4}>
         {/* Title */}
         <InputGroup>
-          <Input
-            name='title'
-            placeholder='Title'
-            value={textInput.title}
-            onChange={onTextChange}
-            {...inputStyles}
-            {...titleInputStyles}
-          />
+          <Input name='title' placeholder='Title' value={textInput.title} onChange={onTextChange} />
           <InputRightElement width='4.5rem'>
             <Text fontSize='sm' color='gray.500'>
               {`${textInput.title.length}/${300}`}
