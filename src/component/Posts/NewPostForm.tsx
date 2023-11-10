@@ -62,7 +62,7 @@ const formTabs: tabType[] = [
 export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 export type tabType = { label: tabLabels; icon: IconType; disabled?: boolean };
 
-interface inputType {
+export interface inputType {
   title: string;
   body: string;
 }
