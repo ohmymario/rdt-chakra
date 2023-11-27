@@ -1,4 +1,4 @@
-import { Flex, Input, InputProps, Stack, Textarea } from '@chakra-ui/react';
+import { InputProps, Textarea } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import TextSubmit from './TextSubmit';
 
@@ -8,7 +8,6 @@ interface TextInputsProps {
     body: string;
   };
   loading: boolean;
-  inputStyles: InputProps;
   onTextChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleCreatePost: () => void;
 }
@@ -16,9 +15,10 @@ interface TextInputsProps {
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
   const { textInput, loading, onTextChange, handleCreatePost } = props;
 
-  const inputStyles = {
+  const textAreaStyles = {
     fontSize: '10pt',
     borderRadius: 4,
+    height: '100px',
     _placeholder: {
       color: 'gray.500',
     },
@@ -34,23 +34,13 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
 
   return (
     <>
-      {/* Title */}
-      {/* <Input
-        name='title'
-        placeholder='Title'
-        value={textInput.title}
-        onChange={(e) => onTextChange(e)}
-        {...inputStyles}
-      /> */}
-
       {/* OPTIONAL TEXT */}
       <Textarea
         name='body'
         placeholder='Text (optional)'
         value={textInput.body}
         onChange={(e) => onTextChange(e)}
-        height='100px'
-        {...inputStyles}
+        {...textAreaStyles}
       />
 
       {/* SUBMIT BUTTON */}
