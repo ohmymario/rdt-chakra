@@ -35,9 +35,20 @@ const PostFormTitle = (props: PostFormTitleProps) => {
     titleLengthStyles.color = 'gray.500';
   }
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    if (value.length > 300) {
+      console.log('Title cannot be longer than 300 characters');
+      return;
+    }
+
+    onTextChange(e);
+  };
+
   return (
     <InputGroup>
-      <Input name='title' placeholder='Title' value={textInput.title} {...titleStyles} onChange={onTextChange} />
+      <Input name='title' placeholder='Title' value={textInput.title} {...titleStyles} onChange={handleTitleChange} />
 
       {/* Length Counter */}
       <InputRightElement width='4.5rem'>

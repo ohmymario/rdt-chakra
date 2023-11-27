@@ -28,6 +28,7 @@ import {
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRouter } from 'next/router';
 import NewPostFormError from './NewPostFormError';
+import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -91,10 +92,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   // Generic Text Input Handler
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'title' && value.length > 300) {
-      return;
-    }
 
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
@@ -172,10 +169,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setLoadingState('Post', false);
   };
 
-  const titleInputStyles: InputProps = {
-    pr: '4.5rem',
-  };
-
   const renderSelectedTabInput = () => {
     // POST BODY
     if (activeTab === 'Post') {
@@ -219,16 +212,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       </Flex>
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
-        {/* Title */}
-        <InputGroup>
-          <Input name='title' placeholder='Title' value={textInput.title} onChange={onTextChange} />
-          <InputRightElement width='4.5rem'>
-            <Text fontSize='sm' color='gray.500'>
-              {`${textInput.title.length}/${300}`}
-            </Text>
-          </InputRightElement>
-        </InputGroup>
-
+        {/* Title Component */}
+        <PostFormTitle textInput={textInput} onTextChange={onTextChange} />
         {/* Selected Input */}
         {renderSelectedTabInput()}
       </Flex>
