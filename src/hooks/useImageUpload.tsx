@@ -19,11 +19,15 @@ export const useImageUpload = (communityData: Community) => {
 
   const { id } = communityData;
 
-  // going to cloud ☁️
-  const uploadImageToStorage = async (selectedFile: string) => {
-    const imageLocation = `communities/${id}/image`;
+  // Upload Community Image to Cloud ☁️
+  const uploadCommunityImageToStorage = async (selectedFile: string, imageLocation: string) => {
+    // pointer to future image location
     const imageRef = ref(storage, imageLocation);
+
+    // Upload image to storage
     await uploadString(imageRef, selectedFile, 'data_url');
+
+    // Get image URL to append to community document
     const downloadURL = await getDownloadURL(imageRef);
     await updateDoc(doc(firestore, 'communities', id), {
       imageURL: downloadURL,
@@ -31,7 +35,6 @@ export const useImageUpload = (communityData: Community) => {
   };
 
   // handle errors
-  // TODO: refactor this to handle firebase errors
   const handleCatchError = (error: unknown) => {
     if (error instanceof Error) {
       setError(error.message);
@@ -47,7 +50,8 @@ export const useImageUpload = (communityData: Community) => {
     setError(null);
 
     try {
-      await uploadImageToStorage(selectedFile);
+      const imageLocation = `communities/${id}/image`;
+      await uploadCommunityImageToStorage(selectedFile, imageLocation);
       resetSelectedFile();
     } catch (error: unknown) {
       handleCatchError(error);
