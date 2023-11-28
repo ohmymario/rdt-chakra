@@ -1,4 +1,4 @@
-import { Flex, Input, InputGroup, InputProps, InputRightElement, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Input, InputGroup, InputProps, InputRightElement, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
@@ -53,15 +53,17 @@ const formTabs: tabType[] = [
     icon: BiPoll,
     disabled: true,
   },
-  // {
-  //   label: 'Talk',
-  //   icon: Bsic,
-  //   disabled: true,
-  // },
 ];
 
 export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 export type tabType = { label: tabLabels; icon: IconType; disabled?: boolean };
+
+const newPostContainerStyles: FlexProps = {
+  direction: 'column',
+  bg: 'white',
+  borderRadius: 4,
+  w: '100%',
+};
 
 export interface inputType {
   title: string;
@@ -203,7 +205,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   };
 
   return (
-    <Flex direction='column' bg='white' borderRadius={4} w='100%'>
+    <Flex {...newPostContainerStyles}>
       {/* TOP TABS SELECTOR */}
       <Flex>
         {formTabs.map((tab: tabType, i) => (
