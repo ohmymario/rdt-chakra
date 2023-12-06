@@ -1,7 +1,7 @@
 import { Community } from '@/atoms/communitiesAtom';
 import { firestore, storage } from '@/firebase/clientApp';
 import useSelectFile from '@/hooks/useSelectFile';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, DocumentData, DocumentReference, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRef, useState } from 'react';
 
@@ -34,7 +34,26 @@ export const useImageUpload = (communityData: Community) => {
     });
   };
 
-  // handle errors
+  // Upload Post Image to Cloud ☁️
+  const uploadPostImageToStorage = async (
+    docRef: DocumentReference<DocumentData>,
+    selectedFile: string,
+    imageLocation: string
+  ) => {
+    //pointer to storage location
+    const imageRef = ref(storage, imageLocation);
+
+    // upload image to storage
+    await uploadString(imageRef, selectedFile, 'data_url');
+
+    // get image url to append to post document
+    const downloadURL = await getDownloadURL(imageRef);
+
+    // update post document with image url
+    await updateDoc(docRef, { imageURL: downloadURL });
+  };
+
+  // Handler Errors with Message
   const handleCatchError = (error: unknown) => {
     if (error instanceof Error) {
       setErrorMessage(error.message);
@@ -68,6 +87,7 @@ export const useImageUpload = (communityData: Community) => {
   return {
     onSelectFile,
     onUpdateImage,
+    uploadPostImageToStorage,
     selectedFileRef,
     selectedFile,
     uploadingImage,
