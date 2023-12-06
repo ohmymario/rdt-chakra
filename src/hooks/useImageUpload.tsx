@@ -10,7 +10,7 @@ export const useImageUpload = (communityData: Community) => {
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
   // success/error/uploading states
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isUploadSuccessful, setIsUploadSuccessful] = useState<boolean>(false);
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
 
@@ -37,17 +37,22 @@ export const useImageUpload = (communityData: Community) => {
   // handle errors
   const handleCatchError = (error: unknown) => {
     if (error instanceof Error) {
-      setError(error.message);
+      setErrorMessage(error.message);
     } else {
-      setError('An unknown error occurred. Please try again later.');
+      setErrorMessage('An unknown error occurred. Please try again later.');
     }
   };
 
   // initiate upload
   const onUpdateImage = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile) {
+      const errorMessage = 'Please select an image to upload.';
+      setErrorMessage(errorMessage);
+
+      return;
+    }
     setUploadingImage(true);
-    setError(null);
+    setErrorMessage(null);
 
     try {
       const imageLocation = `communities/${id}/image`;
@@ -67,6 +72,6 @@ export const useImageUpload = (communityData: Community) => {
     selectedFile,
     uploadingImage,
     isUploadSuccessful,
-    error,
+    errorMessage,
   };
 };
