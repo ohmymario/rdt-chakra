@@ -1,5 +1,5 @@
 import { Community } from '@/atoms/communitiesAtom';
-import { useImageUpload } from '@/hooks/useImageUpload';
+import { useCommunityImageUpload } from '@/hooks/useCommunityImageUpload';
 import { Divider, Flex, Icon, Image, Input, Spinner, Stack, Text } from '@chakra-ui/react';
 import { FaReddit } from 'react-icons/fa';
 
