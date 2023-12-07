@@ -5,7 +5,7 @@ import { doc, DocumentData, DocumentReference, updateDoc } from 'firebase/firest
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useRef, useState } from 'react';
 
-export const useImageUpload = (communityData: Community) => {
+export const useCommunityImageUpload = (communityData: Community) => {
   // Image Upload / Input Reference
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
@@ -13,8 +13,7 @@ export const useImageUpload = (communityData: Community) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Loading State
-  const [loadingState, setLoadingState] = useState<'idle' | 'loading' | 'error'>('idle');
-  const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+  const [loadingState, setLoadingState] = useState<boolean>(false);
 
   // Check if Upload was Successful
   const [isUploadSuccessful, setIsUploadSuccessful] = useState<boolean>(false);
@@ -77,7 +76,7 @@ export const useImageUpload = (communityData: Community) => {
 
       return;
     }
-    setUploadingImage(true);
+    setLoadingState(true);
     setErrorMessage(null);
 
     try {
@@ -87,17 +86,16 @@ export const useImageUpload = (communityData: Community) => {
     } catch (error: unknown) {
       handleCatchError(error);
     } finally {
-      setUploadingImage(false);
+      setLoadingState(false);
     }
   };
 
   return {
     onSelectFile,
     onUpdateImage,
-    uploadPostImageToStorage,
     selectedFileRef,
     selectedFile,
-    uploadingImage,
+    loadingState,
     isUploadSuccessful,
     errorMessage,
   };
