@@ -1,4 +1,4 @@
-import { Flex, FlexProps, Input, InputGroup, InputProps, InputRightElement, Text } from '@chakra-ui/react';
+import { Flex, FlexProps, Text } from '@chakra-ui/react';
 import { FunctionComponent, useState } from 'react';
 
 //Components
