@@ -9,26 +9,33 @@ export const useImageUpload = (communityData: Community) => {
   // Image Upload / Input Reference
   const selectedFileRef = useRef<HTMLInputElement>(null);
 
-  // success/error/uploading states
+  // Error Message
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isUploadSuccessful, setIsUploadSuccessful] = useState<boolean>(false);
+
+  // Loading State
+  const [loadingState, setLoadingState] = useState<'idle' | 'loading' | 'error'>('idle');
   const [uploadingImage, setUploadingImage] = useState<boolean>(false);
+
+  // Check if Upload was Successful
+  const [isUploadSuccessful, setIsUploadSuccessful] = useState<boolean>(false);
 
   // handle file selection / where file is held in state
   const { selectedFile, onSelectFile, resetSelectedFile } = useSelectFile();
 
   const { id } = communityData;
 
-  // Upload Community Image to Cloud ☁️
+  // Upload Community Image/Avatar to Cloud ☁️
   const uploadCommunityImageToStorage = async (selectedFile: string, imageLocation: string) => {
-    // pointer to future image location
+    // Pointer to future image location
     const imageRef = ref(storage, imageLocation);
 
-    // Upload image to storage
+    // Upload Logo/Image to Storage
     await uploadString(imageRef, selectedFile, 'data_url');
 
     // Get image URL to append to community document
     const downloadURL = await getDownloadURL(imageRef);
+
+    // Update Document with Logo/Image URL
     await updateDoc(doc(firestore, 'communities', id), {
       imageURL: downloadURL,
     });
