@@ -9,7 +9,8 @@ interface AboutAdminControlsProps {
 
 const AboutAdminControls = (props: AboutAdminControlsProps) => {
   const { communityData } = props;
-  const { selectedFileRef, selectedFile, onSelectFile, uploadingImage, onUpdateImage } = useImageUpload(communityData);
+  const { selectedFileRef, selectedFile, loadingState, onSelectFile, onUpdateImage } =
+    useCommunityImageUpload(communityData);
 
   return (
     <>
@@ -43,7 +44,7 @@ const AboutAdminControls = (props: AboutAdminControlsProps) => {
         </Flex>
 
         {selectedFile &&
-          (uploadingImage ? (
+          (loadingState ? (
             <Spinner />
           ) : (
             <Text cursor='pointer' onClick={onUpdateImage}>
