@@ -1,7 +1,7 @@
+import { storage } from '@/firebase/clientApp';
 import { DocumentData, DocumentReference, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useState } from 'react';
-import { firestore, storage } from '@/firebase/clientApp';
 import useSelectFile from './useSelectFile';
 
 export const usePostImageUpload = () => {
@@ -9,6 +9,7 @@ export const usePostImageUpload = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Loading State
+  // TODO: BRING LOADING STATE IN FROM NEW POST FORM
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
   // handle file selection / where file is held in state
@@ -44,11 +45,35 @@ export const usePostImageUpload = () => {
     }
   };
 
-  // initiate upload
-  const onUploadImage = async () => {
-    // Load, Reset, and Check for Errors
-    // Call upload function
+  // Initiate Upload
+  const onUploadImage = async (docRef: DocumentReference<DocumentData>) => {
+    // LOADING
+    setLoadingState(true);
+    // setLoadingState('Image & Video', true);
+
+    // FILE CHECK
+    if (!selectedFile) {
+      const errorMessage = 'Please select an image to upload.';
+      setErrorMessage(errorMessage);
+      // setLoadingState('Image & Video', false);
+      setLoadingState(false);
+      return;
+    }
+
+    // RESET ERROR
+    setErrorMessage(null);
+
+    // UPLOAD TRY CATCH FINALLY BLOCK
+    try {
+      const imageLocation = `posts/${docRef.id}/image`;
+      await uploadPostImageToStorage(docRef, selectedFile, imageLocation);
+    } catch (error: unknown) {
+      handleCatchError(error);
+    } finally {
+      // setLoadingState('Image & Video', false);
+      setLoadingState(false);
+    }
   };
 
-  return { onUploadImage };
+  return { onUploadImage, onSelectFile, selectedFile, loadingState, errorMessage };
 };
