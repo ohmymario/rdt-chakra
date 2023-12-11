@@ -34,7 +34,15 @@ export const usePostImageUpload = () => {
   };
 
   // Handler Errors with Message
-  const handleCatchError = (error: unknown) => {};
+  const handleCatchError = (error: unknown) => {
+    if (error instanceof Error) {
+      const errorMessage = `Error uploading image: ${error.message}`;
+      setErrorMessage(errorMessage);
+    } else {
+      const errorMessage = 'An error occurred while uploading the image.';
+      setErrorMessage(errorMessage);
+    }
+  };
 
   // initiate upload
   const onUploadImage = async () => {
