@@ -40,25 +40,6 @@ export const useCommunityImageUpload = (communityData: Community) => {
     });
   };
 
-  // Upload Post Image to Cloud ☁️
-  const uploadPostImageToStorage = async (
-    docRef: DocumentReference<DocumentData>,
-    selectedFile: string,
-    imageLocation: string
-  ) => {
-    //pointer to storage location
-    const imageRef = ref(storage, imageLocation);
-
-    // upload image to storage
-    await uploadString(imageRef, selectedFile, 'data_url');
-
-    // get image url to append to post document
-    const downloadURL = await getDownloadURL(imageRef);
-
-    // update post document with image url
-    await updateDoc(docRef, { imageURL: downloadURL });
-  };
-
   // Handler Errors with Message
   const handleCatchError = (error: unknown) => {
     if (error instanceof Error) {
