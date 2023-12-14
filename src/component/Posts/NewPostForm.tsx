@@ -13,22 +13,14 @@ import { BsLink45Deg } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
 
-import { firestore, storage } from '@/firebase/clientApp';
-import useSelectFile from '@/hooks/useSelectFile';
+import { firestore } from '@/firebase/clientApp';
 import { User as FirebaseUser } from 'firebase/auth';
-import {
-  addDoc,
-  collection,
-  DocumentData,
-  DocumentReference,
-  serverTimestamp,
-  Timestamp,
-  updateDoc,
-} from 'firebase/firestore';
-import { getDownloadURL, ref, uploadString } from 'firebase/storage';
+import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import NewPostFormError from './NewPostFormError';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
+
+import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -76,7 +68,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [activeTab, setActiveTab] = useState<tabLabels>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [error, setError] = useState<string | null>(null);
-  const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
+
+  // const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
+  const { onUploadImage, onSelectFile, resetSelectedFile, selectedFile, loadingState, errorMessage } =
+    usePostImageUpload();
 
   const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
     Post: false,
@@ -121,34 +116,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     return newPost;
   };
 
-  const handleUploadImage = async (docRef: DocumentReference<DocumentData>) => {
-    setLoadingState('Image & Video', true);
-
-    if (!selectedFile) {
-      const errorMessage = 'No file selected';
-      setError(errorMessage);
-      setLoadingState('Image & Video', false);
-      return;
-    }
-
-    try {
-      const imageRef = ref(storage, `posts/${docRef.id}/image`);
-      await uploadString(imageRef, selectedFile, 'data_url');
-      const downloadURL = await getDownloadURL(imageRef);
-      await updateDoc(docRef, { imageURL: downloadURL });
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        const errorMessage = `Error uploading image: ${error.message}`;
-        setError(errorMessage);
-      } else {
-        const errorMessage = 'An error occurred while uploading the image.';
-        setError(errorMessage);
-      }
-    } finally {
-      setLoadingState('Image & Video', false);
-    }
-  };
-
   const handleCreatePost = async () => {
     resetError();
     setLoadingState('Post', true);
@@ -157,7 +124,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
     try {
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
-      if (selectedFile) await handleUploadImage(postDocRef);
+      if (selectedFile) await onUploadImage(postDocRef);
       router.back();
     } catch (error: unknown) {
       if (error instanceof Error) {
