@@ -75,5 +75,5 @@ export const usePostImageUpload = () => {
     }
   };
 
-  return { onUploadImage, onSelectFile, selectedFile, loadingState, errorMessage };
+  return { onUploadImage, onSelectFile, resetSelectedFile, selectedFile, loadingState, errorMessage };
 };
