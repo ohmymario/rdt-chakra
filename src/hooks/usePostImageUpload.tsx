@@ -13,7 +13,7 @@ export const usePostImageUpload = () => {
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
   // handle file selection / where file is held in state
-  const { selectedFile, onSelectFile, resetSelectedFile } = useSelectFile();
+  const { selectedFile, onSelectFile, resetSelectedFile, errorMessage: fileSelectionError } = useSelectFile();
 
   // Upload Post Image to Cloud ☁️
   const uploadPostImageToStorage = async (
@@ -34,7 +34,7 @@ export const usePostImageUpload = () => {
     await updateDoc(docRef, { imageURL: downloadURL });
   };
 
-  // Handler Errors with Message
+  // Handler Image Upload Errors with Message
   const handleCatchError = (error: unknown) => {
     if (error instanceof Error) {
       const errorMessage = `Error uploading image: ${error.message}`;
