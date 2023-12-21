@@ -13,12 +13,17 @@ import { BsLink45Deg } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
 
+// Firebase
 import { firestore } from '@/firebase/clientApp';
 import { User as FirebaseUser } from 'firebase/auth';
 import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
+
+// Router
 import { useRouter } from 'next/router';
-import NewPostFormError from './NewPostFormError';
+
+// Components
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
+import NewPostFormError from './NewPostFormError';
 
 import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 
