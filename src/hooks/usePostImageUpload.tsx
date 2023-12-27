@@ -1,61 +1,50 @@
+import { tabLabels } from '@/component/Posts/NewPostForm';
 import { storage } from '@/firebase/clientApp';
 import { DocumentData, DocumentReference, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSelectFile from './useSelectFile';
 
 export const usePostImageUpload = () => {
-  // Error Message
+  // Local Error Message
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // Loading State
   // TODO: BRING LOADING STATE IN FROM NEW POST FORM
   const [loadingState, setLoadingState] = useState<boolean>(false);
-
-  // handle file selection / where file is held in state
   const { selectedFile, onSelectFile, resetSelectedFile, errorMessage: fileSelectionError } = useSelectFile();
 
+  useEffect(() => {
+    setErrorMessage(fileSelectionError);
+  }, [fileSelectionError]);
+
   // Upload Post Image to Cloud ☁️
-  const uploadPostImageToStorage = async (
-    docRef: DocumentReference<DocumentData>,
-    selectedFile: string,
-    imageLocation: string
-  ) => {
-    //pointer to storage location
+  const uploadPostImageToStorage = async (docRef: DocumentReference<DocumentData>) => {
+    if (!selectedFile) return;
+
+    const imageLocation = `posts/${docRef.id}/image`;
     const imageRef = ref(storage, imageLocation);
-
-    // upload image to storage
     await uploadString(imageRef, selectedFile, 'data_url');
-
-    // get image url to append to post document
     const downloadURL = await getDownloadURL(imageRef);
-
-    // update post document with image url
     await updateDoc(docRef, { imageURL: downloadURL });
   };
 
   // Handler Image Upload Errors with Message
-  const handleCatchError = (error: unknown) => {
+  // Enhanced error handler with context for clearer error messages
+  const handleCatchError = (error: unknown, context: 'fileSelection' | 'upload') => {
+    let prefix = context === 'fileSelection' ? 'File selection error: ' : 'Image upload error: ';
     if (error instanceof Error) {
-      const errorMessage = `Error uploading image: ${error.message}`;
-      setErrorMessage(errorMessage);
+      setErrorMessage(prefix + error.message);
     } else {
-      const errorMessage = 'An error occurred while uploading the image.';
-      setErrorMessage(errorMessage);
+      setErrorMessage(prefix + 'An unknown error occurred. Please try again later.');
     }
   };
 
   // Initiate Upload
   const onUploadImage = async (docRef: DocumentReference<DocumentData>) => {
-    // LOADING
     setLoadingState(true);
-    // setLoadingState('Image & Video', true);
 
     // FILE CHECK
     if (!selectedFile) {
-      const errorMessage = 'Please select an image to upload.';
-      setErrorMessage(errorMessage);
-      // setLoadingState('Image & Video', false);
+      handleCatchError(new Error('Please select an image to upload.'), 'fileSelection');
       setLoadingState(false);
       return;
     }
@@ -65,12 +54,10 @@ export const usePostImageUpload = () => {
 
     // UPLOAD TRY CATCH FINALLY BLOCK
     try {
-      const imageLocation = `posts/${docRef.id}/image`;
-      await uploadPostImageToStorage(docRef, selectedFile, imageLocation);
+      await uploadPostImageToStorage(docRef);
     } catch (error: unknown) {
-      handleCatchError(error);
+      handleCatchError(error, 'upload');
     } finally {
-      // setLoadingState('Image & Video', false);
       setLoadingState(false);
     }
   };
