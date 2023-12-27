@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react';
-import { FunctionComponent, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
@@ -74,10 +74,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [error, setError] = useState<string | null>(null);
 
-  // const { selectedFile, onSelectFile, errorMessage, resetSelectedFile } = useSelectFile();
-  const { onUploadImage, onSelectFile, resetSelectedFile, selectedFile, loadingState, errorMessage } =
-    usePostImageUpload();
-
   const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
     Post: false,
     'Image & Video': false,
@@ -85,6 +81,15 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     Poll: false,
     Talk: false,
   });
+
+  const {
+    onUploadImage,
+    onSelectFile,
+    resetSelectedFile,
+    selectedFile,
+    loadingState: imageLoadingState,
+    errorMessage,
+  } = usePostImageUpload();
 
   // Generic Loading State Setter
   const setLoadingState = (tab: tabLabels, state: boolean) => {
@@ -175,6 +180,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       return <Text>Link Tab Coming Soon</Text>;
     }
   };
+
+  useEffect(() => {
+    setLoadingStates((prev) => ({ ...prev, 'Image & Video': imageLoadingState }));
+  }, [imageLoadingState]);
 
   return (
     <Flex {...newPostContainerStyles}>
