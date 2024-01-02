@@ -1,4 +1,3 @@
-import { tabLabels } from '@/component/Posts/NewPostForm';
 import { storage } from '@/firebase/clientApp';
 import { DocumentData, DocumentReference, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadString } from 'firebase/storage';
@@ -6,9 +5,7 @@ import { useEffect, useState } from 'react';
 import useSelectFile from './useSelectFile';
 
 export const usePostImageUpload = () => {
-  // Local Error Message
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  // TODO: BRING LOADING STATE IN FROM NEW POST FORM
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const { selectedFile, onSelectFile, resetSelectedFile, errorMessage: fileSelectionError } = useSelectFile();
 
@@ -42,17 +39,14 @@ export const usePostImageUpload = () => {
   const onUploadImage = async (docRef: DocumentReference<DocumentData>) => {
     setLoadingState(true);
 
-    // FILE CHECK
     if (!selectedFile) {
       handleCatchError(new Error('Please select an image to upload.'), 'fileSelection');
       setLoadingState(false);
       return;
     }
 
-    // RESET ERROR
     setErrorMessage(null);
 
-    // UPLOAD TRY CATCH FINALLY BLOCK
     try {
       await uploadPostImageToStorage(docRef);
     } catch (error: unknown) {
