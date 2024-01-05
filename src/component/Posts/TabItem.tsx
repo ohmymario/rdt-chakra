@@ -1,6 +1,7 @@
+import { tabLabels } from '@/hooks/useTabState';
 import { Flex, Icon } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
-import { tabType, tabLabels } from './NewPostForm';
+import { tabType } from './NewPostForm';
 
 interface TabItemProps {
   tab: tabType;
