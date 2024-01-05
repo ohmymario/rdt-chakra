@@ -25,7 +25,11 @@ import { useRouter } from 'next/router';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 import NewPostFormError from './NewPostFormError';
 
+// Hooks
 import { usePostImageUpload } from '@/hooks/usePostImageUpload';
+
+// Types
+import { tabLabels } from '@/hooks/useTabState';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -52,7 +56,6 @@ const formTabs: tabType[] = [
   },
 ];
 
-export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 export type tabType = { label: tabLabels; icon: IconType; disabled?: boolean };
 
 const newPostContainerStyles: FlexProps = {
