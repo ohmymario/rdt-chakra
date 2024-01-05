@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 // Types
-import { tabLabels } from '../../NewPostForm';
+import { tabLabels } from '@/hooks/useTabState';
 
 // Components
 import ImageUploadError from './ImageUploadError';
