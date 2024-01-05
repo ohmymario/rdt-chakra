@@ -88,7 +88,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     resetSelectedFile,
     selectedFile,
     loadingState: imageLoadingState,
-    errorMessage,
+    errorMessage: imageUploadError,
   } = usePostImageUpload();
 
   // Generic Loading State Setter
@@ -169,7 +169,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           onSelectFile={onSelectFile}
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
-          errorMessage={errorMessage}
+          errorMessage={imageUploadError}
           loading={loadingStates['Image & Video']}
         />
       );
@@ -184,6 +184,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   useEffect(() => {
     setLoadingStates((prev) => ({ ...prev, 'Image & Video': imageLoadingState }));
   }, [imageLoadingState]);
+
+  useEffect(() => {
+    setError(imageUploadError);
+  }, [imageUploadError]);
 
   return (
     <Flex {...newPostContainerStyles}>
