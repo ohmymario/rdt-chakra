@@ -20,15 +20,16 @@ interface TextInputs {
 
 export const usePostCreation = (
   user: User,
-  communityImageURL: string,
-  selectedFile: string,
+  communityImageURL: string | undefined,
+  selectedFile: string | null,
+  textInput: TextInputs,
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
 
-  const createPostObject = (textInput: TextInputs) => {
+  const createPostObject = () => {
     const { communityId } = router.query;
     const { title, body } = textInput;
     const { uid, email } = user;
@@ -53,12 +54,12 @@ export const usePostCreation = (
    * @param textInput Object containing title and body of the post.
    */
 
-  const createPost = async (textInput: TextInputs): Promise<void> => {
+  const createPost = async () => {
     setLoadingState(true);
     setError(null);
 
     try {
-      const newPost = createPostObject(textInput);
+      const newPost = createPostObject();
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
 
       if (selectedFile) {
@@ -78,5 +79,5 @@ export const usePostCreation = (
     }
   };
 
-  return { createPost, error, setError, loadingState };
+  return { createPost, error, loadingState };
 };

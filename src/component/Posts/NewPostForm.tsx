@@ -27,6 +27,7 @@ import NewPostFormError from './NewPostFormError';
 
 // Hooks
 import { usePostImageUpload } from '@/hooks/usePostImageUpload';
+import { usePostCreation } from '@/hooks/usePostCreation';
 
 // Types
 import { tabLabels } from '@/hooks/useTabState';
@@ -94,6 +95,12 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     errorMessage: imageUploadError,
   } = usePostImageUpload();
 
+  const {
+    createPost,
+    loadingState: postLoadingState,
+    error: postCreationError,
+  } = usePostCreation(user, communityImageURL, selectedFile, textInput, onUploadImage);
+
   // Generic Loading State Setter
   const setLoadingState = (tab: tabLabels, state: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [tab]: state }));
@@ -109,55 +116,13 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   // Generic Error Resetter
   const resetError = () => setError(null);
 
-  const createPostObject = () => {
-    const { communityId } = router.query;
-    const { title, body } = textInput;
-    const { uid, email } = user;
-
-    const newPost: Post = {
-      communityId: communityId as string,
-      communityImageURL: communityImageURL || '',
-      creatorId: uid,
-      creatorDisplayName: email!.split('@')[0],
-      title: title,
-      body: body,
-      numberOfComments: 0,
-      voteStatus: 1,
-      createdAt: serverTimestamp() as Timestamp,
-    };
-
-    return newPost;
-  };
-
-  const handleCreatePost = async () => {
-    resetError();
-    setLoadingState('Post', true);
-
-    const newPost = createPostObject();
-
-    try {
-      const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
-      if (selectedFile) await onUploadImage(postDocRef);
-      router.back();
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        const errorMessage = `Error creating post: ${error.message}`;
-        setError(errorMessage);
-      } else {
-        console.error('Error adding Post: ', error);
-      }
-    }
-
-    setLoadingState('Post', false);
-  };
-
   const renderSelectedTabInput = () => {
     // POST BODY
     if (activeTab === 'Post') {
       return (
         <TextInputs
           textInput={textInput}
-          handleCreatePost={handleCreatePost}
+          handleCreatePost={createPost}
           onTextChange={onTextChange}
           loading={loadingStates['Post']}
         />
