@@ -3,8 +3,9 @@ import { useRouter } from 'next/router';
 import { firestore } from '@/firebase/clientApp';
 import { addDoc, collection, serverTimestamp, DocumentReference, Timestamp } from 'firebase/firestore';
 import { User } from 'firebase/auth';
+import { Post } from '@/atoms/postsAtoms';
 
-interface TextInputs {
+interface TextInput {
   title: string;
   body: string;
 }
@@ -22,7 +23,7 @@ export const usePostCreation = (
   user: User,
   communityImageURL: string | undefined,
   selectedFile: string | null,
-  textInput: TextInputs,
+  textInput: TextInput,
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
   const router = useRouter();
@@ -34,7 +35,7 @@ export const usePostCreation = (
     const { title, body } = textInput;
     const { uid, email } = user;
 
-    const newPost = {
+    const newPost: Post = {
       communityId: communityId as string,
       communityImageURL: communityImageURL || '',
       creatorId: uid,
