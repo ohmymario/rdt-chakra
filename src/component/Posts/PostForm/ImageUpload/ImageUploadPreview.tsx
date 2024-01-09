@@ -2,11 +2,11 @@
 import { Button, Image, Spacer, Stack } from '@chakra-ui/react';
 
 // Types
-import { tabLabels } from '@/hooks/useTabState';
+import { tabLabel } from '@/hooks/useTabState';
 
 interface ImageUploadPreviewProps {
   selectedFile: string;
-  setActiveTab: (tab: tabLabels) => void;
+  setActiveTab: (tab: tabLabel) => void;
   resetSelectedFile: () => void;
 }
 

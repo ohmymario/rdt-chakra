@@ -6,10 +6,10 @@ import { useState } from 'react';
  * @returns An object containing the active tab and a setter function.
  */
 
-export type tabLabels = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
+export type tabLabel = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 
 export const useTabState = () => {
-  const [activeTab, setActiveTab] = useState<tabLabels>('Post');
+  const [activeTab, setActiveTab] = useState<tabLabel>('Post');
 
   return {
     activeTab,

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 // Types
-import { tabLabels } from '@/hooks/useTabState';
+import { tabLabel } from '@/hooks/useTabState';
 
 // Components
 import ImageUploadError from './ImageUploadError';
@@ -15,7 +15,7 @@ interface ImageUploadProps {
   loading: boolean;
   onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectedFile: () => void;
-  setActiveTab: (tab: tabLabels) => void;
+  setActiveTab: (tab: tabLabel) => void;
 }
 
 const ImageUpload = (props: ImageUploadProps) => {

@@ -30,12 +30,14 @@ import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 import { usePostCreation } from '@/hooks/usePostCreation';
 
 // Types
-import { tabLabels } from '@/hooks/useTabState';
+import { tabLabel } from '@/hooks/useTabState';
 
 interface NewPostFormProps {
   user: FirebaseUser;
   communityImageURL?: string;
 }
+
+export type tabType = { label: tabLabel; icon: IconType; disabled?: boolean };
 
 const formTabs: tabType[] = [
   {
@@ -74,11 +76,11 @@ export interface inputType {
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const { user, communityImageURL } = props;
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<tabLabels>('Post');
+  const [activeTab, setActiveTab] = useState<tabLabel>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [error, setError] = useState<string | null>(null);
 
-  const [loadingStates, setLoadingStates] = useState<Record<tabLabels, boolean>>({
+  const [loadingStates, setLoadingStates] = useState<Record<tabLabel, boolean>>({
     Post: false,
     'Image & Video': false,
     Link: false,
@@ -102,7 +104,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   } = usePostCreation(user, communityImageURL, selectedFile, textInput, onUploadImage);
 
   // Generic Loading State Setter
-  const setLoadingState = (tab: tabLabels, state: boolean) => {
+  const setLoadingState = (tab: tabLabel, state: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [tab]: state }));
   };
 
