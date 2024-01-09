@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react';
-import { FunctionComponent, useEffect, useState } from 'react';
+import { FunctionComponent, use, useEffect, useState } from 'react';
 
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
@@ -137,20 +137,26 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   };
 
   useEffect(() => {
-    setLoadingStates((prev) => ({ ...prev, Post: postLoadingState }));
-  }, [postLoadingState]);
+    setLoadingStates((prev) => ({
+      ...prev,
+      'Image & Video': imageLoadingState,
+      Post: postLoadingState,
+    }));
+  }, [postLoadingState, imageLoadingState]);
 
   useEffect(() => {
-    setLoadingStates((prev) => ({ ...prev, 'Image & Video': imageLoadingState }));
-  }, [imageLoadingState]);
+    if (activeTab === 'Post') {
+      setError(postCreationError);
+    }
 
-  useEffect(() => {
-    setError(postCreationError);
-  }, [postCreationError]);
+    if (activeTab === 'Image & Video') {
+      setError(imageUploadError);
+    }
 
-  useEffect(() => {
-    setError(imageUploadError);
-  }, [imageUploadError]);
+    if (activeTab === 'Link') {
+      setError(null);
+    }
+  }, [postCreationError, imageUploadError]);
 
   return (
     <Flex {...newPostContainerStyles}>
