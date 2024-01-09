@@ -70,7 +70,6 @@ export interface inputType {
 
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const { user, communityImageURL } = props;
-  const router = useRouter();
   const [activeTab, setActiveTab] = useState<tabLabel>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
   const [error, setError] = useState<string | null>(null);
@@ -98,20 +97,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     error: postCreationError,
   } = usePostCreation(user, communityImageURL, selectedFile, textInput, onUploadImage);
 
-  // Generic Loading State Setter
-  const setLoadingState = (tab: tabLabel, state: boolean) => {
-    setLoadingStates((prev) => ({ ...prev, [tab]: state }));
-  };
-
   // Generic Text Input Handler
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
-
-  // Generic Error Resetter
-  const resetError = () => setError(null);
 
   const renderSelectedTabInput = () => {
     // POST BODY
