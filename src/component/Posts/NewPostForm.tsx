@@ -7,27 +7,24 @@ import TextInputs from './PostForm/TextInputs/TextInputs';
 import TabItem from './TabItem';
 
 //Icons
-import { Post } from '@/atoms/postsAtoms';
 import { BiPoll } from 'react-icons/bi';
 import { BsLink45Deg } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
 
 // Firebase
-import { firestore } from '@/firebase/clientApp';
 import { User as FirebaseUser } from 'firebase/auth';
-import { addDoc, collection, serverTimestamp, Timestamp } from 'firebase/firestore';
 
 // Router
 import { useRouter } from 'next/router';
 
 // Components
-import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 import NewPostFormError from './NewPostFormError';
+import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 
 // Hooks
-import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 import { usePostCreation } from '@/hooks/usePostCreation';
+import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 
 // Types
 import { tabLabel } from '@/hooks/useTabState';
@@ -58,8 +55,6 @@ const formTabs: tabType[] = [
     disabled: true,
   },
 ];
-
-export type tabType = { label: tabLabels; icon: IconType; disabled?: boolean };
 
 const newPostContainerStyles: FlexProps = {
   direction: 'column',
