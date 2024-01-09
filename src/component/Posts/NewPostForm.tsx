@@ -137,8 +137,16 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   };
 
   useEffect(() => {
+    setLoadingStates((prev) => ({ ...prev, Post: postLoadingState }));
+  }, [postLoadingState]);
+
+  useEffect(() => {
     setLoadingStates((prev) => ({ ...prev, 'Image & Video': imageLoadingState }));
   }, [imageLoadingState]);
+
+  useEffect(() => {
+    setError(postCreationError);
+  }, [postCreationError]);
 
   useEffect(() => {
     setError(imageUploadError);
