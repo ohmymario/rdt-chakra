@@ -34,6 +34,19 @@ interface NewPostFormProps {
   communityImageURL?: string;
 }
 
+interface TabStatus {
+  loading: boolean;
+  error: string | null;
+}
+
+interface StatusState {
+  Post: TabStatus;
+  'Image & Video': TabStatus;
+  Link: TabStatus;
+  Poll: TabStatus;
+  Talk: TabStatus;
+}
+
 export type tabType = { label: tabLabel; icon: IconType; disabled?: boolean };
 
 const formTabs: tabType[] = [
@@ -72,7 +85,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const { user, communityImageURL } = props;
   const [activeTab, setActiveTab] = useState<tabLabel>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
-  const [error, setError] = useState<string | null>(null);
 
   const [loadingStates, setLoadingStates] = useState<Record<tabLabel, boolean>>({
     Post: false,
@@ -80,6 +92,16 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     Link: false,
     Poll: false,
     Talk: false,
+  });
+  const [error, setError] = useState<string | null>(null);
+
+  // Status State to replace loadingStates and error
+  const [status, setStatus] = useState<StatusState>({
+    Post: { loading: false, error: null },
+    'Image & Video': { loading: false, error: null },
+    Link: { loading: false, error: null },
+    Poll: { loading: false, error: null },
+    Talk: { loading: false, error: null },
   });
 
   const {
