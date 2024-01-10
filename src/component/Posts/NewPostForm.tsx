@@ -86,15 +86,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [activeTab, setActiveTab] = useState<tabLabel>('Post');
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
 
-  const [loadingStates, setLoadingStates] = useState<Record<tabLabel, boolean>>({
-    Post: false,
-    'Image & Video': false,
-    Link: false,
-    Poll: false,
-    Talk: false,
-  });
-  const [error, setError] = useState<string | null>(null);
-
   // Status State to replace loadingStates and error
   const [status, setStatus] = useState<StatusState>({
     Post: { loading: false, error: null },
@@ -133,7 +124,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           textInput={textInput}
           handleCreatePost={createPost}
           onTextChange={onTextChange}
-          loading={loadingStates['Post']}
+          loading={status['Post'].loading}
         />
       );
     }
@@ -147,7 +138,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
           errorMessage={imageUploadError}
-          loading={loadingStates['Image & Video']}
+          loading={status['Image & Video'].loading}
         />
       );
     }
@@ -159,26 +150,12 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   };
 
   useEffect(() => {
-    setLoadingStates((prev) => ({
+    setStatus((prev) => ({
       ...prev,
-      'Image & Video': imageLoadingState,
-      Post: postLoadingState,
+      'Image & Video': { loading: imageLoadingState, error: imageUploadError },
+      Post: { loading: postLoadingState, error: postCreationError },
     }));
-  }, [postLoadingState, imageLoadingState]);
-
-  useEffect(() => {
-    if (activeTab === 'Post') {
-      setError(postCreationError);
-    }
-
-    if (activeTab === 'Image & Video') {
-      setError(imageUploadError);
-    }
-
-    if (activeTab === 'Link') {
-      setError(null);
-    }
-  }, [postCreationError, imageUploadError]);
+  }, [postLoadingState, imageLoadingState, postCreationError, imageUploadError]);
 
   return (
     <Flex {...newPostContainerStyles}>
@@ -196,7 +173,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         {renderSelectedTabInput()}
       </Flex>
       {/* ERROR */}
-      <NewPostFormError error={error} />
+      <NewPostFormError error={status[activeTab].error} />
     </Flex>
   );
 };
