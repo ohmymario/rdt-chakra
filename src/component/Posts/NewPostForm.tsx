@@ -1,5 +1,5 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react';
-import { FunctionComponent, use, useEffect, useState } from 'react';
+import { FunctionComponent, useEffect, useState } from 'react';
 
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
@@ -16,7 +16,6 @@ import { IconType } from 'react-icons/lib';
 import { User as FirebaseUser } from 'firebase/auth';
 
 // Router
-import { useRouter } from 'next/router';
 
 // Components
 import NewPostFormError from './NewPostFormError';
@@ -87,7 +86,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
 
   // Status State to replace loadingStates and error
-  const [status, setStatus] = useState<StatusState>({
+  const [tabStatus, setTabStatus] = useState<StatusState>({
     Post: { loading: false, error: null },
     'Image & Video': { loading: false, error: null },
     Link: { loading: false, error: null },
@@ -122,9 +121,9 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       return (
         <TextInputs
           textInput={textInput}
-          handleCreatePost={createPost}
+          createPost={createPost}
           onTextChange={onTextChange}
-          loading={status['Post'].loading}
+          loading={tabStatus['Post'].loading}
         />
       );
     }
@@ -138,7 +137,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
           errorMessage={imageUploadError}
-          loading={status['Image & Video'].loading}
+          loading={tabStatus['Image & Video'].loading}
         />
       );
     }
@@ -150,7 +149,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   };
 
   useEffect(() => {
-    setStatus((prev) => ({
+    setTabStatus((prev) => ({
       ...prev,
       'Image & Video': { loading: imageLoadingState, error: imageUploadError },
       Post: { loading: postLoadingState, error: postCreationError },
@@ -167,13 +166,12 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       </Flex>
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
-        {/* Title Component */}
         <PostFormTitle textInput={textInput} onTextChange={onTextChange} />
-        {/* Selected Input */}
         {renderSelectedTabInput()}
       </Flex>
+
       {/* ERROR */}
-      <NewPostFormError error={status[activeTab].error} />
+      <NewPostFormError error={tabStatus[activeTab].error} />
     </Flex>
   );
 };

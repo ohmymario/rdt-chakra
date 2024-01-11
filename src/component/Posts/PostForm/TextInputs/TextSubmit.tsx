@@ -2,12 +2,12 @@ import { Button, Flex } from '@chakra-ui/react';
 
 interface TextSubmitProps {
   isDisabled: boolean;
-  handleCreatePost: () => void;
+  createPost: () => Promise<void>;
   loading: boolean;
 }
 
 const TextSubmit = (props: TextSubmitProps) => {
-  const { isDisabled, handleCreatePost, loading } = props;
+  const { isDisabled, createPost, loading } = props;
 
   const buttonStyles = {
     height: '34px',
@@ -16,7 +16,7 @@ const TextSubmit = (props: TextSubmitProps) => {
 
   return (
     <Flex justify={'flex-end'}>
-      <Button {...buttonStyles} isDisabled={isDisabled} isLoading={loading} onClick={handleCreatePost}>
+      <Button {...buttonStyles} isDisabled={isDisabled} isLoading={loading} onClick={createPost}>
         Post
       </Button>
     </Flex>

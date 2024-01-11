@@ -1,4 +1,4 @@
-import { InputProps, Textarea } from '@chakra-ui/react';
+import { Textarea } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import TextSubmit from './TextSubmit';
 
@@ -9,11 +9,11 @@ interface TextInputsProps {
   };
   loading: boolean;
   onTextChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  handleCreatePost: () => void;
+  createPost: () => Promise<void>;
 }
 
 const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) => {
-  const { textInput, loading, onTextChange, handleCreatePost } = props;
+  const { textInput, loading, onTextChange, createPost } = props;
 
   const textAreaStyles = {
     fontSize: '10pt',
@@ -44,7 +44,7 @@ const TextInputs: FunctionComponent<TextInputsProps> = (props: TextInputsProps) 
       />
 
       {/* SUBMIT BUTTON */}
-      <TextSubmit isDisabled={isDisabled} handleCreatePost={handleCreatePost} loading={loading} />
+      <TextSubmit isDisabled={isDisabled} createPost={createPost} loading={loading} />
     </>
   );
 };
