@@ -6,9 +6,14 @@ import { useState } from 'react';
  * @returns An object containing the active tab and a setter function.
  */
 
+interface returnTabState {
+  activeTab: tabLabel;
+  setActiveTab: React.Dispatch<React.SetStateAction<tabLabel>>;
+}
+
 export type tabLabel = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 
-export const useTabState = () => {
+export const useTabState = (): returnTabState => {
   const [activeTab, setActiveTab] = useState<tabLabel>('Post');
 
   return {
