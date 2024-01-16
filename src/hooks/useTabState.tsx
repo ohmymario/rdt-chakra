@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-/**
- * @desc Manages the state for active tab in the New Post Form.
- * @param - The initial tab to be active.
- * @returns An object containing the active tab and a setter function.
- */
+export type tabLabel = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
 
-interface returnTabState {
+interface ReturnTabState {
   activeTab: tabLabel;
   setActiveTab: React.Dispatch<React.SetStateAction<tabLabel>>;
 }
 
-export type tabLabel = 'Post' | 'Image & Video' | 'Link' | 'Poll' | 'Talk';
+/**
+ * @desc Manages the state for active tab in the New Post Form.
+ * @param initialTab - The initial tab to be active. Defaults to 'Post'.
+ * @returns An object containing the active tab and a setter function.
+ */
 
-export const useTabState = (): returnTabState => {
-  const [activeTab, setActiveTab] = useState<tabLabel>('Post');
+export const useTabState = (initialTab: tabLabel = 'Post'): ReturnTabState => {
+  const [activeTab, setActiveTab] = useState<tabLabel>(initialTab);
 
   return {
     activeTab,

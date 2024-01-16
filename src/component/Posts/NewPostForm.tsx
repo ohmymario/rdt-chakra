@@ -22,6 +22,7 @@ import NewPostFormError from './NewPostFormError';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 
 // Hooks
+import { useTabState } from '@/hooks/useTabState';
 import { usePostCreation } from '@/hooks/usePostCreation';
 import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 
@@ -77,7 +78,6 @@ const newPostContainerStyles: FlexProps = {
 
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const { user, communityImageURL } = props;
-  const [activeTab, setActiveTab] = useState<tabLabel>('Post');
 
   const [tabStatus, setTabStatus] = useState<StatusState>({
     Post: { loading: false, error: null },
@@ -86,6 +86,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     Poll: { loading: false, error: null },
     Talk: { loading: false, error: null },
   });
+
+  const { activeTab, setActiveTab } = useTabState('Post');
 
   const {
     onUploadImage,
