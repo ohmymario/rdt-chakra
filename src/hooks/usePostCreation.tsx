@@ -4,11 +4,7 @@ import { firestore } from '@/firebase/clientApp';
 import { addDoc, collection, serverTimestamp, DocumentReference, Timestamp } from 'firebase/firestore';
 import { User } from 'firebase/auth';
 import { Post } from '@/atoms/postsAtoms';
-
-interface TextInput {
-  title: string;
-  body: string;
-}
+import { useTextInput } from '@/hooks/useTextInput';
 
 /**
  * @desc Manages the creation of a new post.
@@ -23,16 +19,15 @@ export const usePostCreation = (
   user: User,
   communityImageURL: string | undefined,
   selectedFile: string | null,
-  textInput: TextInput,
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
+  const { textInput, setTextInput } = useTextInput();
 
   const createPostObject = () => {
     const { communityId } = router.query;
-    const { title, body } = textInput;
     const { uid, email } = user;
 
     const newPost: Post = {
@@ -40,8 +35,8 @@ export const usePostCreation = (
       communityImageURL: communityImageURL || '',
       creatorId: uid,
       creatorDisplayName: email!.split('@')[0],
-      title: title,
-      body: body,
+      title: textInput.title,
+      body: textInput.body,
       numberOfComments: 0,
       voteStatus: 1,
       createdAt: serverTimestamp() as Timestamp,
@@ -49,11 +44,6 @@ export const usePostCreation = (
 
     return newPost;
   };
-
-  /**
-   * Creates a new post object and adds it to the database.
-   * @param textInput Object containing title and body of the post.
-   */
 
   const createPost = async () => {
     setLoadingState(true);
@@ -80,5 +70,5 @@ export const usePostCreation = (
     }
   };
 
-  return { createPost, error, loadingState };
+  return { createPost, setTextInput, textInput, error, loadingState };
 };

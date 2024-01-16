@@ -75,17 +75,10 @@ const newPostContainerStyles: FlexProps = {
   w: '100%',
 };
 
-export interface inputType {
-  title: string;
-  body: string;
-}
-
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const { user, communityImageURL } = props;
   const [activeTab, setActiveTab] = useState<tabLabel>('Post');
-  const [textInput, setTextInput] = useState<inputType>({ title: '', body: '' });
 
-  // Status State to replace loadingStates and error
   const [tabStatus, setTabStatus] = useState<StatusState>({
     Post: { loading: false, error: null },
     'Image & Video': { loading: false, error: null },
@@ -105,9 +98,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   const {
     createPost,
+    textInput,
+    setTextInput,
     loadingState: postLoadingState,
     error: postCreationError,
-  } = usePostCreation(user, communityImageURL, selectedFile, textInput, onUploadImage);
+  } = usePostCreation(user, communityImageURL, selectedFile, onUploadImage);
 
   // Generic Text Input Handler
   const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
