@@ -15,8 +15,6 @@ import { IconType } from 'react-icons/lib';
 // Firebase
 import { User as FirebaseUser } from 'firebase/auth';
 
-// Router
-
 // Components
 import NewPostFormError from './NewPostFormError';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
@@ -101,16 +99,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   const {
     createPost,
     textInput,
-    setTextInput,
+    handleInputChange,
     loadingState: postLoadingState,
     error: postCreationError,
   } = usePostCreation(user, communityImageURL, selectedFile, onUploadImage);
-
-  // Generic Text Input Handler
-  const onTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setTextInput((prev) => ({ ...prev, [name]: value }));
-  };
 
   const renderSelectedTabInput = () => {
     // POST BODY
@@ -119,7 +111,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
         <TextInputs
           textInput={textInput}
           createPost={createPost}
-          onTextChange={onTextChange}
+          onTextChange={handleInputChange}
           loading={tabStatus['Post'].loading}
         />
       );
@@ -163,7 +155,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       </Flex>
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
-        <PostFormTitle textInput={textInput} onTextChange={onTextChange} />
+        <PostFormTitle textInput={textInput} onTextChange={handleInputChange} />
         {renderSelectedTabInput()}
       </Flex>
 
