@@ -22,7 +22,7 @@ export const usePostCreation = (
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
   const { textInput, handleInputChange } = useTextInput();
 
@@ -47,7 +47,7 @@ export const usePostCreation = (
 
   const createPost = async () => {
     setLoadingState(true);
-    setError(null);
+    setErrorMessage(null);
 
     try {
       const newPost = createPostObject();
@@ -61,14 +61,14 @@ export const usePostCreation = (
       router.push(`/some/redirect/path`);
     } catch (error) {
       if (error instanceof Error) {
-        setError(`Error creating post: ${error.message}`);
+        setErrorMessage(`Error creating post: ${error.message}`);
       } else {
-        setError('An unexpected error occurred. Please try again.');
+        setErrorMessage('An unexpected error occurred. Please try again.');
       }
     } finally {
       setLoadingState(false);
     }
   };
 
-  return { createPost, handleInputChange, textInput, error, loadingState };
+  return { createPost, handleInputChange, textInput, errorMessage, loadingState };
 };

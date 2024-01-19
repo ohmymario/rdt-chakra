@@ -101,7 +101,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     textInput,
     handleInputChange,
     loadingState: postLoadingState,
-    error: postCreationError,
+    errorMessage: postCreationError,
   } = usePostCreation(user, communityImageURL, selectedFile, onUploadImage);
 
   const renderSelectedTabInput = () => {
