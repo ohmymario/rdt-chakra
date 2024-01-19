@@ -24,7 +24,7 @@ export const usePostCreation = (
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [loadingState, setLoadingState] = useState<boolean>(false);
-  const { textInput, setTextInput } = useTextInput();
+  const { textInput, handleInputChange } = useTextInput();
 
   const createPostObject = () => {
     const { communityId } = router.query;
@@ -70,5 +70,5 @@ export const usePostCreation = (
     }
   };
 
-  return { createPost, setTextInput, textInput, error, loadingState };
+  return { createPost, handleInputChange, textInput, error, loadingState };
 };
