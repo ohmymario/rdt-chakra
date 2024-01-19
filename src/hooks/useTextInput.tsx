@@ -23,5 +23,5 @@ export const useTextInput = () => {
     setTextInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  return { textInput, setTextInput, handleInputChange };
+  return { textInput, handleInputChange };
 };
