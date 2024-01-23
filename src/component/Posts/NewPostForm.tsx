@@ -100,8 +100,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     createPost,
     textInput,
     handleInputChange,
-    loadingState: postLoadingState,
-    errorMessage: postCreationError,
+    status: postCreationStatus,
   } = usePostCreation(user, communityImageURL, selectedFile, onUploadImage);
 
   const renderSelectedTabInput = () => {
@@ -141,9 +140,9 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     setTabStatus((prev) => ({
       ...prev,
       'Image & Video': { loading: imageLoadingState, error: imageUploadError },
-      Post: { loading: postLoadingState, error: postCreationError },
+      Post: { loading: postCreationStatus.loading, error: postCreationStatus.error },
     }));
-  }, [postLoadingState, imageLoadingState, postCreationError, imageUploadError]);
+  }, [imageLoadingState, imageUploadError, postCreationStatus]);
 
   return (
     <Flex {...newPostContainerStyles}>

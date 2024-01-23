@@ -15,6 +15,11 @@ import { useTextInput } from '@/hooks/useTextInput';
  * @returns An object containing functions and states related to post creation.
  */
 
+interface StatusState {
+  error: string | null;
+  loading: boolean;
+}
+
 export const usePostCreation = (
   user: User,
   communityImageURL: string | undefined,
@@ -22,8 +27,12 @@ export const usePostCreation = (
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loadingState, setLoadingState] = useState<boolean>(false);
+
+  const [status, setStatus] = useState<StatusState>({
+    error: null,
+    loading: false,
+  });
+
   const { textInput, handleInputChange } = useTextInput();
 
   const createPostObject = () => {
@@ -46,8 +55,10 @@ export const usePostCreation = (
   };
 
   const createPost = async () => {
-    setLoadingState(true);
-    setErrorMessage(null);
+    setStatus({
+      error: null,
+      loading: true,
+    });
 
     try {
       const newPost = createPostObject();
@@ -61,14 +72,20 @@ export const usePostCreation = (
       router.push(`/some/redirect/path`);
     } catch (error) {
       if (error instanceof Error) {
-        setErrorMessage(`Error creating post: ${error.message}`);
+        setStatus({
+          error: `Error creating post: ${error.message}`,
+          loading: false,
+        });
       } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
+        setStatus({
+          error: 'An unexpected error occurred. Please try again.',
+          loading: false,
+        });
       }
     } finally {
-      setLoadingState(false);
+      setStatus((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  return { createPost, handleInputChange, textInput, errorMessage, loadingState };
+  return { createPost, handleInputChange, textInput, status };
 };
