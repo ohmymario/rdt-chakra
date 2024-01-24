@@ -18,6 +18,7 @@ import { useTextInput } from '@/hooks/useTextInput';
 interface StatusState {
   error: string | null;
   loading: boolean;
+  success: boolean;
 }
 
 export const usePostCreation = (
@@ -31,6 +32,7 @@ export const usePostCreation = (
   const [status, setStatus] = useState<StatusState>({
     error: null,
     loading: false,
+    success: false,
   });
 
   const { textInput, handleInputChange } = useTextInput();
@@ -58,28 +60,36 @@ export const usePostCreation = (
     setStatus({
       error: null,
       loading: true,
+      success: false,
     });
 
     try {
       const newPost = createPostObject();
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
 
-      if (selectedFile) {
-        await onUploadImage(postDocRef);
-      }
+      if (selectedFile) await onUploadImage(postDocRef);
 
-      // Redirect or perform further actions after successful post creation
+      // TODO - Redirect to the newly created post
+      // TODO - SUCCESS FOR STATUS
+      setStatus({
+        error: null,
+        loading: false,
+        success: true,
+      });
+
       router.push(`/some/redirect/path`);
-    } catch (error) {
+    } catch (error: unknown) {
       if (error instanceof Error) {
         setStatus({
           error: `Error creating post: ${error.message}`,
           loading: false,
+          success: false,
         });
       } else {
         setStatus({
           error: 'An unexpected error occurred. Please try again.',
           loading: false,
+          success: false,
         });
       }
     } finally {
