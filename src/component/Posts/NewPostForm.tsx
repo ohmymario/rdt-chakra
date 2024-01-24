@@ -92,8 +92,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     onSelectFile,
     resetSelectedFile,
     selectedFile,
-    loadingState: imageLoadingState,
-    errorMessage: imageUploadError,
+    status: postImageStatus,
   } = usePostImageUpload();
 
   const {
@@ -139,10 +138,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
   useEffect(() => {
     setTabStatus((prev) => ({
       ...prev,
-      'Image & Video': { loading: imageLoadingState, error: imageUploadError },
+      'Image & Video': { loading: postImageStatus.loading, error: postImageStatus.error },
       Post: { loading: postCreationStatus.loading, error: postCreationStatus.error },
     }));
-  }, [imageLoadingState, imageUploadError, postCreationStatus]);
+  }, [postImageStatus, postCreationStatus]);
 
   return (
     <Flex {...newPostContainerStyles}>

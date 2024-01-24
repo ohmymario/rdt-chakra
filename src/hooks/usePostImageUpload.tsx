@@ -4,13 +4,26 @@ import { getDownloadURL, ref, uploadString } from 'firebase/storage';
 import { useEffect, useState } from 'react';
 import useSelectFile from './useSelectFile';
 
+interface StatusState {
+  error: string | null;
+  loading: boolean;
+  success: boolean;
+}
+
 export const usePostImageUpload = () => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [loadingState, setLoadingState] = useState<boolean>(false);
+  const [status, setStatus] = useState<StatusState>({
+    error: null,
+    loading: false,
+    success: false,
+  });
+
   const { selectedFile, onSelectFile, resetSelectedFile, errorMessage: fileSelectionError } = useSelectFile();
 
   useEffect(() => {
-    setErrorMessage(fileSelectionError);
+    setStatus((prev) => ({
+      ...prev,
+      error: fileSelectionError,
+    }));
   }, [fileSelectionError]);
 
   // Upload Post Image to Cloud ☁️
@@ -24,37 +37,47 @@ export const usePostImageUpload = () => {
     await updateDoc(docRef, { imageURL: downloadURL });
   };
 
-  // Handler Image Upload Errors with Message
-  // Enhanced error handler with context for clearer error messages
   const handleCatchError = (error: unknown, context: 'fileSelection' | 'upload') => {
     let prefix = context === 'fileSelection' ? 'File selection error: ' : 'Image upload error: ';
     if (error instanceof Error) {
-      setErrorMessage(prefix + error.message);
+      setStatus((prev) => ({
+        ...prev,
+        error: prefix + error.message,
+      }));
     } else {
-      setErrorMessage(prefix + 'An unknown error occurred. Please try again later.');
+      setStatus((prev) => ({
+        ...prev,
+        error: prefix + 'An unknown error occurred. Please try again later.',
+      }));
     }
   };
 
   // Initiate Upload
   const onUploadImage = async (docRef: DocumentReference<DocumentData>) => {
-    setLoadingState(true);
+    setStatus({
+      error: null,
+      loading: true,
+      success: false,
+    });
 
     if (!selectedFile) {
-      handleCatchError(new Error('Please select an image to upload.'), 'fileSelection');
-      setLoadingState(false);
+      setStatus((prev) => ({
+        ...prev,
+        error: 'Image upload error: Please select an image to upload.',
+        loading: false,
+      }));
       return;
     }
 
-    setErrorMessage(null);
-
     try {
       await uploadPostImageToStorage(docRef);
+      setStatus((prev) => ({ ...prev, success: true }));
     } catch (error: unknown) {
       handleCatchError(error, 'upload');
     } finally {
-      setLoadingState(false);
+      setStatus((prev) => ({ ...prev, loading: false }));
     }
   };
 
-  return { onUploadImage, onSelectFile, resetSelectedFile, selectedFile, loadingState, errorMessage };
+  return { onUploadImage, onSelectFile, resetSelectedFile, selectedFile, status };
 };
