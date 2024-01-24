@@ -26,6 +26,7 @@ import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 
 // Types
 import { tabLabel } from '@/hooks/useTabState';
+import NewPostFormSubmit from './NewPostFormSubmit';
 
 interface NewPostFormProps {
   user: FirebaseUser;
@@ -106,12 +107,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     // POST BODY
     if (activeTab === 'Post') {
       return (
-        <TextInputs
-          textInput={textInput}
-          createPost={createPost}
-          onTextChange={handleInputChange}
-          loading={tabStatus['Post'].loading}
-        />
+        <TextInputs textInput={textInput} onTextChange={handleInputChange} errorMessage={tabStatus['Post'].error} />
       );
     }
 
@@ -123,7 +119,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           onSelectFile={onSelectFile}
           resetSelectedFile={resetSelectedFile}
           setActiveTab={setActiveTab}
-          errorMessage={imageUploadError}
+          errorMessage={tabStatus['Image & Video'].error}
           loading={tabStatus['Image & Video'].loading}
         />
       );
@@ -135,6 +131,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     }
   };
 
+  const isDisabled = textInput.title === '' || textInput.body === '';
+
   useEffect(() => {
     setTabStatus((prev) => ({
       ...prev,
@@ -145,7 +143,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   return (
     <Flex {...newPostContainerStyles}>
-      {/* TOP TABS SELECTOR */}
       <Flex>
         {formTabs.map((tab: tabType, i) => (
           <TabItem tab={tab} key={i} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
@@ -155,10 +152,8 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       <Flex direction={'column'} gap={3} width='100%' p={4}>
         <PostFormTitle textInput={textInput} onTextChange={handleInputChange} />
         {renderSelectedTabInput()}
+        <NewPostFormSubmit isDisabled={isDisabled} loading={postCreationStatus.loading} createPost={createPost} />
       </Flex>
-
-      {/* ERROR */}
-      <NewPostFormError error={tabStatus[activeTab].error} />
     </Flex>
   );
 };
