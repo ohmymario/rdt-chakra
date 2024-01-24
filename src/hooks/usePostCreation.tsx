@@ -70,14 +70,13 @@ export const usePostCreation = (
       if (selectedFile) await onUploadImage(postDocRef);
 
       // TODO - Redirect to the newly created post
-      // TODO - SUCCESS FOR STATUS
       setStatus({
         error: null,
         loading: false,
         success: true,
       });
 
-      router.push(`/some/redirect/path`);
+      router.push(`/r/${newPost.communityId}/comments/${postDocRef.id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
         setStatus({
