@@ -66,30 +66,15 @@ export const usePostCreation = (
     try {
       const newPost = createPostObject();
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
-
       if (selectedFile) await onUploadImage(postDocRef);
 
-      // TODO - Redirect to the newly created post
-      setStatus({
-        error: null,
-        loading: false,
-        success: true,
-      });
-
+      setStatus((prev) => ({ ...prev, success: true }));
       router.push(`/r/${newPost.communityId}/comments/${postDocRef.id}`);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        setStatus({
-          error: `Error creating post: ${error.message}`,
-          loading: false,
-          success: false,
-        });
+        setStatus((prev) => ({ ...prev, error: `Error creating post: ${(error as Error).message}` }));
       } else {
-        setStatus({
-          error: 'An unexpected error occurred. Please try again.',
-          loading: false,
-          success: false,
-        });
+        setStatus((prev) => ({ ...prev, error: `An unexpected error occurred. Please try again.` }));
       }
     } finally {
       setStatus((prev) => ({ ...prev, loading: false }));
