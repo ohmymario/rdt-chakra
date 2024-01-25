@@ -107,7 +107,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     // POST BODY
     if (activeTab === 'Post') {
       return (
-        <TextInputs textInput={textInput} onTextChange={handleInputChange} errorMessage={tabStatus['Post'].error} />
+        <TextInputs
+          textInput={textInput}
+          handleInputChange={handleInputChange}
+          errorMessage={tabStatus['Post'].error}
+        />
       );
     }
 

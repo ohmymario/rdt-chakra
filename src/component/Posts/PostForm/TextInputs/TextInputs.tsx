@@ -1,5 +1,4 @@
 import { Textarea } from '@chakra-ui/react';
-import { FunctionComponent } from 'react';
 
 interface TextInputsProps {
   textInput: {
@@ -7,11 +6,11 @@ interface TextInputsProps {
     body: string;
   };
   errorMessage: string | null;
-  onTextChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 const TextInputs = (props: TextInputsProps) => {
-  const { textInput, errorMessage, onTextChange } = props;
+  const { textInput, errorMessage, handleInputChange } = props;
 
   const textAreaStyles = {
     fontSize: '10pt',
@@ -36,7 +35,7 @@ const TextInputs = (props: TextInputsProps) => {
         name='body'
         placeholder='Text (optional)'
         value={textInput.body}
-        onChange={(e) => onTextChange(e)}
+        onChange={(e) => handleInputChange(e)}
         {...textAreaStyles}
       />
     </>
