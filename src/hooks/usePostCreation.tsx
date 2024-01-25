@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { firestore } from '@/firebase/clientApp';
+import { firestore, auth } from '@/firebase/clientApp';
 import { addDoc, collection, serverTimestamp, DocumentReference, Timestamp } from 'firebase/firestore';
-import { User } from 'firebase/auth';
+import { useAuthState } from 'react-firebase-hooks/auth';
 import { Post } from '@/atoms/postsAtoms';
 import { useTextInput } from '@/hooks/useTextInput';
 
 /**
  * @desc Manages the creation of a new post.
- * @param user The current logged in user.
  * @param communityImageURL The image URL of the community.
  * @param selectedFile The selected file for image upload.
  * @param onUploadImage Function to upload an image.
@@ -22,11 +21,11 @@ interface StatusState {
 }
 
 export const usePostCreation = (
-  user: User,
   communityImageURL: string | undefined,
   selectedFile: string | null,
   onUploadImage: (docRef: DocumentReference) => Promise<void>
 ) => {
+  const [user] = useAuthState(auth);
   const router = useRouter();
 
   const [status, setStatus] = useState<StatusState>({
@@ -39,8 +38,9 @@ export const usePostCreation = (
 
   const createPostObject = () => {
     const { communityId } = router.query;
-    const { uid, email } = user;
+    if (!user) return null; // Handle null user case
 
+    const { uid, email } = user;
     const newPost: Post = {
       communityId: communityId as string,
       communityImageURL: communityImageURL || '',
@@ -57,6 +57,11 @@ export const usePostCreation = (
   };
 
   const createPost = async () => {
+    if (!user) {
+      setStatus((prev) => ({ ...prev, error: 'User not authenticated' }));
+      return;
+    }
+
     setStatus({
       error: null,
       loading: true,
@@ -65,6 +70,8 @@ export const usePostCreation = (
 
     try {
       const newPost = createPostObject();
+      if (!newPost) throw new Error('Invalid user data');
+
       const postDocRef = await addDoc(collection(firestore, 'posts'), newPost);
       if (selectedFile) await onUploadImage(postDocRef);
 
