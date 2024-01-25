@@ -12,9 +12,6 @@ import { BsLink45Deg } from 'react-icons/bs';
 import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
 import { IconType } from 'react-icons/lib';
 
-// Firebase
-import { User as FirebaseUser } from 'firebase/auth';
-
 // Components
 import NewPostFormError from './NewPostFormError';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
@@ -29,7 +26,6 @@ import { tabLabel } from '@/hooks/useTabState';
 import NewPostFormSubmit from './NewPostFormSubmit';
 
 interface NewPostFormProps {
-  user: FirebaseUser;
   communityImageURL?: string;
 }
 
@@ -76,7 +72,7 @@ const newPostContainerStyles: FlexProps = {
 };
 
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
-  const { user, communityImageURL } = props;
+  const { communityImageURL } = props;
 
   const [tabStatus, setTabStatus] = useState<StatusState>({
     Post: { loading: false, error: null },
@@ -101,7 +97,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
     textInput,
     handleInputChange,
     status: postCreationStatus,
-  } = usePostCreation(user, communityImageURL, selectedFile, onUploadImage);
+  } = usePostCreation(communityImageURL, selectedFile, onUploadImage);
 
   const renderSelectedTabInput = () => {
     // POST BODY
