@@ -4,26 +4,18 @@ import { FunctionComponent, useEffect, useState } from 'react';
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
 import TextInputs from './PostForm/TextInputs/TextInputs';
-// import TabItem from './TabItem';
-
-//Icons
-import { BiPoll } from 'react-icons/bi';
-import { BsLink45Deg } from 'react-icons/bs';
-import { IoDocumentText, IoImageOutline } from 'react-icons/io5';
-import { IconType } from 'react-icons/lib';
 
 // Components
-import NewPostFormError from './NewPostFormError';
 import PostFormTitle from './PostForm/PostFormTitle/PostFormTitle';
 
 // Hooks
-import { useTabState } from '@/hooks/useTabState';
 import { usePostCreation } from '@/hooks/usePostCreation';
 import { usePostImageUpload } from '@/hooks/usePostImageUpload';
+import { useTabState } from '@/hooks/useTabState';
 
 // Types
-import { tabLabel } from '@/hooks/useTabState';
 import NewPostFormSubmit from './NewPostFormSubmit';
+import FormTabs from './PostForm/FormTabs/FormTabs';
 
 interface NewPostFormProps {
   communityImageURL?: string;
@@ -41,28 +33,6 @@ interface StatusState {
   Poll: TabStatus;
   Talk: TabStatus;
 }
-
-export type tabType = { label: tabLabel; icon: IconType; disabled?: boolean };
-
-const formTabs: tabType[] = [
-  {
-    label: 'Post',
-    icon: IoDocumentText,
-  },
-  {
-    label: 'Image & Video',
-    icon: IoImageOutline,
-  },
-  {
-    label: 'Link',
-    icon: BsLink45Deg,
-  },
-  {
-    label: 'Poll',
-    icon: BiPoll,
-    disabled: true,
-  },
-];
 
 const newPostContainerStyles: FlexProps = {
   direction: 'column',
@@ -143,11 +113,7 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   return (
     <Flex {...newPostContainerStyles}>
-      <Flex>
-        {formTabs.map((tab: tabType, i) => (
-          <TabItem tab={tab} key={i} selected={tab.label === activeTab} setActiveTab={setActiveTab} />
-        ))}
-      </Flex>
+      <FormTabs setActiveTab={setActiveTab} activeTab={activeTab} />
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
         <PostFormTitle textInput={textInput} onTextChange={handleInputChange} />
