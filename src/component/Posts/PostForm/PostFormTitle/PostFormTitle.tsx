@@ -1,8 +1,8 @@
 import { Input, InputGroup, InputProps, InputRightElement, Text, TextProps } from '@chakra-ui/react';
-import { inputType } from '../../NewPostForm';
+import { InputType } from '@/hooks/useTextInput';
 
 interface PostFormTitleProps {
-  textInput: inputType;
+  textInput: InputType;
   onTextChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
