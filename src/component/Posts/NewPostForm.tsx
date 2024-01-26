@@ -4,7 +4,7 @@ import { FunctionComponent, useEffect, useState } from 'react';
 //Components
 import ImageUpload from './PostForm/ImageUpload/ImageUpload';
 import TextInputs from './PostForm/TextInputs/TextInputs';
-import TabItem from './TabItem';
+// import TabItem from './TabItem';
 
 //Icons
 import { BiPoll } from 'react-icons/bi';
