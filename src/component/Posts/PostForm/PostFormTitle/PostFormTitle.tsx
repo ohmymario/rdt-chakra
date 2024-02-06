@@ -1,4 +1,7 @@
+// Chakra UI
 import { Input, InputGroup, InputProps, InputRightElement, Text, TextProps } from '@chakra-ui/react';
+
+// Hooks
 import { InputType } from '@/hooks/useTextInput';
 
 interface PostFormTitleProps {
