@@ -116,7 +116,10 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
       <FormTabs setActiveTab={setActiveTab} activeTab={activeTab} />
 
       <Flex direction={'column'} gap={3} width='100%' p={4}>
+        {/* FORM TITLE */}
         <PostFormTitle textInput={textInput} onTextChange={handleInputChange} />
+
+        {/* FORM INPUT */}
         {renderSelectedTabInput()}
         <NewPostFormSubmit isDisabled={isDisabled} loading={postCreationStatus.loading} createPost={createPost} />
       </Flex>

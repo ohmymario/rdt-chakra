@@ -1,34 +1,67 @@
 // Chakra UI Components
-import { Button, Image, Spacer, Stack } from '@chakra-ui/react';
-
-// Types
-import { tabLabel } from '@/hooks/useTabState';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { Box, Flex, Image } from '@chakra-ui/react';
 
 interface ImageUploadPreviewProps {
   selectedFile: string;
-  setActiveTab: (tab: tabLabel) => void;
   resetSelectedFile: () => void;
 }
 
 const ImageUploadPreview = (props: ImageUploadPreviewProps) => {
-  const { selectedFile, setActiveTab, resetSelectedFile } = props;
+  const { selectedFile, resetSelectedFile } = props;
   return (
-    <>
-      <Image src={selectedFile} alt='Your uploaded image preview' maxW='400px' maxH='400px' />
+    <Flex
+      justifyContent='center'
+      direction='column'
+      border='1px solid'
+      borderColor='gray.200'
+      borderRadius='4'
+      position='relative'
+      overflow='hidden'
+    >
+      {/* Image Container */}
+      <Flex
+        position='relative'
+        alignSelf='center'
+        maxH='400px'
+        width='100%'
+        overflow='hidden'
+        align='center'
+        justify='center'
+      >
+        {/* Blurry Background Image */}
+        <Image
+          src={selectedFile}
+          alt='Background Preview'
+          width='100%'
+          height='100%'
+          transform='scale(1.1)'
+          filter='blur(13px)'
+          position='absolute'
+          top={0}
+          left={0}
+        />
 
-      {/* SPACER */}
-      <Spacer />
-      {/* SPACER */}
+        {/* Clear Image */}
+        <Image src={selectedFile} alt='Your uploaded image preview' maxH='400px' position='relative' zIndex={1} />
+      </Flex>
 
-      <Stack direction='row' spacing={4} mt={6}>
-        <Button height='28px' aria-label='Go back to post editing' onClick={() => setActiveTab('Post')}>
-          Back to Post
-        </Button>
-        <Button height='28px' variant='outline' aria-label='Remove selected image' onClick={resetSelectedFile}>
-          Remove
-        </Button>
-      </Stack>
-    </>
+      {/* Delete Image */}
+      <Box m={2} alignSelf='flex-end' padding={1} zIndex={2}>
+        <DeleteIcon
+          boxSize={8}
+          color='gray.500'
+          cursor='pointer'
+          onClick={resetSelectedFile}
+          p={1.5}
+          _hover={{
+            bg: 'gray.100',
+            cursor: 'pointer',
+            borderRadius: '4',
+          }}
+        />
+      </Box>
+    </Flex>
   );
 };
 
