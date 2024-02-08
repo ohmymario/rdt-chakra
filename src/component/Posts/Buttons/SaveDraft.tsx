@@ -12,10 +12,10 @@ const SaveDraft = (props: SaveDraftProps) => {
   const buttonStyles = {
     _hover: isDisabled
       ? {
-          backgroundColor: 'gray.50',
+          backgroundColor: 'gray.100',
         }
       : {
-          backgroundColor: 'gray.50',
+          backgroundColor: 'gray.100',
         },
   };
 
