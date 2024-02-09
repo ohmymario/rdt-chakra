@@ -44,6 +44,34 @@ export const Button: ComponentStyleConfig = {
         bg: 'gray.50',
       },
     },
+    postOutline: {
+      color: 'gray.500',
+      height: '32px',
+      border: '1px solid',
+      padding: '0px 22px',
+      borderColor: 'gray.500',
+      _hover: {
+        backgroundColor: 'gray.100',
+      },
+      _disabled: {
+        cursor: 'not-allowed',
+      },
+    },
+    postSolid: {
+      color: 'gray.600',
+      height: '32px',
+      border: '1px solid',
+      padding: '0px 22px',
+      backgroundColor: 'gray.400',
+      borderColor: 'gray.400',
+      _hover: {
+        backgroundColor: 'gray.300',
+        borderColor: 'gray.300',
+      },
+      _disabled: {
+        cursor: 'not-allowed',
+      },
+    },
     auth: {
       color: 'white',
       bg: '#D93A00',
