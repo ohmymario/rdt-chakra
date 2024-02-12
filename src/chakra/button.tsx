@@ -46,10 +46,11 @@ export const Button: ComponentStyleConfig = {
     },
     postOutline: {
       color: 'gray.500',
+      borderColor: 'gray.500',
+
       height: '32px',
       border: '1px solid',
       padding: '0px 22px',
-      borderColor: 'gray.500',
       _hover: {
         backgroundColor: 'gray.100',
       },
@@ -59,11 +60,12 @@ export const Button: ComponentStyleConfig = {
     },
     postSolid: {
       color: 'gray.600',
+      backgroundColor: 'gray.400',
+      borderColor: 'gray.400',
+
       height: '32px',
       border: '1px solid',
       padding: '0px 22px',
-      backgroundColor: 'gray.400',
-      borderColor: 'gray.400',
       _hover: {
         backgroundColor: 'gray.300',
         borderColor: 'gray.300',
