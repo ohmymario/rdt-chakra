@@ -3,11 +3,11 @@ import { Button, Flex } from '@chakra-ui/react';
 interface CancelProps {
   isDisabled?: boolean;
   loading?: boolean;
-  functionality?: () => Promise<void>;
+  onCancel?: () => Promise<void>;
 }
 
 const Cancel = (props: CancelProps) => {
-  const { isDisabled, functionality, loading } = props;
+  const { isDisabled, onCancel, loading } = props;
 
   const cancelButtonStyles = {
     color: 'blue.500',
@@ -23,7 +23,7 @@ const Cancel = (props: CancelProps) => {
         {...cancelButtonStyles}
         isDisabled={isDisabled}
         isLoading={loading}
-        onClick={functionality}
+        onClick={onCancel}
         variant='postOutline'
       >
         Cancel
