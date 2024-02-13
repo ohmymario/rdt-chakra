@@ -3,7 +3,7 @@ import { Button, Flex } from '@chakra-ui/react';
 interface CancelProps {
   isDisabled?: boolean;
   loading?: boolean;
-  onCancel?: () => Promise<void>;
+  onCancel: () => void;
 }
 
 const Cancel = (props: CancelProps) => {
