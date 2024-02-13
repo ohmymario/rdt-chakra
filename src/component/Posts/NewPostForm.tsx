@@ -14,8 +14,12 @@ import { usePostImageUpload } from '@/hooks/usePostImageUpload';
 import { useTabState } from '@/hooks/useTabState';
 
 // Types
-import NewPostFormSubmit from './NewPostFormSubmit';
 import FormTabs from './PostForm/FormTabs/FormTabs';
+
+// Buttons
+import Cancel from './Buttons/Cancel';
+import SaveDraft from './Buttons/SaveDraft';
+import Submit from './Buttons/Submit';
 
 interface NewPostFormProps {
   communityImageURL?: string;
@@ -121,7 +125,19 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
         {/* FORM INPUT */}
         {renderSelectedTabInput()}
-        <NewPostFormSubmit isDisabled={isDisabled} loading={postCreationStatus.loading} createPost={createPost} />
+
+        {/* FORM SUBMIT / CANCEL / SAVE DRAFT */}
+        <Flex justify={'flex-end'} gap={2}>
+          <SaveDraft loading={postCreationStatus.loading} isDisabled={isDisabled} />
+
+          <Cancel
+            loading={postCreationStatus.loading}
+            // isDisabled={isDisabled}
+            onCancel={() => alert('cancel clicked')}
+          />
+
+          <Submit isDisabled={isDisabled} loading={postCreationStatus.loading} createPost={createPost} />
+        </Flex>
       </Flex>
     </Flex>
   );

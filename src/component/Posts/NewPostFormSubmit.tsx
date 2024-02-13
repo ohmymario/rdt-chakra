@@ -9,14 +9,20 @@ interface NewPostFormSubmitProps {
 const NewPostFormSubmit = (props: NewPostFormSubmitProps) => {
   const { isDisabled, createPost, loading } = props;
 
-  const buttonStyles = {
-    height: '34px',
-    padding: '0px 30px',
-  };
+  // const buttonStyles = {
+  //   height: '32px',
+  //   padding: '0px 22px',
+  // };
 
   return (
     <Flex justify={'flex-end'}>
-      <Button {...buttonStyles} isDisabled={isDisabled} isLoading={loading} onClick={createPost}>
+      <Button
+        // {...buttonStyles}
+        isDisabled={isDisabled}
+        isLoading={loading}
+        onClick={createPost}
+        variant='postSolid'
+      >
         Post
       </Button>
     </Flex>
