@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { Flex, FlexProps, Text } from '@chakra-ui/react';
 import { FunctionComponent, useEffect, useState } from 'react';
 
@@ -20,7 +21,6 @@ import FormTabs from './PostForm/FormTabs/FormTabs';
 import Cancel from './Buttons/Cancel';
 import SaveDraft from './Buttons/SaveDraft';
 import Submit from './Buttons/Submit';
-import { useRouter } from 'next/router';
 
 interface NewPostFormProps {
   communityImageURL?: string;
