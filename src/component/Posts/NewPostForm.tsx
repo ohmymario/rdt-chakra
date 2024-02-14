@@ -20,6 +20,7 @@ import FormTabs from './PostForm/FormTabs/FormTabs';
 import Cancel from './Buttons/Cancel';
 import SaveDraft from './Buttons/SaveDraft';
 import Submit from './Buttons/Submit';
+import { useRouter } from 'next/router';
 
 interface NewPostFormProps {
   communityImageURL?: string;
@@ -46,6 +47,7 @@ const newPostContainerStyles: FlexProps = {
 };
 
 const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
+  const router = useRouter();
   const { communityImageURL } = props;
 
   const [tabStatus, setTabStatus] = useState<StatusState>({
@@ -107,6 +109,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
   const isDisabled = textInput.title === '' || textInput.body === '';
 
+  // function that sends the user to the home page
+  const cancelPost = () => {
+    router.push('/');
+  };
+
   useEffect(() => {
     setTabStatus((prev) => ({
       ...prev,
@@ -128,15 +135,11 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
 
         {/* FORM SUBMIT / CANCEL / SAVE DRAFT */}
         <Flex justify={'flex-end'} gap={2}>
-          <SaveDraft loading={postCreationStatus.loading} isDisabled={isDisabled} />
-
-          <Cancel
-            loading={postCreationStatus.loading}
-            // isDisabled={isDisabled}
-            onCancel={() => alert('cancel clicked')}
-          />
-
-          <Submit isDisabled={isDisabled} loading={postCreationStatus.loading} createPost={createPost} />
+          {activeTab === 'Post' && <SaveDraft loading={postCreationStatus.loading} isDisabled={isDisabled} />}
+          {activeTab === 'Image & Video' && (
+            <Cancel loading={postCreationStatus.loading} isDisabled={false} onCancel={cancelPost} />
+          )}
+          <Submit loading={postCreationStatus.loading} isDisabled={isDisabled} createPost={createPost} />
         </Flex>
       </Flex>
     </Flex>
