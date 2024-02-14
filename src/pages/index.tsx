@@ -4,7 +4,7 @@ import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem/PostItem';
-import PostLoaderSkeleton from '@/component/Posts/PostLoaderSkeleton';
+import PostLoaderSkeleton from '@/component/Posts/PostSkeletonLoader/PostLoaderSkeleton';
 import PostsError from '@/component/Posts/PostsError';
 import { auth } from '@/firebase/clientApp';
 import useAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
@@ -17,10 +17,19 @@ import type { NextPage } from 'next';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
+interface Status {
+  loading: boolean;
+  error: string | null;
+}
+
 const Home: NextPage = () => {
   // Local State
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+
+  const [status, setStatus] = useState<Status>({
+    loading: true,
+    error: null,
+  });
 
   const [user, loadingUser] = useAuthState(auth);
   const { communityStateValue } = useCommunityData();
@@ -46,10 +55,13 @@ const Home: NextPage = () => {
         setError(new Error(error));
         return;
       }
-      if (!loading) setLoading(false);
+
+      if (!loading) {
+        setStatus({ ...status, loading: false });
+      }
       updateStateValue(key, data);
     },
-    [updateStateValue]
+    [updateStateValue, status]
   );
 
   // Get Community Posts
@@ -105,9 +117,9 @@ const Home: NextPage = () => {
   return (
     <PageContent>
       <>
-        {loading && <PostLoaderSkeleton count={4} />}
+        {status.loading && <PostLoaderSkeleton count={4} />}
         {error && <PostsError error={error} />}
-        {!loading && !error && (
+        {!status.loading && !error && (
           <Stack>
             {postStateValue.posts.map((post, index) => {
               const userIsCreator = user?.uid === post.creatorId;
