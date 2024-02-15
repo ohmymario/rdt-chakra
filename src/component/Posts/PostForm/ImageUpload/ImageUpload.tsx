@@ -36,7 +36,7 @@ const ImageUpload = (props: ImageUploadProps) => {
         <ImageUploadPreview
           selectedFile={selectedFile}
           resetSelectedFile={resetSelectedFile}
-          setActiveTab={setActiveTab}
+          // setActiveTab={setActiveTab}
         />
       );
     }
