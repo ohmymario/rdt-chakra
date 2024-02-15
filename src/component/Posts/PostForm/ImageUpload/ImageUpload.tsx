@@ -15,11 +15,10 @@ interface ImageUploadProps {
   loading: boolean;
   onSelectFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   resetSelectedFile: () => void;
-  setActiveTab: (tab: tabLabel) => void;
 }
 
 const ImageUpload = (props: ImageUploadProps) => {
-  const { selectedFile, errorMessage, loading, onSelectFile, resetSelectedFile, setActiveTab } = props;
+  const { selectedFile, errorMessage, loading, onSelectFile, resetSelectedFile } = props;
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,13 +31,7 @@ const ImageUpload = (props: ImageUploadProps) => {
 
     // Selected
     if (selectedFile) {
-      return (
-        <ImageUploadPreview
-          selectedFile={selectedFile}
-          resetSelectedFile={resetSelectedFile}
-          // setActiveTab={setActiveTab}
-        />
-      );
+      return <ImageUploadPreview selectedFile={selectedFile} resetSelectedFile={resetSelectedFile} />;
     }
 
     // Default

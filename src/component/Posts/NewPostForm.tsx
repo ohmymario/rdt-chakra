@@ -94,7 +94,6 @@ const NewPostForm: FunctionComponent<NewPostFormProps> = (props) => {
           selectedFile={selectedFile}
           onSelectFile={onSelectFile}
           resetSelectedFile={resetSelectedFile}
-          setActiveTab={setActiveTab}
           errorMessage={tabStatus['Image & Video'].error}
           loading={tabStatus['Image & Video'].loading}
         />
