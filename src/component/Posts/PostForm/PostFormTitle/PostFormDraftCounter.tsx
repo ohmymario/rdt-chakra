@@ -1,50 +1,44 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, TextProps } from '@chakra-ui/react';
 
 interface PostFormDraftCounterProps {}
 
 const PostFormDraftCounter = (props: PostFormDraftCounterProps) => {
   const {} = props;
 
-  const draftStyles = {
+  const draftStyles: TextProps = {
     textTransform: 'uppercase',
-    fontSize: '12px',
     fontWeight: '700',
-    color: 'blue.500',
     lineHeight: '22px',
     letterSpacing: '0.5px',
+
+    color: 'blue.500',
     marginLeft: '10px',
     borderRadius: '2px',
     px: '4px',
   };
 
+  const counterStyles: TextProps = {
+    alignSelf: 'center',
+    fontWeight: '400',
+    borderRadius: '2px',
+    color: 'white',
+    padding: '0px 3px',
+    bg: 'gray.500',
+  };
+
   return (
-    <Flex border='1px solid ' borderRadius={'14px'} padding='3px 10px 3px 0px'>
-      <Text
-        textTransform='uppercase'
-        fontSize='12px'
-        fontWeight='700'
-        color='blue.500'
-        lineHeight='22px'
-        letterSpacing='0.5px'
-        marginLeft='10px'
-        borderRadius='2px'
-        px={'4px'}
-      >
-        drafts
-      </Text>
-      <Text
-        fontSize='12px'
-        alignSelf='center'
-        fontWeight='400'
-        marginLeft='1px'
-        lineHeight='20px'
-        borderRadius='2px'
-        padding='0px 3px'
-        bg='gray.500'
-        color='white'
-      >
-        0
-      </Text>
+    <Flex
+      // border='1px solid'
+      borderRadius={'14px'}
+      padding='5px 13px 5px 0px'
+      fontSize={'11px'}
+      _hover={{
+        backgroundColor: 'gray.300',
+        cursor: 'pointer',
+      }}
+    >
+      <Text {...draftStyles}>drafts</Text>
+      <Text {...counterStyles}>0</Text>
     </Flex>
   );
 };
