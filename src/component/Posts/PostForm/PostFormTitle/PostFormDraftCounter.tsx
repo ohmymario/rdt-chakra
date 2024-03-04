@@ -28,7 +28,6 @@ const PostFormDraftCounter = (props: PostFormDraftCounterProps) => {
 
   return (
     <Flex
-      // border='1px solid'
       borderRadius={'14px'}
       padding='5px 13px 5px 0px'
       fontSize={'11px'}
