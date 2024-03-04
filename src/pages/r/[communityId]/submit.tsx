@@ -24,7 +24,7 @@ const SubmitPostPage: FunctionComponent = (props) => {
         <HStack
           borderBottom='1px solid white'
           w='100%'
-          p='14px 0'
+          p='14px 0 6px 0'
           mb='8px'
           justifyContent={'space-between'}
           paddingRight='20px'
