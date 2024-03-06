@@ -1,5 +1,5 @@
 // Libs
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react';
+import { HStack, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 
 // Components
@@ -13,6 +13,7 @@ import { auth } from '@/firebase/clientApp';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 // Hooks
+import PostRules from '@/component/Posts/PostRules';
 import useCommunityData from '@/hooks/useCommunityData';
 
 const SubmitPostPage: FunctionComponent = (props) => {
@@ -37,8 +38,10 @@ const SubmitPostPage: FunctionComponent = (props) => {
         {user && <NewPostForm communityImageURL={communityStateValue.currentCommunity?.imageURL} />}
       </VStack>
 
-      {/* todo: change to rules */}
-      <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</>
+      {/* todo: change to rules of posting */}
+      {/* <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</> */}
+
+      <PostRules />
     </PageContent>
   );
 };
