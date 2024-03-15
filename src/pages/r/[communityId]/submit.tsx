@@ -3,7 +3,7 @@ import { HStack, Text, VStack } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 
 // Components
-import About from '@/component/Community/About/About';
+// import About from '@/component/Community/About/About';
 import PageContent from '@/component/Layout/PageContent';
 import NewPostForm from '@/component/Posts/NewPostForm';
 import PostFormDraftCounter from '@/component/Posts/PostForm/PostFormTitle/PostFormDraftCounter';
@@ -37,9 +37,6 @@ const SubmitPostPage: FunctionComponent = (props) => {
         </HStack>
         {user && <NewPostForm communityImageURL={communityStateValue.currentCommunity?.imageURL} />}
       </VStack>
-
-      {/* todo: change to rules of posting */}
-      {/* <>{communityStateValue.currentCommunity && <About communityData={communityStateValue.currentCommunity} />}</> */}
 
       <PostRules />
     </PageContent>
