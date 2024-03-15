@@ -1,11 +1,14 @@
 import { Alert, AlertDescription, AlertIcon, AlertTitle } from '@chakra-ui/react';
 
 interface PostsErrorProps {
-  error: Error;
+  error: Error | null;
 }
 
 const PostsError = (props: PostsErrorProps) => {
   const { error } = props;
+
+  if (!error) return null;
+
   return (
     <Alert
       height='300px'
