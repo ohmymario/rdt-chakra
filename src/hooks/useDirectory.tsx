@@ -15,11 +15,13 @@ const useDirectory = () => {
 
   const onSelectMenuItem = (menuItem: DirectoryMenuItem) => {
     setDirectoryState((prev) => ({ ...prev, selectedMenuItem: menuItem }));
-    router.push(menuItem.link);
+    const link = menuItem.link;
 
     if (directoryState.isOpen === true) {
       toggleMenuOpen();
     }
+
+    router.push(link);
   };
 
   const toggleMenuOpen = () => {
@@ -54,7 +56,7 @@ const useDirectory = () => {
         selectedMenuItem: packagedMenuItem,
       }));
     }
-  }, [currentCommunity]);
+  }, [currentCommunity, router.pathname, setDirectoryState]);
 
   return { directoryState, toggleMenuOpen, onSelectMenuItem };
 };
