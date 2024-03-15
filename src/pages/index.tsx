@@ -4,8 +4,8 @@ import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem/PostItem';
-import PostLoaderSkeleton from '@/component/Posts/PostSkeletonLoader/PostLoaderSkeleton';
 import PostsError from '@/component/Posts/PostsError';
+import PostLoaderSkeleton from '@/component/Posts/PostSkeletonLoader/PostLoaderSkeleton';
 import { auth } from '@/firebase/clientApp';
 import useAuthCommunityPosts from '@/hooks/useAuthCommunityPosts';
 import useCommunityData from '@/hooks/useCommunityData';
@@ -19,13 +19,10 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 interface Status {
   loading: boolean;
-  error: string | null;
+  error: Error | null;
 }
 
 const Home: NextPage = () => {
-  // Local State
-  const [error, setError] = useState<Error | null>(null);
-
   const [status, setStatus] = useState<Status>({
     loading: true,
     error: null,
@@ -52,16 +49,19 @@ const Home: NextPage = () => {
   const processPostData = useCallback(
     (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
       if (error) {
-        setError(new Error(error));
+        setStatus((prev) => ({
+          ...prev,
+          error: new Error(error),
+        }));
         return;
       }
 
       if (!loading) {
-        setStatus({ ...status, loading: false });
+        setStatus((prev) => ({ ...prev, loading: false }));
       }
       updateStateValue(key, data);
     },
-    [updateStateValue, status]
+    [updateStateValue]
   );
 
   // Get Community Posts
@@ -97,7 +97,7 @@ const Home: NextPage = () => {
     processPostData,
   ]);
 
-  // Get User Post Votes
+  // // Get User Post Votes
   useEffect(() => {
     if (user && postStateValue.posts) {
       processPostData(loadingPostVotes, postVotesError, postVotes, 'postVotes');
@@ -118,8 +118,9 @@ const Home: NextPage = () => {
     <PageContent>
       <>
         {status.loading && <PostLoaderSkeleton count={4} />}
-        {error && <PostsError error={error} />}
-        {!status.loading && !error && (
+        {status.error && <PostsError error={status.error} />}
+
+        {
           <Stack>
             {postStateValue.posts.map((post, index) => {
               const userIsCreator = user?.uid === post.creatorId;
@@ -139,7 +140,7 @@ const Home: NextPage = () => {
               );
             })}
           </Stack>
-        )}
+        }
       </>
       <Stack spacing={5}>
         <Recommendations />
