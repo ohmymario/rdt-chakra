@@ -54,21 +54,38 @@ const Home: NextPage = () => {
   // Updates the postStateValue with the from Hooks
   const processPostData = useCallback(
     (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
-      // ERRROR
+      // Update State with error from hook
       if (error) {
         setStatus((prev) => ({
           ...prev,
           error: new Error(error),
+
+          // Will retrieve from hook in future
+          isFetching: false,
         }));
         return;
       }
 
-      // LOADING - sets the loading status to false when the data is fetched
-      if (!loading) {
-        setStatus((prev) => ({ ...prev, loading: false }));
+      // Early return if loading
+      if (loading) {
+        setStatus((prev) => ({
+          ...prev,
+          loading: true,
+          isFetching: true,
+        }));
+        return;
       }
 
-      // SUCCESS
+      // update State with loading from hook
+      if (!loading) {
+        setStatus((prev) => ({
+          ...prev,
+          loading: false,
+          isFetching: false,
+        }));
+      }
+
+      // Update State with data from hook
       updateStateValue(key, data);
     },
     [updateStateValue]
