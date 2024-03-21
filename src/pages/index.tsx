@@ -20,12 +20,14 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 interface Status {
   loading: boolean;
   error: Error | null;
+  isFetching: boolean;
 }
 
 const Home: NextPage = () => {
   const [status, setStatus] = useState<Status>({
     loading: true,
     error: null,
+    isFetching: false,
   });
 
   const [user, loadingUser] = useAuthState(auth);
@@ -36,6 +38,8 @@ const Home: NextPage = () => {
   const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = useUnAuthCommunityPosts();
   const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes();
 
+  // Generic Function to Update State Value
+  // Accepts Key / Value to update the state
   const updateStateValue = useCallback(
     <K extends keyof PostState>(key: K, value: PostState[K]) => {
       setPostStateValue((prev) => ({
@@ -46,8 +50,11 @@ const Home: NextPage = () => {
     [setPostStateValue]
   );
 
+  // Checks the post data for errors and loading status
+  // Updates the postStateValue with the from Hooks
   const processPostData = useCallback(
     (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
+      // ERRROR
       if (error) {
         setStatus((prev) => ({
           ...prev,
@@ -56,9 +63,12 @@ const Home: NextPage = () => {
         return;
       }
 
+      // LOADING - sets the loading status to false when the data is fetched
       if (!loading) {
         setStatus((prev) => ({ ...prev, loading: false }));
       }
+
+      // SUCCESS
       updateStateValue(key, data);
     },
     [updateStateValue]
