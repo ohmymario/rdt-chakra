@@ -50,42 +50,35 @@ const Home: NextPage = () => {
     [setPostStateValue]
   );
 
-  // Checks the post data for errors and loading status
-  // Updates the postStateValue with the from Hooks
+  // Update State with Data
   const processPostData = useCallback(
     (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
-      // Update State with error from hook
+      // Early Return
       if (error) {
         setStatus((prev) => ({
           ...prev,
           error: new Error(error),
-
-          // Will retrieve from hook in future
           isFetching: false,
         }));
         return;
       }
 
-      // Early return if loading
       if (loading) {
         setStatus((prev) => ({
           ...prev,
-          loading: true,
           isFetching: true,
         }));
         return;
       }
 
-      // update State with loading from hook
-      if (!loading) {
-        setStatus((prev) => ({
-          ...prev,
-          loading: false,
-          isFetching: false,
-        }));
-      }
+      // Success
+      setStatus((prev) => ({
+        ...prev,
+        loading: false,
+        isFetching: false,
+      }));
 
-      // Update State with data from hook
+      // Update State with Data
       updateStateValue(key, data);
     },
     [updateStateValue]
@@ -112,15 +105,14 @@ const Home: NextPage = () => {
     }
   }, [
     user,
-    authPosts,
     loadingUser,
     communityStateValue,
     loadingAuthPosts,
     authError,
-    unAuthPosts,
+    authPosts,
     loadingUnAuthPosts,
     unAuthError,
-    updateStateValue,
+    unAuthPosts,
     processPostData,
   ]);
 
