@@ -52,18 +52,18 @@ const Home: NextPage = () => {
 
   // Update State with Data
   const processPostData = useCallback(
-    (loading: boolean, error: string | null, data: Post[] | PostVote[], key: keyof PostState) => {
+    (data: { data: Post[] | PostVote[]; loading: boolean; error: string | null }, key: keyof PostState) => {
       // Early Return
-      if (error) {
+      if (data.error && typeof data.error === 'string') {
         setStatus((prev) => ({
           ...prev,
-          error: new Error(error),
+          error: new Error(data.error as string),
           isFetching: false,
         }));
         return;
       }
 
-      if (loading) {
+      if (data.loading) {
         setStatus((prev) => ({
           ...prev,
           isFetching: true,
@@ -79,7 +79,7 @@ const Home: NextPage = () => {
       }));
 
       // Update State with Data
-      updateStateValue(key, data);
+      updateStateValue(key, data.data);
     },
     [updateStateValue]
   );
