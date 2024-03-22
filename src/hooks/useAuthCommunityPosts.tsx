@@ -9,9 +9,12 @@ import { handleFetchError } from '@/utils/handleFetchError';
 import { toPost } from '@/utils/convertToPost';
 
 interface useAuthPostResult {
-  authPosts: Post[];
-  loading: boolean;
-  error: string | null;
+  // TODO RENAME FROM STATE TO SOMETHING MORE DESCRIPTIVE
+  authPostsData: {
+    data: Post[];
+    loading: boolean;
+    error: string | null;
+  };
 }
 
 // Fetches community posts from Firestore based on given community IDs
@@ -26,7 +29,7 @@ const fetchCommunityPostsFromFirestore = async (communityIds: string[]): Promise
 const useAuthCommunityPosts = (): useAuthPostResult => {
   const { communityStateValue } = useCommunityData();
 
-  const [authPosts, setAuthPosts] = useState<Post[]>([]);
+  const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +44,7 @@ const useAuthCommunityPosts = (): useAuthPostResult => {
     try {
       const userCommunityIDs = communityStateValue.mySnippets.map((snippet) => snippet.communityId);
       const fetchedPosts = await fetchCommunityPostsFromFirestore(userCommunityIDs);
-      setAuthPosts(fetchedPosts);
+      setData(fetchedPosts);
     } catch (error: unknown) {
       setError(handleFetchError(error));
     } finally {
@@ -53,11 +56,7 @@ const useAuthCommunityPosts = (): useAuthPostResult => {
     fetchCommunityPosts();
   }, [fetchCommunityPosts]);
 
-  return {
-    authPosts,
-    loading,
-    error,
-  };
+  return { authPostsData: { data, loading, error } };
 };
 
 export default useAuthCommunityPosts;
