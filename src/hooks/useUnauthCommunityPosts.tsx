@@ -6,9 +6,11 @@ import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
 import { useCallback, useEffect, useState } from 'react';
 
 interface useUnAuthPostResult {
-  unAuthPosts: Post[];
-  loading: boolean;
-  error: string | null;
+  unAuthPostsData: {
+    data: Post[];
+    loading: boolean;
+    error: string | null;
+  };
 }
 
 const fetchUnAuthCommunityPosts = async (): Promise<Post[]> => {
@@ -21,7 +23,7 @@ const fetchUnAuthCommunityPosts = async (): Promise<Post[]> => {
 };
 
 const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
-  const [unAuthPosts, setUnAuthPosts] = useState<Post[]>([]);
+  const [data, setData] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,7 +33,7 @@ const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
 
     try {
       const fetchedPosts = await fetchUnAuthCommunityPosts();
-      setUnAuthPosts(fetchedPosts);
+      setData(fetchedPosts);
     } catch (error: unknown) {
       setError(handleFetchError(error));
     } finally {
@@ -43,7 +45,7 @@ const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
     fetchCommunityPosts();
   }, [fetchCommunityPosts]);
 
-  return { unAuthPosts, loading, error };
+  return { unAuthPostsData: { data, loading, error } };
 };
 
 export default useUnAuthCommunityPosts;
