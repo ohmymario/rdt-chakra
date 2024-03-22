@@ -34,9 +34,9 @@ const Home: NextPage = () => {
   const { communityStateValue } = useCommunityData();
   const { postStateValue, setPostStateValue, onVote, onSelectPost, onDeletePost } = usePostsData();
 
-  const { authPosts, loading: loadingAuthPosts, error: authError } = useAuthCommunityPosts();
-  const { unAuthPosts, loading: loadingUnAuthPosts, error: unAuthError } = useUnAuthCommunityPosts();
-  const { postVotes, loading: loadingPostVotes, error: postVotesError } = useUserPostVotes();
+  const { authPostsData } = useAuthCommunityPosts();
+  const { unAuthPostsData } = useUnAuthCommunityPosts();
+  const { userPostVotes } = useUserPostVotes();
 
   // Generic Function to Update State Value
   // Accepts Key / Value to update the state
