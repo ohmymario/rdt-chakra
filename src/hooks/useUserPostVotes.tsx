@@ -10,9 +10,11 @@ import { User } from 'firebase/auth';
 import { toPostVote } from '@/utils/convertToPostVote';
 
 interface UserPostVotesResult {
-  postVotes: PostVote[];
-  loading: boolean;
-  error: string | null;
+  userPostVotes: {
+    data: PostVote[];
+    loading: boolean;
+    error: string | null;
+  };
 }
 
 // abstracts the fetch query and necessary data
@@ -41,7 +43,7 @@ const fetchUserPostVotesInBatches = async (user: User, postIDs: (string | undefi
 };
 
 const useUserPostVotes = (): UserPostVotesResult => {
-  const [postVotes, setPostVotes] = useState<PostVote[]>([]);
+  const [data, setData] = useState<PostVote[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -61,7 +63,7 @@ const useUserPostVotes = (): UserPostVotesResult => {
 
     try {
       const fetchedPostVotes = await fetchUserPostVotesInBatches(user, postIDs);
-      setPostVotes(fetchedPostVotes);
+      setData(fetchedPostVotes);
     } catch (error: unknown) {
       setError(handleFetchError(error));
     } finally {
@@ -73,7 +75,7 @@ const useUserPostVotes = (): UserPostVotesResult => {
     fetchUserPostVotes();
   }, [fetchUserPostVotes]);
 
-  return { postVotes, loading, error };
+  return { userPostVotes: { data, loading, error } };
 };
 
 export default useUserPostVotes;
