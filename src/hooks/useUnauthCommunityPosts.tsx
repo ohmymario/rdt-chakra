@@ -3,7 +3,7 @@ import { firestore } from '@/firebase/clientApp';
 import { toPost } from '@/utils/convertToPost';
 import { handleFetchError } from '@/utils/handleFetchError';
 import { collection, getDocs, limit, orderBy, query } from 'firebase/firestore';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface useUnAuthPostResult {
   unAuthPostsData: {
@@ -45,7 +45,12 @@ const useUnAuthCommunityPosts = (): useUnAuthPostResult => {
     fetchCommunityPosts();
   }, [fetchCommunityPosts]);
 
-  return { unAuthPostsData: { data, loading, error } };
+  return useMemo(
+    () => ({
+      unAuthPostsData: { data, loading, error },
+    }),
+    [data, loading, error]
+  );
 };
 
 export default useUnAuthCommunityPosts;

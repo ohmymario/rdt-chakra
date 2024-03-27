@@ -1,7 +1,7 @@
 import { Post } from '@/atoms/postsAtoms';
 import { firestore } from '@/firebase/clientApp';
 import { collection, getDocs, query, where } from 'firebase/firestore';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import useCommunityData from './useCommunityData';
 
 import { handleFetchError } from '@/utils/handleFetchError';
@@ -9,7 +9,6 @@ import { handleFetchError } from '@/utils/handleFetchError';
 import { toPost } from '@/utils/convertToPost';
 
 interface useAuthPostResult {
-  // TODO RENAME FROM STATE TO SOMETHING MORE DESCRIPTIVE
   authPostsData: {
     data: Post[];
     loading: boolean;
@@ -56,7 +55,12 @@ const useAuthCommunityPosts = (): useAuthPostResult => {
     fetchCommunityPosts();
   }, [fetchCommunityPosts]);
 
-  return { authPostsData: { data, loading, error } };
+  return useMemo(
+    () => ({
+      authPostsData: { data, loading, error },
+    }),
+    [data, loading, error]
+  );
 };
 
 export default useAuthCommunityPosts;
