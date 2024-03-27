@@ -75,7 +75,16 @@ const useUserPostVotes = (): UserPostVotesResult => {
     fetchUserPostVotes();
   }, [fetchUserPostVotes]);
 
-  return { userPostVotes: { data, loading, error } };
+  return useMemo(
+    () => ({
+      userPostVotes: {
+        data,
+        loading,
+        error,
+      },
+    }),
+    [data, loading, error]
+  );
 };
 
 export default useUserPostVotes;
