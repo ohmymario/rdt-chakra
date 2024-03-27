@@ -36,7 +36,7 @@ const Home: NextPage = () => {
 
   const { authPostsData } = useAuthCommunityPosts();
   const { unAuthPostsData } = useUnAuthCommunityPosts();
-  const { userPostVotes } = useUserPostVotes();
+  // const { userPostVotes } = useUserPostVotes();
 
   // Generic Function to Update State Value
   // Accepts Key / Value to update the state
@@ -54,7 +54,7 @@ const Home: NextPage = () => {
   const processPostData = useCallback(
     (data: { data: Post[] | PostVote[]; loading: boolean; error: string | null }, key: keyof PostState) => {
       // Early Return
-      if (data.error && typeof data.error === 'string') {
+      if (data.error) {
         setStatus((prev) => ({
           ...prev,
           error: new Error(data.error as string),
@@ -63,6 +63,7 @@ const Home: NextPage = () => {
         return;
       }
 
+      // Loading from hook
       if (data.loading) {
         setStatus((prev) => ({
           ...prev,
@@ -92,40 +93,29 @@ const Home: NextPage = () => {
       const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
 
       if (snippetsFound) {
-        processPostData(loadingAuthPosts, authError, authPosts, 'posts');
+        processPostData(authPostsData, 'posts');
       }
 
       if (snippetsNotFound) {
-        processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
+        processPostData(unAuthPostsData, 'posts');
       }
     }
 
     if (!user && !loadingUser) {
-      processPostData(loadingUnAuthPosts, unAuthError, unAuthPosts, 'posts');
+      processPostData(unAuthPostsData, 'posts');
     }
-  }, [
-    user,
-    loadingUser,
-    communityStateValue,
-    loadingAuthPosts,
-    authError,
-    authPosts,
-    loadingUnAuthPosts,
-    unAuthError,
-    unAuthPosts,
-    processPostData,
-  ]);
+  }, [user, authPostsData, communityStateValue, loadingUser, processPostData, unAuthPostsData]);
 
   // // Get User Post Votes
   useEffect(() => {
     if (user && postStateValue.posts) {
-      processPostData(loadingPostVotes, postVotesError, postVotes, 'postVotes');
+      // processPostData(userPostVotes, 'postVotes');
     }
 
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postStateValue.posts, loadingPostVotes, postVotesError, postVotes, processPostData, updateStateValue]);
+  }, [user, postStateValue.posts, updateStateValue]);
 
   const userVoteValues = useMemo(() => {
     return postStateValue.posts.map(
