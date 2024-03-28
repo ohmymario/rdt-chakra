@@ -87,24 +87,28 @@ const Home: NextPage = () => {
 
   // Get Community Posts
   useEffect(() => {
-    if (user && !loadingUser) {
-      const { snippetsFetched, mySnippets } = communityStateValue;
-      const snippetsFound = snippetsFetched && mySnippets.length > 0;
-      const snippetsNotFound = snippetsFetched && mySnippets.length === 0;
+    // Early Return
+    if (loadingUser) return;
 
-      if (snippetsFound) {
-        processPostData(authPostsData, 'posts');
-      }
-
-      if (snippetsNotFound) {
-        processPostData(unAuthPostsData, 'posts');
-      }
+    if (!user) {
+      processPostData(unAuthPostsData, 'posts');
+      return;
     }
 
-    if (!user && !loadingUser) {
+    // Destructure Values and return if no snippets are fetched
+    const { snippetsFetched, mySnippets } = communityStateValue;
+    if (!snippetsFetched) return;
+
+    // User Found, Check if Communities Joined
+
+    if (mySnippets.length === 0) {
       processPostData(unAuthPostsData, 'posts');
     }
-  }, [user, authPostsData, communityStateValue, loadingUser, processPostData, unAuthPostsData]);
+
+    if (mySnippets.length > 0) {
+      processPostData(authPostsData, 'posts');
+    }
+  }, [user, loadingUser, authPostsData, unAuthPostsData, communityStateValue, processPostData]);
 
   // // Get User Community Post Votes
   useEffect(() => {
