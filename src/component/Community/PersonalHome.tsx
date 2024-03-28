@@ -74,7 +74,11 @@ const PersonalHome = (props: PersonalHomeProps) => {
           <Text fontWeight={600}>Home</Text>
         </Flex>
         <Stack spacing={3}>
-          <Text fontSize='9pt'>Your personal Reddit frontpage, built for you.</Text>
+          <Text fontSize='9pt'>
+            Your personal Reddit frontpage. Come here to check in with your favorite communities.
+          </Text>
+
+          {/* DIVIDER LINE HERE */}
 
           <Button height='30px' onClick={handleCreatePost}>
             Create Post
