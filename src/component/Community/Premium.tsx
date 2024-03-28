@@ -20,7 +20,7 @@ const Premium = (props: PremiumProps) => {
         <Icon as={GiCheckedShield} fontSize={26} color='brand.100' mt={2} />
         <Stack spacing={1} fontSize='9pt' pl={2}>
           <Text fontWeight={600}>Reddit Promise</Text>
-          <Text>The best Reddit experience, with monthly Coins</Text>
+          <Text>The best Reddit experience</Text>
         </Stack>
       </Flex>
       <Button height='30px' bg='brand.100'>
