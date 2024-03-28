@@ -2,6 +2,7 @@ import { Post, PostState, PostVote } from '@/atoms/postsAtoms';
 import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
+import SitePolicies from '@/component/Community/SitePolicies';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem/PostItem';
 import PostsError from '@/component/Posts/PostsError';
@@ -89,7 +90,6 @@ const Home: NextPage = () => {
   useEffect(() => {
     // Early Return
     if (loadingUser) return;
-
     if (!user) {
       processPostData(unAuthPostsData, 'posts');
       return;
@@ -159,6 +159,8 @@ const Home: NextPage = () => {
         <Recommendations />
         <Premium />
         <PersonalHome />
+
+        <SitePolicies />
       </Stack>
     </PageContent>
   );
