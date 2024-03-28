@@ -36,7 +36,7 @@ const Home: NextPage = () => {
 
   const { authPostsData } = useAuthCommunityPosts();
   const { unAuthPostsData } = useUnAuthCommunityPosts();
-  // const { userPostVotes } = useUserPostVotes();
+  const { userPostVotes } = useUserPostVotes();
 
   // Generic Function to Update State Value
   // Accepts Key / Value to update the state
@@ -106,16 +106,16 @@ const Home: NextPage = () => {
     }
   }, [user, authPostsData, communityStateValue, loadingUser, processPostData, unAuthPostsData]);
 
-  // // Get User Post Votes
+  // // Get User Community Post Votes
   useEffect(() => {
     if (user && postStateValue.posts) {
-      // processPostData(userPostVotes, 'postVotes');
+      processPostData(userPostVotes, 'postVotes');
     }
 
     return () => {
       updateStateValue('postVotes', []);
     };
-  }, [user, postStateValue.posts, updateStateValue]);
+  }, [user, postStateValue.posts, userPostVotes, updateStateValue, processPostData]);
 
   const userVoteValues = useMemo(() => {
     return postStateValue.posts.map(
