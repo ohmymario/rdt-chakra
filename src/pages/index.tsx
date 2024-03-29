@@ -88,18 +88,14 @@ const Home: NextPage = () => {
 
   // Get Community Posts
   useEffect(() => {
-    // Early Return
     if (loadingUser) return;
     if (!user) {
       processPostData(unAuthPostsData, 'posts');
       return;
     }
 
-    // Destructure Values and return if no snippets are fetched
     const { snippetsFetched, mySnippets } = communityStateValue;
     if (!snippetsFetched) return;
-
-    // User Found, Check if Communities Joined
 
     if (mySnippets.length === 0) {
       processPostData(unAuthPostsData, 'posts');
