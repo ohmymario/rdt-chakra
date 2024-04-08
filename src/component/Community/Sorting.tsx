@@ -52,15 +52,23 @@ const SortingButton = (text: string, Icon: any) => {
 const Sorting = (props: SortingProps) => {
   return (
     <Flex {...flexContainerStyles}>
-      <Flex>
-        <Button>Best</Button>
-        <Button>Hot</Button>
-        <Button>New</Button>
-        <Button>Top</Button>
-        <Button>Top</Button>
-      </Flex>
-      <Flex>
-        <Button>ICON</Button>
+      <Flex gap={1}>
+        {sortOptions.map((option, index) => {
+          return (
+            <Button
+              key={index}
+              height={8}
+              bg={'none'}
+              color='gray.500'
+              px={2.5}
+              _hover={{ color: 'blue.500', bg: 'gray.300' }}
+            >
+              <Icon as={option.Icon} boxSize={4} mr={1} />
+
+              {option.Text}
+            </Button>
+          );
+        })}
       </Flex>
     </Flex>
   );
