@@ -23,6 +23,7 @@ const flexContainerStyles = {
   borderColor: 'gray.300',
   p: 2,
   mb: 4,
+  width: '100%',
 };
 
 const sortOptions = [
@@ -48,8 +49,18 @@ const sortOptions = [
 ];
 
 // button will be used soon
-const SortingButton = (text: string, Icon: any) => {
-  return <Button>{text}</Button>;
+import { ReactNode } from 'react';
+
+const SortingButton = (props: { children: ReactNode }) => {
+  const buttonStyles = {
+    height: 8,
+    bg: 'none',
+    color: 'gray.500',
+    px: 2.5,
+    _hover: { color: 'blue.500', bg: 'gray.300' },
+  };
+
+  return <Button>{props.children}</Button>;
 };
 
 const Sorting = (props: SortingProps) => {
