@@ -1,9 +1,12 @@
 import { Button, Flex, Icon } from '@chakra-ui/react';
 import { RiRocket2Fill } from 'react-icons/ri';
 import { PiFlame } from 'react-icons/pi';
-import { FaRegSun } from 'react-icons/fa';
 import { FaArrowUpWideShort } from 'react-icons/fa6';
+
+import { FaRegSun } from 'react-icons/fa';
 import { FaEllipsisH } from 'react-icons/fa';
+import { FaThList } from 'react-icons/fa';
+import { Children } from 'react';
 
 interface SortingProps {}
 
@@ -52,7 +55,7 @@ const SortingButton = (text: string, Icon: any) => {
 const Sorting = (props: SortingProps) => {
   return (
     <Flex {...flexContainerStyles}>
-      <Flex gap={1}>
+      <Flex gap={1} justifyContent='space-between'>
         {sortOptions.map((option, index) => {
           return (
             <Button
@@ -69,6 +72,9 @@ const Sorting = (props: SortingProps) => {
             </Button>
           );
         })}
+        <Button height={8} bg={'none'} color='gray.500' px={2.5} _hover={{ color: 'blue.500', bg: 'gray.300' }}>
+          <Icon as={FaThList} boxSize={4} />
+        </Button>
       </Flex>
     </Flex>
   );
