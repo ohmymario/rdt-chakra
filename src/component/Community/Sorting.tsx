@@ -1,5 +1,9 @@
-import { Button, Flex } from '@chakra-ui/react';
+import { Button, Flex, Icon } from '@chakra-ui/react';
 import { RiRocket2Fill } from 'react-icons/ri';
+import { PiFlame } from 'react-icons/pi';
+import { FaRegSun } from 'react-icons/fa';
+import { FaArrowUpWideShort } from 'react-icons/fa6';
+import { FaEllipsisH } from 'react-icons/fa';
 
 interface SortingProps {}
 
@@ -21,21 +25,26 @@ const flexContainerStyles = {
 const sortOptions = [
   {
     Text: 'Best',
-    Icon: 'Best',
+    Icon: RiRocket2Fill,
   },
   {
     Text: 'Hot',
-    Icon: 'Hot',
+    Icon: PiFlame,
   },
   {
     Text: 'New',
-    Icon: 'New',
+    Icon: FaRegSun,
   },
   {
-    Icon: 'Elipsis',
+    Text: 'Top',
+    Icon: FaArrowUpWideShort,
+  },
+  {
+    Icon: FaEllipsisH,
   },
 ];
 
+// button will be used soon
 const SortingButton = (text: string, Icon: any) => {
   return <Button>{text}</Button>;
 };
