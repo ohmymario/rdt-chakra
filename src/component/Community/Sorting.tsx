@@ -3,10 +3,13 @@ import { Button, Flex, Icon } from '@chakra-ui/react';
 // React Icons
 import { PiFlame } from 'react-icons/pi';
 import { RiRocket2Fill } from 'react-icons/ri';
-import { FaArrowUpWideShort } from 'react-icons/fa6';
-import { FaEllipsisH, FaRegSun, FaThList } from 'react-icons/fa';
 
 interface SortingProps {}
+
+interface SortingOption {
+  Text?: string;
+  Icon: IconType;
+}
 
 const flexContainerStyles = {
   flex: 1,
@@ -22,7 +25,7 @@ const flexContainerStyles = {
   width: '100%',
 };
 
-const sortOptions = [
+const sortOptions: SortingOption[] = [
   {
     Text: 'Best',
     Icon: RiRocket2Fill,
