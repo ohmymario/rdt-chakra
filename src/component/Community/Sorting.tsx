@@ -1,6 +1,9 @@
 import { Button, Flex, Icon } from '@chakra-ui/react';
 
 // React Icons
+import { IconType } from 'react-icons';
+import { FaEllipsisH, FaRegSun, FaThList } from 'react-icons/fa';
+import { FaArrowUpWideShort } from 'react-icons/fa6';
 import { PiFlame } from 'react-icons/pi';
 import { RiRocket2Fill } from 'react-icons/ri';
 
