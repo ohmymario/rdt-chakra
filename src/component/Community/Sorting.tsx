@@ -1,16 +1,12 @@
 import { Button, Flex, Icon } from '@chakra-ui/react';
-import { RiRocket2Fill } from 'react-icons/ri';
-import { PiFlame } from 'react-icons/pi';
-import { FaArrowUpWideShort } from 'react-icons/fa6';
 
-import { FaRegSun } from 'react-icons/fa';
-import { FaEllipsisH } from 'react-icons/fa';
-import { FaThList } from 'react-icons/fa';
-import { Children } from 'react';
+// React Icons
+import { PiFlame } from 'react-icons/pi';
+import { RiRocket2Fill } from 'react-icons/ri';
+import { FaArrowUpWideShort } from 'react-icons/fa6';
+import { FaEllipsisH, FaRegSun, FaThList } from 'react-icons/fa';
 
 interface SortingProps {}
-
-// Sort the posts based on BEST, HOT, NEW, TOP
 
 const flexContainerStyles = {
   flex: 1,
