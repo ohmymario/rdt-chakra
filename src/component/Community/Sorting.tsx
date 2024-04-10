@@ -14,6 +14,10 @@ interface SortingOption {
   Icon: IconType;
 }
 
+interface SortingButtonProps {
+  option: SortingOption;
+}
+
 const flexContainerStyles = {
   flex: 1,
   justifyContent: 'space-between',
@@ -50,10 +54,7 @@ const sortOptions: SortingOption[] = [
   },
 ];
 
-// button will be used soon
-import { ReactNode } from 'react';
-
-const SortingButton = (props: { children: ReactNode }) => {
+const SortingButton = ({ option }: SortingButtonProps) => {
   const buttonStyles = {
     height: 8,
     bg: 'none',
