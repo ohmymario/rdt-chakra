@@ -56,40 +56,31 @@ const sortOptions: SortingOption[] = [
 
 const SortingButton = ({ option }: SortingButtonProps) => {
   const buttonStyles = {
-    height: 8,
+    height: '8',
     bg: 'none',
     color: 'gray.500',
-    px: 2.5,
+    px: '2.5',
     _hover: { color: 'blue.500', bg: 'gray.300' },
   };
 
-  return <Button>{props.children}</Button>;
+  return (
+    <Button {...buttonStyles}>
+      <Icon as={option.Icon} boxSize={4} mr={option.Text ? 1 : 0} />
+      {option.Text}
+    </Button>
+  );
 };
 
 const Sorting = (props: SortingProps) => {
   return (
-    <Flex {...flexContainerStyles}>
-      <Flex gap={1} justifyContent='space-between'>
+    <Flex {...flexContainerStyles} gap={1} justifyContent='space-between'>
+      <Flex gap={1}>
         {sortOptions.map((option, index) => {
-          return (
-            <Button
-              key={index}
-              height={8}
-              bg={'none'}
-              color='gray.500'
-              px={2.5}
-              _hover={{ color: 'blue.500', bg: 'gray.300' }}
-            >
-              <Icon as={option.Icon} boxSize={4} mr={1} />
-
-              {option.Text}
-            </Button>
-          );
+          return <SortingButton key={index} option={option} />;
         })}
-        <Button height={8} bg={'none'} color='gray.500' px={2.5} _hover={{ color: 'blue.500', bg: 'gray.300' }}>
-          <Icon as={FaThList} boxSize={4} />
-        </Button>
       </Flex>
+
+      <SortingButton option={{ Icon: FaThList }} />
     </Flex>
   );
 };
