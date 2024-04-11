@@ -1,3 +1,5 @@
+// Data file for Sorting Options
+
 import { RiRocket2Fill } from 'react-icons/ri';
 import { PiFlame } from 'react-icons/pi';
 import { FaRegSun } from 'react-icons/fa';
