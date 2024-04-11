@@ -4,7 +4,7 @@ import PersonalHome from '@/component/Community/PersonalHome';
 import Premium from '@/component/Community/Premium';
 import Recommendations from '@/component/Community/Recommendations/Recommendations';
 import SitePolicies from '@/component/Community/SitePolicies';
-import Sorting from '@/component/Community/Sorting';
+import Sorting from '@/component/Community/Sorting/Sorting';
 import PageContent from '@/component/Layout/PageContent';
 import PostItem from '@/component/Posts/PostItem/PostItem';
 import PostsError from '@/component/Posts/PostsError';
