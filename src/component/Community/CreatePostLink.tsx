@@ -55,7 +55,6 @@ const CreatePostLink: FunctionComponent = () => {
     border: '1px solid',
     borderColor: 'gray.300',
     p: 2,
-    mb: 4,
   };
 
   const inputStyles = {
